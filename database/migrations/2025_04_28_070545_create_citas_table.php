@@ -16,10 +16,12 @@ return new class extends Migration
             $table->foreignId('paciente_id')->nullable()->constrained('pacientes')->onDelete('cascade'); // Cita individual
             $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade');
             $table->foreignId('profesional_id')->constrained('profesionals')->onDelete('cascade');
-            $table->foreignId('especialidad_id')->constrained('especialidads')->onDelete('cascade');
-            $table->foreignId('hora_ini')->constrained('horas')->onDelete('cascade');
-            $table->foreignId('hora_fin')->constrained('horas')->onDelete('cascade');
+            $table->foreignId('especialidad_id')->nullValue()->constrained('especialidads');
+            $table->foreignId('servicio_id')->nullValue()->constrained('servicios');
+            $table->time('hora_inicio');
+            $table->time('hora_fin');
             $table->date('fecha');
+            $table->string('tipo')->default('individual'); // individual, grupal
             $table->string('estado')->default('pendiente'); // pendiente, confirmado, cancelado
             $table->longText('observaciones')->nullable();
             $table->timestamps();

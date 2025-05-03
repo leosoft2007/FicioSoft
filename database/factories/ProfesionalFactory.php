@@ -24,7 +24,7 @@ class ProfesionalFactory extends Factory
         $usuario = \App\Models\User::inRandomOrder()->first();
         return [
             'nombre' => $this->faker->name(),
-            'apellidos' => $this->faker->lastName(),
+            'apellido' => $this->faker->lastName(),
             'telefono' => $this->faker->phoneNumber(),
             'email' => $this->faker->unique()->safeEmail(),
             'cif' => $this->faker->unique()->numerify('#########'),
@@ -35,7 +35,7 @@ class ProfesionalFactory extends Factory
             'estado' => $this->faker->state(),
             'codigo_postal' => $this->faker->postcode(),
             'usuario_id' => $usuario,
-            'estado_profesional' => $this->faker->randomElement(['activo', 'inactivo']),
+            'estado' => $this->faker->randomElement(['activo', 'inactivo']),
         ];
     }
 }

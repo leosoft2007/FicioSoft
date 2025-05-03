@@ -21,7 +21,10 @@
 
                     <flux:navlist.item icon="user" :href="route('pacientes.index')" :current="request()->routeIs('paciente.*')" wire:navigate>{{ __('Pacientes') }}</flux:navlist.item>
 
+                    <flux:navlist.item icon="user" :href="route('agenda')" :current="request()->routeIs('cita.*')" wire:navigate>{{ __('Agenda') }}</flux:navlist.item>
                     
+                    <flux:navlist.item icon="user" :href="route('facturas.create')" :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Facturas') }}</flux:navlist.item>
+
 
                     
                   

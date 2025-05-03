@@ -20,25 +20,18 @@ class Cita extends Model
         'clinica_id',
         'profesional_id',
         'especialidad_id',
-        'hora_ini',
+        'hora_inicio',
         'hora_fin',
         'fecha',
         'estado',
         'observaciones'
     ];
     protected $casts = [
-        'fecha' => 'date',
-        'hora_ini' => 'datetime',
-        'hora_fin' => 'datetime',
+        'hora_inicio' => 'datetime:H:i:s',
+        'hora_fin' => 'datetime:H:i:s',
+        'fecha' => 'date:Y-m-d',
     ];
-    protected $with = [
-        'paciente', 
-        'clinica', 
-        'profesional', 
-        'especialidad', 
-        'horaInicio', 
-        'horaFin'
-    ];
+   
  
     public function clinica()
     {
@@ -52,22 +45,17 @@ class Cita extends Model
     {
         return $this->belongsTo(Especialidad::class);
     }
-    public function horaIni()
-    {
-        return $this->belongsTo(Hora::class, 'hora_ini');
-    }
-    public function horaFin()
-    {
-        return $this->belongsTo(Hora::class, 'hora_fin');
-    }
-
-       
-
+    
      // Relación inversa con paciente para citas individuales
      public function paciente()
      {
          return $this->belongsTo(Paciente::class);
      }
+     // relacion con servicio
+        public function servicio()
+        {
+            return $this->belongsTo(Servicio::class);
+        }
  
      // Relación M:M con pacientes a través de la tabla clases (citas grupales)
      public function clases()
@@ -108,25 +96,6 @@ class Cita extends Model
     public function scopeEntreFechas($query, $fechaInicio, $fechaFin)
     {
         return $query->whereBetween('fecha', [$fechaInicio, $fechaFin]);
-    }
-    public function scopeEntreHoras($query, $horaInicio, $horaFin)
-    {
-        return $query->whereBetween('hora_ini', [$horaInicio, $horaFin]);
-    }
-    public function scopeEntreHorasFin($query, $horaInicio, $horaFin)
-    {
-        return $query->whereBetween('hora_fin', [$horaInicio, $horaFin]);
-    }
-    public function scopeEntreHorasIniFin($query, $horaInicio, $horaFin)
-    {
-        return $query->whereBetween('hora_ini', [$horaInicio, $horaFin])
-            ->orWhereBetween('hora_fin', [$horaInicio, $horaFin]);
-    }
-    public function scopeEntreHorasIniFinAndFecha($query, $horaInicio, $horaFin, $fecha)
-    {
-        return $query->whereBetween('hora_ini', [$horaInicio, $horaFin])
-            ->orWhereBetween('hora_fin', [$horaInicio, $horaFin])
-            ->where('fecha', $fecha);
     }
     
 }

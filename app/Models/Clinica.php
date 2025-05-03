@@ -66,6 +66,14 @@ class Clinica extends Model
     {
         return $this->hasMany(Cita::class);
     }
+    public function servicios(): HasMany
+    {
+        return $this->hasMany(Servicio::class);
+    }
+    public function facturas(): HasMany
+    {
+        return $this->hasMany(Factura::class);
+    }
     public function especialidads()
     {
         return $this->belongsToMany(Especialidad::class, 'profesionals', 'clinica_id', 'especialidad_id')

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DisponibleController;
+use App\Livewire\Citas\CitaClinica;
+use App\Livewire\Facturas\FacturaCreate;
 use App\Livewire\Forms\DisponibilidadPaciente;
 use App\Livewire\Pacientes\DisponibleGrilla;
 use App\Livewire\RolesPermissions;
@@ -56,6 +58,11 @@ Route::get('/pacientes/update/{paciente}', \App\Livewire\Pacientes\Edit::class)-
 
 Route::get('/disponibilidad/{id}', DisponibilidadPaciente::class)->name('disponibilidad');
 Route::get('/disponibilidad/{id}/ver/', [DisponibilidadPaciente::class, 'ver'])->name('ver_disponibilidad');
+Route::get('/agenda', CitaClinica::class)->name('agenda');
+// crear factura
+Route::get('/facturas/create', FacturaCreate::class)->name('facturas.create');
+
+
 
 
 });
