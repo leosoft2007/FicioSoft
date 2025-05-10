@@ -22,15 +22,19 @@ class CitaFactory extends Factory
      */
     public function definition()
     {
+        // seleccionar la clinica_id=1
+       $clinica = Clinica::find(1);
+
+        
         // Obtiene asociaciones aleatorias o crea nuevas si no existen
-        $paciente = Paciente::inRandomOrder()->first() ?: Paciente::factory()->create();
-        $clinica = Clinica::inRandomOrder()->first() ?: Clinica::factory()->create();
-        $profesional = Profesional::inRandomOrder()->first() ?: Profesional::factory()->create();
-        $especialidad = Especialidad::inRandomOrder()->first() ?: Especialidad::factory()->create();
-        $servicio = $clinica->servicios()->inRandomOrder()->first() ?: $clinica->servicios()->create();
+        $paciente = Paciente::withoutGlobalScopes()->inRandomOrder()->first() ?: Paciente::factory()->create();
+        
+        $profesional = Profesional::withoutGlobalScopes()->inRandomOrder()->first() ?: Profesional::factory()->create();
+        
+        $servicio = $clinica->servicios()->withoutGlobalScopes()->inRandomOrder()->first() ?: $clinica->servicios()->create();
 
         // Fecha y hora dentro del próximo mes
-        $date = $this->faker->dateTimeBetween('now', '+1 month');
+        $date = $this->faker->dateTimeBetween('now', '+4 month');
         $start = (clone $date)->setTime(
             $this->faker->numberBetween(8, 17),
             $this->faker->randomElement([0, 15, 30, 45])
@@ -42,9 +46,8 @@ class CitaFactory extends Factory
 
         return [
             'paciente_id'    => $paciente->id,
-            'clinica_id'     => $clinica->id,
+            'clinica_id'     => 1,
             'profesional_id' => $profesional->id,
-            'especialidad_id'=> $especialidad->id,
             'servicio_id'    => $servicio->id,
             'fecha'          => $start->format('Y-m-d'),
             'hora_inicio'    => $start->format('H:i:s'),

@@ -12,11 +12,25 @@ class RolesPermissions extends Component
   
     public $roles, $permissions, $selectedRole, $roleName, $rolePermissions = [];
     public $editing = false;
-
+    
+    
     public function mount()
     {
         $this->roles = Role::all();
-        $this->permissions = Permission::all();
+        // Solo pasamos los datos necesarios para evitar problemas con getMorphClass
+    $permissions = Permission::all()->map(function ($perm) {
+        return [
+            'id' => $perm->id,
+            'name' => $perm->name,
+            'description' => $perm->description,
+        ];
+    });
+
+    // Agrupamos por la "segunda palabra" (el modelo)
+    $this->permissions = $permissions->groupBy(function ($perm) {
+        return explode(' ', $perm['name'])[1] ?? 'otros';
+    });
+        
     }
 
     // Método para crear un nuevo rol

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 return [
+
     'accept'          => 'Aceptar',
     'action'          => 'Acción',
     'actions'         => 'Acciones',

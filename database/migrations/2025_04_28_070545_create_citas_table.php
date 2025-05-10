@@ -16,8 +16,7 @@ return new class extends Migration
             $table->foreignId('paciente_id')->nullable()->constrained('pacientes')->onDelete('cascade'); // Cita individual
             $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade');
             $table->foreignId('profesional_id')->constrained('profesionals')->onDelete('cascade');
-            $table->foreignId('especialidad_id')->nullValue()->constrained('especialidads');
-            $table->foreignId('servicio_id')->nullValue()->constrained('servicios');
+            $table->foreignId('servicio_id')->nullable()->constrained('servicios');
             $table->time('hora_inicio');
             $table->time('hora_fin');
             $table->date('fecha');

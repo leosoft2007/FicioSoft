@@ -1,58 +1,69 @@
 <div>
-    <div class="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-lg space-y-6">
-        <h2 class="text-2xl font-bold text-gray-800">🧾 Crear Factura</h2>
+    <x-page-header 
+title="🧾 {{$titulo}}"
+subtitle=""
+color="green" 
+:clickable="true" 
+badge="Nuevo" 
+icon="check" 
+footer="Texto de pie" 
+
+>
+    
     
         {{-- Datos principales --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             <div>
-                <label class="block font-medium text-sm text-gray-700">Paciente</label>
-                <select wire:model="paciente_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                
+                <flux:select label="Paciente" wire:model="paciente_id" >
                     <option value="">Seleccione un paciente</option>
                     @foreach($pacientes as $paciente)
-                        <option value="{{ $paciente->id }}">{{ $paciente->nombre }}</option>
+                        <option value="{{ $paciente->id }}">{{ $paciente->apellido }} {{ $paciente->nombre }}</option>
                     @endforeach
-                </select>
+                </flux:select>
             </div>
             <div>
-                <label class="block font-medium text-sm text-gray-700">Fecha</label>
-                <input type="date" wire:model="fecha" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                
+                <flux:input label="Fecha" type="date" wire:model="fecha" />
             </div>
             <div>
-                <label class="block font-medium text-sm text-gray-700">Método de Pago</label>
-                <div class="mt-2 space-x-4">
-                    <label class="inline-flex items-center">
-                        <input type="radio" wire:model="metodo_pago" value="efectivo" class="text-blue-600 focus:ring-blue-500">
-                        <span class="ml-2">Efectivo</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="radio" wire:model="metodo_pago" value="tarjeta" class="text-blue-600 focus:ring-blue-500">
-                        <span class="ml-2">Tarjeta</span>
-                    </label>
-                </div>
+
+                <flux:radio.group  wire:model="metodo_pago" label="Método de Pago" variant="segmented">
+               
+                    <flux:radio value="efectivo" label="Efectivo" />
+                    <flux:radio value="tarjeta" label="Tarjeta" />
+                </flux:radio.group>
+
+
+
+                
             </div>
         </div>
     
         {{-- Agregar servicios --}}
         <div class="border-t pt-4">
-            <h3 class="font-semibold text-lg text-gray-800">➕ Agregar Servicios</h3>
+            
             <div class="flex items-end gap-4 mt-2">
                 <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700">Servicio</label>
-                    <select wire:model="servicio_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+
+                    
+
+                    
+                    <flux:select label="➕ Agregar Servicios" wire:model="servicio_id" >
                         <option value="">Seleccione un servicio</option>
                         @foreach($serviciosDisponibles as $servicio)
                             <option value="{{ $servicio->id }}">{{ $servicio->nombre }} - ${{ number_format($servicio->precio, 2) }}</option>
                         @endforeach
-                    </select>
-                </div>
+                    </flux:select>
+                    </div>
                 <div class="w-32">
-                    <label class="block text-sm font-medium text-gray-700">Cantidad</label>
-                    <input type="number" wire:model="cantidad" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    
+                    <flux:input label="Cantidad" type="number" wire:model="cantidad" min="1" />
                 </div>
                 <div class="w-28">
-                    <label class="block text-sm font-medium text-gray-700">IVA (%)</label>
-                    <input type="number" wire:model="ivaInput" min="0" max="100" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                   
+                    <flux:input label="IVA (%)" type="number" wire:model="ivaInput" min="0" max="100" />
                 </div>
                 <button type="button" wire:click="addServicio" class="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700">Agregar</button>
             </div>
@@ -60,7 +71,7 @@
     
         {{-- Tabla de servicios agregados --}}
         <div class="mt-4">
-            <table class="min-w-full border border-gray-200 text-sm">
+            <table class="min-w-full border bg-white border-gray-200 text-sm">
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="px-3 py-2 text-left">Descripción</th>
@@ -95,8 +106,8 @@
         {{-- Totales y guardar --}}
         <div class="flex justify-between items-center mt-6 border-t pt-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700">Descripción (opcional)</label>
-                <textarea wire:model="descripcion" rows="2" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></textarea>
+            
+                <flux:textarea label="Descripción (opcional)" wire:model="descripcion" cols="40" rows="2" ></flux:textarea>
             </div>
             <div class="text-right">
                 <p class="text-lg font-semibold text-gray-800">Total: ${{ number_format($this->calcularTotal(), 2) }}</p>
@@ -114,6 +125,7 @@
                 ❌ {{ session('error') }}
             </div>
         @endif
-    </div>
+   
+</x-page-header>
     
 </div>

@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('horas', function (Blueprint $table) {
+        Schema::create('consentimientos', function (Blueprint $table) {
             $table->id();
-            $table->time('hora');
+            $table->string('titulo');
+            $table->text('contenido');
+            $table->string('tipo')->default('general'); // general, clinica, profesional
+            $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('horas');
+        Schema::dropIfExists('consentimientos');
     }
 };

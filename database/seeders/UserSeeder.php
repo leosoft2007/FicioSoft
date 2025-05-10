@@ -17,8 +17,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $usuario = Role::create(['name' => 'Usuario']);
+        $permission = Permission::firstOrCreate(['name' => 'acceder al sistema', 'description' => 'Acceder al sistema']);
+        $usuario = Role::create(['name' => 'Nuevo']);
+        Role::create(['name' => 'Usuario']);
         $admin = Role::create(['name' => 'Administrador']);
+        $admin->givePermissionTo($permission);
         
         $administrador = User::create([
             'name' => 'Leosoft',
@@ -43,7 +46,7 @@ class UserSeeder extends Seeder
         
         $usu->assignRole('Usuario');
 
-        
+        $administrador->givePermissionTo($permission);
 
       //  $administrador->assignRole('Administrador');
         $administrador->syncRoles(['Administrador']);
@@ -56,6 +59,11 @@ class UserSeeder extends Seeder
             'Hora',
             'Paciente',
             'Profesional',
+            'Cita',
+            'Factura',
+            'Servicio',
+            'Disponible',
+            'Consentimiento',
             // Agrega todos los modelos que quieras gestionar permisos
         ];
 
@@ -67,7 +75,6 @@ class UserSeeder extends Seeder
             // Crear permisos comunes como "crear", "editar", "eliminar", "ver"
             Permission::create(['name' => "create $modelName" , 'description' => 'Crear ' . $modelName])->assignRole($admin);
             Permission::create(['name' => "edit $modelName", 'description' => 'Editar ' . $modelName])->assignRole($admin);
-            Permission::create(['name' => "update $modelName", 'description' => 'Actualizar ' . $modelName])->assignRole($admin);
             Permission::create(['name' => "delete $modelName", 'description' => 'Eliminar ' . $modelName])->assignRole($admin);
             Permission::create(['name' => "view $modelName", 'description' => 'Ver ' . $modelName])->assignRole($admin);
 

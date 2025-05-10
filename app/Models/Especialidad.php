@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\Auditable;
+use App\Models\Scopes\ClinicaScope;
+use App\Traits\HasAuditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,10 +11,21 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Especialidad extends Model
 {
-    /** @use HasFactory<\Database\Factories\EspecialidadFactory> */
     use HasFactory;
-    use Auditable;
+    use HasAuditable;
     use HasRoles;
+
+   protected static function booted()
+    {
+        static::addGlobalScope(new ClinicaScope);
+
+        // Al crear una cita, asignamos automáticamente la clínica del usuario
+        static::creating(function ($registro) {
+            if (auth()->check()) {
+                $registro->clinica_id = auth()->user()->clinica_id;
+            }
+        });
+    }
 
     protected $perPage = 20;
     /**
@@ -55,10 +67,9 @@ class Especialidad extends Model
     {
         return $this->hasMany(Cita::class, 'especialidad_id');
     }
-    public function clinicas()
+    public function clinica()
     {
-        return $this->belongsToMany(Clinica::class, 'profesionals', 'especialidad_id', 'clinica_id')
-                    ->withTimestamps();
+        return $this->belongsTo(Clinica::class);
     }
     
    

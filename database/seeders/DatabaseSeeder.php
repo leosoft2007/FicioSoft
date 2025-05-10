@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ProfesionalSeeder::class,
             ServicioSeeder::class,
             CitaSeeder::class,
+            FacturaSeeder::class,
             
 
         ]);

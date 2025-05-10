@@ -2,17 +2,32 @@
 
 namespace App\Models;
 
-use App\Traits\Auditable;
+use App\Models\Scopes\ClinicaScope;
+use App\Traits\HasAuditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
 class Cita extends Model
 {
-    /** @use HasFactory<\Database\Factories\CitaFactory> */
     use HasFactory;
-    use Auditable;
+    use HasAuditable;
     use HasRoles;
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new ClinicaScope);
+
+        // Al crear una cita, asignamos automáticamente la clínica del usuario
+        static::creating(function ($cita) {
+            if (auth()->check()) {
+                $cita->clinica_id = auth()->user()->clinica_id;
+            }
+        });
+    }
+    
+    /** @use HasFactory<\Database\Factories\CitaFactory> */
+    
     protected $perPage = 20;
 
     protected $fillable = [
@@ -37,6 +52,7 @@ class Cita extends Model
     {
         return $this->belongsTo(Clinica::class);
     }
+    
     public function profesional()
     {
         return $this->belongsTo(Profesional::class);

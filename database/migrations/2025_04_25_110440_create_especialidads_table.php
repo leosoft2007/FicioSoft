@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre')->unique();
             $table->string('descripcion')->nullable();
+            $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -17,6 +17,6 @@ class ProfesionalSeeder extends Seeder
         // \App\Models\Profesional::factory()->count(10)->create([
         //     'clinica_id' => 1,
         // ]);
-        \App\Models\Profesional::factory()->count(20);
+        \App\Models\Profesional::factory()->count(10)->create(); 
     }
 }

@@ -5,7 +5,7 @@
     <title>Factura {{ $factura->numero_factura }}</title>
     
         <div>
-          <!--  <img src="{{ public_path('storage/logos/mi_logo.png') }}" class="logo"> -->
+          <!--  <img src="{{ url('storage/logos/mi_logo.png') }}" class="logo"> -->
         </div>
        
         
@@ -177,6 +177,7 @@
         <img src="data:image/svg+xml;base64,{{ $qrSvg }}" 
              alt="QR Factura" 
              style="width: 120px; height: 120px;" />
+            
     </div>
 </body>
 </html>

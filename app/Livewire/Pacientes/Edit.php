@@ -17,6 +17,8 @@ class Edit extends Component
 
     public function save()
     {
+        $this->authorize('edit pacientes');
+        
         $this->form->update();
 
         return $this->redirectRoute('pacientes.index', navigate: true);
@@ -24,6 +26,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('edit pacientes');
         return view('livewire.paciente.edit');
     }
 }

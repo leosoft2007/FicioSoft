@@ -6,6 +6,7 @@ use App\Livewire\Forms\PacienteForm;
 use App\Models\Paciente;
 use Livewire\Component;
 
+
 class Create extends Component
 {
     public PacienteForm $form;
@@ -17,6 +18,8 @@ class Create extends Component
 
     public function save()
     {
+        $this->authorize('create pacientes');
+        
         $this->form->store();
 
         return $this->redirectRoute('pacientes.index', navigate: true);
@@ -24,6 +27,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create pacientes');
         return view('livewire.paciente.create');
     }
 }

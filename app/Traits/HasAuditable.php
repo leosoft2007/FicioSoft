@@ -5,7 +5,7 @@ use App\Models\Audit;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Request;
 
-trait Auditable
+trait HasAuditable
 {
 
     public function audits(): MorphMany
@@ -13,8 +13,9 @@ trait Auditable
             return $this->morphMany(Audit::class, 'auditable');
         }
         
-        protected static function booted()
+        protected static function bootHasAuditable()
     {
+       
         static::created(function ($registro) {
             $registro->audits()->create([
                 'event' => 'created',
@@ -39,7 +40,7 @@ trait Auditable
                 'user_id' => auth()->id(),
                 'url' => Request::fullUrl(), // URL actual
                 'ip_address' => Request::ip(),   // Dirección IP del cliente
-                'user_type' => auth()->user()->getMorphClass(), // Nombre de la clase del usuario autenticado actualmente
+                'user_type' => auth()->check() ? auth()->user()->getMorphClass() : null, // Nombre de la clase del usuario autenticado actualmente
                 'old' => json_encode($original),  //  Estado original del paciente
                 // otros campos de auditoría...
             ]);

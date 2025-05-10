@@ -19,6 +19,7 @@ class EspecialidadFactory extends Factory
         return [
             'nombre' => $this->faker->word(),
             'descripcion' => $this->faker->sentence(),
+            'clinica_id' => 1,
             
         ];
     }

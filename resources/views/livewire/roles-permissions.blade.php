@@ -10,21 +10,36 @@
     @endif
 
     <!-- Crear Rol -->
-    <div class="card p-6 bg-white shadow-lg rounded-lg mb-6">
-        <div class="text-xl font-semibold text-gray-800 mb-4">Crear Rol</div>
+<x-page-header 
+    title="Crear Rol"
+    color="yellow" 
+    :clickable="true" 
+    badge="Nuevo" 
+    icon="check" 
+    footer="Texto de pie" 
+>
         <form wire:submit.prevent="createRole">
             <div class="mb-4">
                 <label for="roleName" class="block text-sm font-medium text-gray-600">Nombre del Rol</label>
                 <input type="text" id="roleName" class="w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" wire:model="roleName">
                 @error('roleName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button type="submit" class="btn btn-primary mt-4">Crear Rol</button>
+            <flux:button type="submit" variant="primary">Crear Rol</flux:button>
         </form>
-    </div>
+    
+</x-page-header>
 
+    
+<x-page-header 
+title="Lista de Roles"
+color="yellow" 
+:clickable="true" 
+badge="Nuevo" 
+icon="check" 
+footer="Texto de pie" 
+>
     <!-- Lista de Roles -->
-    <div class="card p-6 bg-white shadow-lg rounded-lg">
-        <div class="text-xl font-semibold text-gray-800 mb-4">Lista de Roles</div>
+    
         <table class="min-w-full bg-white">
             <thead>
                 <tr>
@@ -46,39 +61,65 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
+</x-page-header>
+    
 
     
     <!-- Editar Rol -->
 @if ($editing)
-<div class="card p-6 bg-white shadow-lg rounded-lg mt-6">
-    <div class="text-xl font-semibold text-gray-800 mb-4">Editar Rol</div>
+<x-page-header 
+title="Editar Rol"
+subtitle="{{ $roleName }}"
+color="yellow" 
+:clickable="true" 
+badge="Nuevo" 
+icon="check" 
+footer="Texto de pie" 
+>
     <form wire:submit.prevent="updateRole">
         <div class="mb-4">
-            <label for="roleName" class="block text-sm font-medium text-gray-600">Nombre del Rol</label>
-            <input type="text" id="roleName" class="w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" wire:model="roleName">
+            
+            
+            
             @error('roleName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <h4 class="text-lg font-semibold text-gray-700 mb-4">Permisos</h4>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            @foreach ($permissions as $permission)
-                <div class="flex items-center">
+            @foreach ($permissions as $model => $group)
+        <div class="bg-gradient-to-br from-white to-gray-50 shadow-xl rounded-2xl p-6 mb-6 transition-all hover:shadow-2xl border border-gray-200">
+        <h5 class="text-xl font-bold text-indigo-600 mb-4 capitalize border-b border-indigo-200 pb-2 tracking-wide flex items-center">
+            <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M9 12l2 2l4 -4" />
+                <path d="M12 22a10 10 0 1 1 0 -20a10 10 0 0 1 0 20z" />
+            </svg>
+            {{ ucfirst($model) }}
+        </h5>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
+            @foreach ($group as $permission)
+                <label class="flex items-center space-x-2 hover:bg-indigo-50 p-2 rounded transition">
                     <input 
                         type="checkbox" 
-                        class="mr-2"
-                        value="{{ $permission->id }}"
+                        class="form-checkbox text-indigo-600 transition duration-150 ease-in-out"
+                        value="{{ $permission['id'] }}"
                         wire:model="rolePermissions"
-                        {{ in_array($permission->id, $rolePermissions) ? 'checked' : '' }}
+                        {{ in_array($permission['id'], $rolePermissions) ? 'checked' : '' }}
                     >
-                    <span class="text-sm text-gray-600">{{ $permission->description }}</span>
-                </div>
+                    <span class="text-sm text-gray-700">{{ $permission['description'] }}</span>
+                </label>
             @endforeach
+        </div>
+        </div>
+    @endforeach
+
+        
+        
         </div>
 
         <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mt-4">Actualizar Rol</button>
     </form>
-</div>
+</x-page-header>
 @endif
 
 </div>

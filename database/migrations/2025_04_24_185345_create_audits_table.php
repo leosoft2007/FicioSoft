@@ -19,7 +19,8 @@ return new class extends Migration
             $table->nullableMorphs('user');
             $table->string('url')->nullable();
             $table->ipAddress('ip_address')->nullable();
-            $table->json('old')->nullable();            
+            $table->json('old')->nullable();
+        
             $table->timestamps();
         });
     }

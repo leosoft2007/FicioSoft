@@ -1,26 +1,27 @@
 <x-layouts.app :title="__('Dashboard')">
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
 
 
+    
 
-                
+    <div class="py-6">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
 
-
+            <!-- Primera fila: Tarjetas resumidas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <livewire:card.card-citas-hoy />
+                <livewire:card.card-facturacion-mensual />
+                <livewire:card.card-pacientes-nuevos />
+                <livewire:card.card-profesionales-activos />
             </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+
+            <!-- Segunda fila: Gráficos y listados -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <livewire:card.card-citas-por-profesional />
+                <livewire:card.card-facturacion-servicios />
             </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-        </div>
-        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-            
-            
-        <!--    <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" /> -->
+
+            <!-- Tercera fila: Próximas Citas -->
+            <livewire:card.card-proximas-citas />
         </div>
     </div>
 </x-layouts.app>

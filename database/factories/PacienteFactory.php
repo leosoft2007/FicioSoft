@@ -20,6 +20,7 @@ class PacienteFactory extends Factory
         return [
             'nombre' => $this->faker->firstName(),
             'apellido' => $this->faker->lastName(),
+            'dni' => $this->faker->unique()->numerify('#########'),
             'email' => $this->faker->unique()->safeEmail(),
             'telefono' => $this->faker->phoneNumber(),
             'fecha_nacimiento' => $this->faker->date(),
@@ -44,6 +45,7 @@ class PacienteFactory extends Factory
             'estado_paciente' => $this->faker->randomElement(['activo', 'inactivo', 'suspendido']),
             'tipo_paciente' => $this->faker->randomElement(['regular', 'VIP', 'urgente']),
             'referido_por' => $this->faker->name(),
+            'clinica_id' => 1, // Cambia esto por el ID de la clínica que desees usar
            
             // 'clinica_id' => Clinica::factory(), // Uncomment this line if you want to create a new clinica for each paciente
             // 'clinica_id' => Clinica::factory()->create()->id, // Uncomment this line if you want to create a new clinica for each paciente

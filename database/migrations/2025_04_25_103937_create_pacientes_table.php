@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('apellido');
+            $table->string('dni')->nullable();
             $table->string('email')->unique();
             $table->string('telefono')->nullable();
             $table->date('fecha_nacimiento')->nullable();
@@ -39,7 +40,7 @@ return new class extends Migration
             $table->string('estado_paciente')->default('activo'); // activo, inactivo, suspendido
             $table->string('tipo_paciente')->default('regular'); // regular, VIP, urgente
             $table->string('referido_por')->nullable();
-            $table->foreignId('clinica_id')->nullable()->constrained('clinicas')->onDelete('cascade');
+            $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -13,6 +13,10 @@ class ServicioSeeder extends Seeder
      */
     public function run(): void
     {
-        Servicio::factory()->count(20)->create();
+        // crear 20 registro con id_clinica = 1
+        Servicio::factory()->count(20)->create([
+            'clinica_id' => 1,
+        ]);
+      
     }
 }

@@ -45,7 +45,7 @@ class ProfesionalForm extends Form
 
     public function setProfesionalModel(Profesional $profesionalModel): void
     {
-        $clinicaId = auth()->user();
+        $clinicaId =auth()->user();
 
         $this->profesionalModel = $profesionalModel;
         

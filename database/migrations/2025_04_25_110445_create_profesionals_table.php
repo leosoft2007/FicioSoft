@@ -22,12 +22,12 @@ return new class extends Migration
             $table->string('ciudad')->nullable();
             $table->string('estado')->nullable();
             $table->string('codigo_postal')->nullable();
-            $table->foreignId('clinica_id')->onDelete('cascade');
-            $table->foreign('clinica_id')->references('id')->on('clinicas');
+            $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade');
             $table->foreignId('especialidad_id')->onDelete('cascade');
             $table->foreign('especialidad_id')->references('id')->on('especialidads');
             $table->foreignId('usuario_id')->onDelete('cascade');
             $table->foreign('usuario_id')->references('id')->on('users');
+            $table->string('color')->nullable();
             $table->timestamps();
         });
     }

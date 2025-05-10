@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Audit extends Model
 {
+    
     protected $fillable = [
         'event',
         'auditable_type',
@@ -28,4 +31,5 @@ class Audit extends Model
     {
         return $this->morphTo();
     }
+    
 }

@@ -16,18 +16,22 @@ class EspecialidadSeeder extends Seeder
         $especialidad = Especialidad::create([
             'nombre' => 'ficioterapia',
             'descripcion' => 'fisioterapia',
+            'clinica_id' => 1,
         ]);
         $especialidad = Especialidad::create([
             'nombre' => 'Psicologia',
             'descripcion' => 'psicologia',
+            'clinica_id' => 1,
         ]);
         $especialidad = Especialidad::create([
             'nombre' => 'Nutricion',
             'descripcion' => 'nutricion',
+            'clinica_id' => 1,
         ]);
         $especialidad = Especialidad::create([
             'nombre' => 'Pilates',
             'descripcion' => 'pilates',
+            'clinica_id' => 1,
         ]);
     }
 }

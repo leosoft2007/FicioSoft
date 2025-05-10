@@ -17,7 +17,7 @@ class PacienteSeeder extends Seeder
         // \App\Models\Paciente::factory()->count(10)->create([
         //     'clinica_id' => 1,
         // ]);
-        \App\Models\Paciente::factory()->count(20)->create([
+        \App\Models\Paciente::factory()->count(40)->create([
             'clinica_id' => 1,
         ]);
     }

@@ -13,7 +13,7 @@ class UserObserver
     {
         
         // Asignar el rol "Usuario" al nuevo usuario
-        $user->assignRole('Usuario');
+        $user->assignRole('Nuevo');
     }
 
     /**

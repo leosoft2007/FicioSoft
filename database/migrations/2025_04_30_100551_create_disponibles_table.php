@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('disponibles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paciente_id')->constrained('pacientes')->onDelete('cascade');
+            $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade');
             $table->enum('dia', ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom']);
             $table->time('hora_inicio');
             $table->time('hora_fin');
