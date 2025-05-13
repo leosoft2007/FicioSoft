@@ -20,7 +20,7 @@ class CitaClinica extends Component
     public $showModal = false;
     public $showModal2 = false;
     public $selectedCita = null;
-    public $estado='';
+    public $estado = '';
     public $fecha;
     public $hora_inicio;
     public $hora_fin;
@@ -34,17 +34,17 @@ class CitaClinica extends Component
         'hora_fin' => '',
         'observaciones' => ' ',
     ];
-    public $pacientes= [];
-    public $profesionales= [];
+    public $pacientes = [];
+    public $profesionales = [];
 
-   
+
 
     public function mount()
     {
         $this->user = auth()->user();
         $this->clinicaId = $this->user->clinica_id;
         $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->get();
-       
+
         // Cargar solo profesionales con al menos una cita
         $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)
             ->whereHas('citas', function ($query) {
@@ -55,76 +55,75 @@ class CitaClinica extends Component
 
 
         $this->loadCitas();
-
     }
 
     public function openCreateModal($data)
-{
-    
-    $start = \Carbon\Carbon::parse($data['start']);
-    $end = \Carbon\Carbon::parse($data['end']);
+    {
 
-    $this->newCita['fecha'] = $start->toDateString();
-    $this->newCita['hora_inicio'] = $start->format('H:i');
-    $this->newCita['hora_fin'] = $end->format('H:i');
+        $start = \Carbon\Carbon::parse($data['start']);
+        $end = \Carbon\Carbon::parse($data['end']);
 
-    $this->showModal2 = true;
-}
+        $this->newCita['fecha'] = $start->toDateString();
+        $this->newCita['hora_inicio'] = $start->format('H:i');
+        $this->newCita['hora_fin'] = $end->format('H:i');
 
-public function guardarCita()
-{
-    $this->validate([
-        'newCita.paciente_id' => 'required|exists:pacientes,id',
-        'newCita.profesional_id' => 'required|exists:profesionals,id',
-        'newCita.fecha' => 'required|date',
-        'newCita.hora_inicio' => 'required|date_format:H:i',
-        'newCita.hora_fin' => 'required|date_format:H:i|after:newCita.hora_inicio',
-        'newCita.observaciones' => 'nullable|string|max:255',
-    ]);
-
-    // Crear la cita
-  
-    
-    // Verificar si la cita ya existe
-    $existingCita = Cita::where('fecha', $this->newCita['fecha'])
-        ->where('hora_inicio', $this->newCita['hora_inicio'])
-        ->where('hora_fin', $this->newCita['hora_fin'])
-        ->where('clinica_id', $this->clinicaId)
-        ->first();
-
-    if ($existingCita) {
-        session()->flash('error', 'Ya existe una cita en este horario.');
-        return;
+        $this->showModal2 = true;
     }
-    // capturar el error de la creación de la cita
-    try {
-        $cita = Cita::create([
-            'paciente_id' => $this->newCita['paciente_id'],
-            'profesional_id' => $this->newCita['profesional_id'],
-            'fecha' => $this->newCita['fecha'],
-            'hora_inicio' => $this->newCita['hora_inicio'],
-            'hora_fin' => $this->newCita['hora_fin'],
-            'observaciones' => $this->newCita['observaciones'],
-            'estado' => 'pendiente',
-            'clinica_id' => $this->clinicaId,
-            'tipo' => 'individual', // o 'grupal' según tu lógica
+
+    public function guardarCita()
+    {
+        $this->validate([
+            'newCita.paciente_id' => 'required|exists:pacientes,id',
+            'newCita.profesional_id' => 'required|exists:profesionals,id',
+            'newCita.fecha' => 'required|date',
+            'newCita.hora_inicio' => 'required|date_format:H:i',
+            'newCita.hora_fin' => 'required|date_format:H:i|after:newCita.hora_inicio',
+            'newCita.observaciones' => 'nullable|string|max:255',
         ]);
-                        } catch (\Exception $e) {
-                            $this->errorMessage = 'Error al crear la cita: ' . $e->getMessage();
-                            \Log::error('Error al crear cita: ' . $e->getMessage(), [
-                                'trace' => $e->getTraceAsString()
-                            ]);
-                            return;
-                        }
-                    $this->loadCitas(); // Recargar citas    
-                    $this->closemodal2();
-                
-                $this->reset('newCita', 'showModal2');
-                $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
-            }
+
+        // Crear la cita
+
+
+        // Verificar si la cita ya existe
+        $existingCita = Cita::where('fecha', $this->newCita['fecha'])
+            ->where('hora_inicio', $this->newCita['hora_inicio'])
+            ->where('hora_fin', $this->newCita['hora_fin'])
+            ->where('clinica_id', $this->clinicaId)
+            ->first();
+
+        if ($existingCita) {
+            session()->flash('error', 'Ya existe una cita en este horario.');
+            return;
+        }
+        // capturar el error de la creación de la cita
+        try {
+            $cita = Cita::create([
+                'paciente_id' => $this->newCita['paciente_id'],
+                'profesional_id' => $this->newCita['profesional_id'],
+                'fecha' => $this->newCita['fecha'],
+                'hora_inicio' => $this->newCita['hora_inicio'],
+                'hora_fin' => $this->newCita['hora_fin'],
+                'observaciones' => $this->newCita['observaciones'],
+                'estado' => 'pendiente',
+                'clinica_id' => $this->clinicaId,
+                'tipo' => 'individual', // o 'grupal' según tu lógica
+            ]);
+        } catch (\Exception $e) {
+            $this->errorMessage = 'Error al crear la cita: ' . $e->getMessage();
+            \Log::error('Error al crear cita: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return;
+        }
+        $this->loadCitas(); // Recargar citas
+        $this->closemodal2();
+
+        $this->reset('newCita', 'showModal2');
+        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+    }
     public function filtrarPorProfesional($profesionalId)
     {
-        
+
         $this->profesionalSeleccionado = $profesionalId;
         $this->loadCitas();
     }
@@ -135,17 +134,25 @@ public function guardarCita()
             'paciente:id,nombre,apellido',
             'profesional:id,nombre,color'
         ])
-        ->select([
-            'id', 'paciente_id', 'profesional_id', 'fecha', 'hora_inicio', 'hora_fin',
-            'observaciones', 'estado', 'tipo', 'clinica_id'
-        ])
-        ->where('clinica_id', $this->clinicaId);
-    
+            ->select([
+                'id',
+                'paciente_id',
+                'profesional_id',
+                'fecha',
+                'hora_inicio',
+                'hora_fin',
+                'observaciones',
+                'estado',
+                'tipo',
+                'clinica_id'
+            ])
+            ->where('clinica_id', $this->clinicaId);
+
         if ($this->profesionalSeleccionado) {
             $query->where('profesional_id', $this->profesionalSeleccionado);
         }
-        
-    
+
+
         $this->citas = $query->get()->map(function ($cita) {
             $pacienteNombre = $cita->paciente?->nombre . ' ' . $cita->paciente?->apellido;
             $profesionalNombre = $cita->profesional?->nombre;
@@ -167,9 +174,9 @@ public function guardarCita()
                 ],
             ];
         })->toArray();
-    
+
         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
-    
+
         return $this->citas;
     }
 
@@ -177,7 +184,7 @@ public function guardarCita()
     {
         // Buscar la cita completa en la base de datos
         $cita = Cita::with(['paciente', 'profesional'])->find($data['citaId']);
-        
+
         if ($cita) {
             $this->selectedCita = [
                 'id' => $cita->id,
@@ -190,38 +197,36 @@ public function guardarCita()
                 'estado' => (string) $cita->estado,
                 'observaciones' => $cita->observaciones,
             ];
-              //dd($this->selectedCita);
-              $this->fecha = Carbon::parse($cita->fecha)->format('Y-m-d');
-              $this->hora_inicio = Carbon::parse($cita->hora_inicio)->format('H:i');
-              $this->hora_fin = Carbon::parse($cita->hora_fin)->format('H:i');
+            //dd($this->selectedCita);
+            $this->fecha = Carbon::parse($cita->fecha)->format('Y-m-d');
+            $this->hora_inicio = Carbon::parse($cita->hora_inicio)->format('H:i');
+            $this->hora_fin = Carbon::parse($cita->hora_fin)->format('H:i');
 
             $this->showModal = true;
-           // dd($this->showModal);
+            // dd($this->showModal);
         }
-        $this->estado =$cita->estado;
+        $this->estado = $cita->estado;
     }
 
     public function closeModal()
     {
-        
+
         $this->showModal = false;
         $this->selectedCita = null;
-        
-         $this->dispatch('modalClosed');
+
+        $this->dispatch('modalClosed');
         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
-      
     }
     public function closeModal2()
     {
-      
+
         $this->showModal2 = false;
         $this->selectedCita = null;
-        
-         $this->dispatch('modalClosed');
-         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
-      
+
+        $this->dispatch('modalClosed');
+        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
     }
-  
+
 
     public function saveCita()
     {
@@ -230,7 +235,7 @@ public function guardarCita()
         ]);
 
         $cita = Cita::find($this->selectedCita['id']);
-        
+
         if ($cita) {
             $cita->update([
                 'estado' => $this->selectedCita['estado'],
@@ -238,35 +243,34 @@ public function guardarCita()
                 'fecha' => $this->selectedCita['fecha'],
                 'hora_inicio' => $this->selectedCita['hora_inicio'],
                 'hora_fin' => $this->selectedCita['hora_fin'],
-                
+
             ]);
 
-            
-            
+
+
             $this->loadCitas(); // Recargar citas
             $this->closeModal();
-            
+
             // Emitir evento para actualizar el calendario
             $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
         }
     }
 
     public function deleteCita()
-{
-    if ($this->selectedCita && isset($this->selectedCita['id'])) {
-        Cita::find($this->selectedCita['id'])?->delete();
-        $this->showModal = false;
-        $this->selectedCita = null;
-        $this->loadCitas();
-        $this->dispatch('modalClosed');
-        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+    {
+        if ($this->selectedCita && isset($this->selectedCita['id'])) {
+            Cita::find($this->selectedCita['id'])?->delete();
+            $this->showModal = false;
+            $this->selectedCita = null;
+            $this->loadCitas();
+            $this->dispatch('modalClosed');
+            $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
         }
-}
+    }
 
     public function render()
     {
 
         return view('livewire.citas.cita-clinica');
     }
-
 }

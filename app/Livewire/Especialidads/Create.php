@@ -17,6 +17,7 @@ class Create extends Component
 
     public function save()
     {
+        $this->form->clinica_id = auth()->user()->clinica->id;
         $this->form->store();
 
         return $this->redirectRoute('especialidads.index', navigate: true);

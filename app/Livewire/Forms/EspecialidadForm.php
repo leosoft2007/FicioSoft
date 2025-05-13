@@ -11,12 +11,14 @@ class EspecialidadForm extends Form
     
     public $nombre = '';
     public $descripcion = '';
+    public $clinica_id;
 
     public function rules(): array
     {
         return [
 			'nombre' => 'required|string',
 			'descripcion' => 'string',
+            'clinica_id' => 'required',
         ];
     }
 

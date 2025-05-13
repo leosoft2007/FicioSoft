@@ -12,6 +12,8 @@ use App\Livewire\Facturas\FacturaListado;
 use App\Livewire\Firma\FirmaPad;
 use App\Livewire\Firma\FirmarConsentimiento;
 use App\Livewire\Forms\DisponibilidadPaciente;
+use App\Livewire\Grupos\CrearCitaGrupal;
+use App\Livewire\Grupos\Grupo;
 use App\Livewire\Pacientes\DisponibleGrilla;
 use App\Livewire\RolesPermissions;
 use App\Livewire\TestInput;
@@ -62,14 +64,14 @@ Route::get('/especialidads/create', \App\Livewire\Especialidads\Create::class)->
 Route::get('/especialidads/show/{especialidad}', \App\Livewire\Especialidads\Show::class)->name('especialidads.show');
 Route::get('/especialidads/update/{especialidad}', \App\Livewire\Especialidads\Edit::class)->name('especialidads.edit');
 
-Route::get('/profesionals', \App\Livewire\Profesionals\Index::class)->name('profesionals.index');       
+Route::get('/profesionals', \App\Livewire\Profesionals\Index::class)->name('profesionals.index');
 Route::get('/profesionals/create', \App\Livewire\Profesionals\Create::class)->name('profesionals.create');
 Route::get('/profesionals/show/{profesional}', \App\Livewire\Profesionals\Show::class)->name('profesionals.show');
 Route::get('/profesionals/update/{profesional}', \App\Livewire\Profesionals\Edit::class)->name('profesionals.edit');
 
 Route::get('/pacientes', \App\Livewire\Pacientes\Index::class)->name('pacientes.index');
-Route::get('/pacientes/create', \App\Livewire\Pacientes\Create::class)->name('pacientes.create');       
-Route::get('/pacientes/show/{paciente}', \App\Livewire\Pacientes\Show::class)->name('pacientes.show');  
+Route::get('/pacientes/create', \App\Livewire\Pacientes\Create::class)->name('pacientes.create');
+Route::get('/pacientes/show/{paciente}', \App\Livewire\Pacientes\Show::class)->name('pacientes.show');
 Route::get('/pacientes/update/{paciente}', \App\Livewire\Pacientes\Edit::class)->name('pacientes.edit');
 
 Route::get('/disponibilidad/{id}', DisponibilidadPaciente::class)->name('disponibilidad');
@@ -88,10 +90,10 @@ Route::get('/facturas/listado', FacturaListado::class)->name('facturas.listado')
 Route::get('/firmapad', FirmaPad::class)->name('firmapad');
 Route::get('/consentimientos', \App\Livewire\Consentimientos\Index::class)->name('consentimientos.index');
 Route::get('/consentimientos/create', \App\Livewire\Consentimientos\Create::class)->name('consentimientos.create');
-Route::get('/consentimientos/show/{consentimiento}', \App\Livewire\Consentimientos\Show::class)->name('consentimientos.show');                                                                                                                          
-Route::get('/consentimientos/update/{consentimiento}', \App\Livewire\Consentimientos\Edit::class)->name('consentimientos.edit');   
+Route::get('/consentimientos/show/{consentimiento}', \App\Livewire\Consentimientos\Show::class)->name('consentimientos.show');
+Route::get('/consentimientos/update/{consentimiento}', \App\Livewire\Consentimientos\Edit::class)->name('consentimientos.edit');
 
-// Route::resource('/firma', ConsentimientoPacienteController::class)->names('firma'); 
+// Route::resource('/firma', ConsentimientoPacienteController::class)->names('firma');
 
 Route::get('/pacientes/consentimientos/firmar/{paciente}/{consentimientos}', [ConsentimientoPacienteController::class, 'firmar'])
     ->name('consentimiento.firmar');
@@ -100,8 +102,8 @@ Route::get('/pacientes/consentimientos/firmar/{paciente}/{consentimientos}', [Co
     ->name('consentimiento.store');
 
     Route::get('/preview-pdf/{id}', [ConsentimientoPacienteController::class, 'generarPdf']);
-
-
+    // grupos
+    Route::get('/grupos', Grupo::class)->name('grupo');
 
 
 });

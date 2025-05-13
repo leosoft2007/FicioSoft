@@ -25,12 +25,12 @@ class CitaFactory extends Factory
         // seleccionar la clinica_id=1
        $clinica = Clinica::find(1);
 
-        
+
         // Obtiene asociaciones aleatorias o crea nuevas si no existen
         $paciente = Paciente::withoutGlobalScopes()->inRandomOrder()->first() ?: Paciente::factory()->create();
-        
+
         $profesional = Profesional::withoutGlobalScopes()->inRandomOrder()->first() ?: Profesional::factory()->create();
-        
+
         $servicio = $clinica->servicios()->withoutGlobalScopes()->inRandomOrder()->first() ?: $clinica->servicios()->create();
 
         // Fecha y hora dentro del próximo mes
@@ -52,7 +52,7 @@ class CitaFactory extends Factory
             'fecha'          => $start->format('Y-m-d'),
             'hora_inicio'    => $start->format('H:i:s'),
             'hora_fin'       => $end->format('H:i:s'),
-            'tipo'           => $this->faker->randomElement(['individual', 'grupal']),
+            'tipo'           => 'individual',
             'estado'         => $this->faker->randomElement(['pendiente', 'confirmado', 'cancelado']),
             'observaciones'  => $this->faker->optional()->sentence(),
         ];

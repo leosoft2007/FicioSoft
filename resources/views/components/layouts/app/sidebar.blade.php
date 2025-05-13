@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
         @include('partials.head')
-        
+
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
@@ -15,25 +15,25 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    
+
                     <flux:navlist.item icon="academic-cap" :href="route('especialidads.index')" :current="request()->routeIs('especialidad.*')" wire:navigate>{{ __('Especialidad') }}</flux:navlist.item>
 
                     <flux:navlist.item icon="user-circle" :href="route('profesionals.index')" :current="request()->routeIs('profesional.*')" wire:navigate>{{ __('Profesionales') }}</flux:navlist.item>
 
                     <flux:navlist.item icon="user-group" :href="route('pacientes.index')" :current="request()->routeIs('paciente.*')" wire:navigate>{{ __('Pacientes') }}</flux:navlist.item>
 
-                    <flux:navlist.item icon="pencil-square" :href="route('agenda')" :current="request()->routeIs('cita.*')" wire:navigate>{{ __('Agenda') }}</flux:navlist.item>
 
-                    
+
+
 
                     <flux:navlist.item icon="pencil-square" :href="route('consentimientos.index')" :current="request()->routeIs('consentimientos.*')" wire:navigate>{{ __('Concentimiento') }}</flux:navlist.item>
 
-                    
-                    
 
-                    
+
+
+
                    <!-- <flux:navlist.item icon="document-currency-euro" :href="route('facturas.create')" :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Facturas') }}</flux:navlist.item>
-                    
+
                     <flux:navlist.item icon="document-currency-euro" :href="route('facturas.index')" :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Lista de Facturas') }}</flux:navlist.item>
                    -->
                     <flux:dropdown position="top" align="start" class="max-lg:hidden">
@@ -45,18 +45,29 @@
                                 <flux:menu.radio icon="document-currency-euro" :href="route('facturas.listado')" :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Listados') }}</flux:menu.radio>
                             </flux:menu.radio.group>
                             </flux:menu>
-                    
                     </flux:dropdown>
+
+                    <flux:dropdown position="top" align="start" class="max-lg:hidden">
+                        <flux:profile icon="users" name="Agendas" />
+                            <flux:menu>
+                            <flux:menu.radio.group>
+                                <flux:menu.item icon="users"  :href="route('agenda')" :current="request()->routeIs('cita.*')" wire:navigate>{{ __('Agenda Completa') }}</flux:menu.radio>
+                                <flux:menu.item icon="document-text" :href="route('grupo')" :current="request()->routeIs('grupo.*')" wire:navigate>{{ __('Clases Grupales') }}</flux:menu.radio>
+                                
+                            </flux:menu.radio.group>
+                            </flux:menu>
+                    </flux:dropdown>
+
 
                   <!--  <flux:navlist.item icon="shield-check" :href="route('roles-permissions')" :current="request()->routeIs('roles-permissions.*')" wire:navigate>{{ __('Roles & Permissions') }}</flux:navlist.item> -->
                   @role('Administrador')
                         <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.*')" wire:navigate>{{ __('Users') }}</flux:navlist.item>
                         <flux:navlist.item icon="users" :href="route('clinicas.index')" :current="request()->routeIs('clinicas.*')" wire:navigate>{{ __('Clinicas') }}</flux:navlist.item>
                         <flux:navlist.item icon="shield-check" :href="route('roles-permissions')" :current="request()->routeIs('roles-permissions.*')" wire:navigate> {{ __('Roles & Permissions') }}</flux:navlist.item>
-                       
+
                   @endrole
-              
-                    
+
+
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -169,7 +180,7 @@
         </flux:header>
 
         {{ $slot }}
-      
+
         @fluxScripts
     </body>
 </html>

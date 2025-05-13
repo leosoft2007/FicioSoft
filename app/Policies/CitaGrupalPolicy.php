@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Clase;
+use App\Models\CitaGrupal;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class ClasePolicy
+class CitaGrupalPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class ClasePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Clase $clase): bool
+    public function view(User $user, CitaGrupal $citaGrupal): bool
     {
         return false;
     }
@@ -35,7 +35,7 @@ class ClasePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Clase $clase): bool
+    public function update(User $user, CitaGrupal $citaGrupal): bool
     {
         return false;
     }
@@ -43,7 +43,7 @@ class ClasePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Clase $clase): bool
+    public function delete(User $user, CitaGrupal $citaGrupal): bool
     {
         return false;
     }
@@ -51,7 +51,7 @@ class ClasePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Clase $clase): bool
+    public function restore(User $user, CitaGrupal $citaGrupal): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class ClasePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Clase $clase): bool
+    public function forceDelete(User $user, CitaGrupal $citaGrupal): bool
     {
         return false;
     }

@@ -26,8 +26,9 @@ class Profesional extends Model
         });
     }
     /** @use HasFactory<\Database\Factories\ProfesionalFactory> */
-   
+
     protected $perPage = 20;
+    protected $table = 'profesionals';
     /**
      * The attributes that are mass assignable.
      *
@@ -87,5 +88,10 @@ class Profesional extends Model
     {
         return $this->hasMany(Cita::class);
     }
-    
+
+    public function citaGrupals()
+    {
+        return $this->hasMany(CitaGrupal::class);
+    }
+
 }

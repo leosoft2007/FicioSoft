@@ -7,6 +7,7 @@ use App\Traits\HasAuditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Traits\HasRoles;
 
 class Paciente extends Model
@@ -27,8 +28,8 @@ class Paciente extends Model
         });
     }
     /** @use HasFactory<\Database\Factories\PacienteFactory> */
-    
-    
+
+
     protected $perPage = 20;
 
     protected $fillable = [
@@ -82,7 +83,7 @@ class Paciente extends Model
     {
         return $this->direccion . ', ' . $this->ciudad . ', ' . $this->estado . ', ' . $this->codigo_postal . ', ' . $this->pais;
     }
-    
+
     public function clinica(): BelongsTo
     {
         return $this->belongsTo(Clinica::class);
@@ -101,18 +102,21 @@ class Paciente extends Model
             ->withPivot('firma', 'firmado_en')
             ->withTimestamps();
 
-            
     }
-   
 
-    
-    
-    // Relación M:M con citas a través de la tabla clases (citas grupales)
-    public function clases()
+    public function citaGrupalPacientes()
     {
-        return $this->belongsToMany(Cita::class, 'clases', 'paciente_id', 'cita_id');
+        return $this->hasMany(CitaGrupalPaciente::class);
     }
 
+    public function citaGrupalOcurrencias(): BelongsToMany
+    {
+        return $this->belongsToMany(CitaGrupalOcurrencia::class, 'cita_grupal_pacientes', 'paciente_id', 'cita_grupal_ocurrencia_id')
+            ->withPivot('clinica_id')
+            ->withTimestamps();
+    }
+
+   
     public function scopeActivos($query)
     {
         return $query->where('estado_paciente', 'activo');
