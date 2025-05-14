@@ -46,7 +46,7 @@ class ProfesionalFactory extends Factory
                 '#AB47BC', // morado fuerte
                 '#FF8A65', // coral oscuro
                 '#9575CD', // lavanda saturada
-                '#B388FF', // violeta más vivo
+                '#B388FF', // violeta más vivo 
                 '#4DD0E1'  // turquesa fuerte
             ])
         ];

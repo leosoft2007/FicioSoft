@@ -13,7 +13,7 @@ class Consentimiento extends Model
      use HasFactory;
     use HasRoles;
     use HasAuditable;
-    
+
     protected static function booted()
     {
         static::addGlobalScope(new ClinicaScope);
@@ -25,7 +25,7 @@ class Consentimiento extends Model
             }
         });
     }
-   
+
 
     protected $fillable = [
         'titulo',
@@ -39,11 +39,16 @@ class Consentimiento extends Model
                 return $this->belongsToMany(Paciente::class, 'consentimiento_pacientes', 'consentimiento_id', 'paciente_id')
                     ->withPivot('firma', 'firmado_en')
                     ->withTimestamps();
+                    
             }
+    public function consentimientoPacientes()
+    {
+        return $this->hasMany(ConsentimientoPaciente::class);
+    }
     public function clinica()
     {
         return $this->belongsTo(Clinica::class);
     }
-   
-    
+
+
 }

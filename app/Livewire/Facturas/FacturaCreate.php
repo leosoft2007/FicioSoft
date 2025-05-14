@@ -106,12 +106,13 @@ class FacturaCreate extends Component
             'fecha' => 'required|date',
             'metodo_pago' => 'required|in:efectivo,tarjeta',
         ]);
-    
+
         DB::beginTransaction();
-    
+
             try {
                 if ($this->facturaId) {
                     $factura = Factura::findOrFail($this->facturaId);
+
                     $factura->update([
                         'paciente_id' => $this->paciente_id,
                         'fecha' => $this->fecha,
@@ -127,19 +128,18 @@ class FacturaCreate extends Component
                         'fecha' => $this->fecha,
                         'estado' => 'pendiente',
                         'metodo_pago' => $this->metodo_pago,
-                        'numero_factura' => strtoupper(Str::random(10)),
                         'descripcion' => $this->descripcion,
                         'total' => $this->calcularTotal(),
                     ]);
                 }
-        
+
                 foreach ($this->servicios as $item) {
                     FacturaDetalle::create([
                         'factura_id' => $factura->id,
                         ...$item
                     ]);
                 }
-        
+
         DB::commit();
         if ($this->facturaId) {
             session()->flash('success', 'Factura actualizada correctamente.');
@@ -149,7 +149,7 @@ class FacturaCreate extends Component
                 'paciente_id', 'metodo_pago', 'descripcion',
                 'servicios', 'servicio_id', 'cantidad', 'ivaInput'
             ]);
-        
+
             return $this->download($factura->id); // 🔁 ahora hace todo desde aquí
         }
         } catch (\Exception $e) {
@@ -161,7 +161,7 @@ class FacturaCreate extends Component
         public function download($id)
             {
                 $factura = Factura::with(['paciente', 'clinica', 'detalles'])->findOrFail($id);
-                
+
                 // 👇 Generar el QR aquí
                 $factura->load(['paciente', 'clinica', 'detalles']);
                 $qrData = json_encode([
@@ -170,7 +170,7 @@ class FacturaCreate extends Component
                     'total' => $factura->total,
                 ]);
                 $qrSvg = base64_encode(QrCode::format('svg')->size(120)->generate($qrData));
-        
+
                 // 👇 Cargar la vista pasando el QR
                 $pdf = Pdf::loadView('pdf.factura', [
                     'factura' => $factura,
@@ -197,5 +197,5 @@ class FacturaCreate extends Component
             ]);
         }
 
-        
+
     }

@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
 
 
-    <x-page-header title="🗓️ Agenda de Citas" subtitle="Visualiza todas las citas de la clínica" color="lime"
-        :clickable="true" badge="Nuevo" icon="check" footer="Texto de pie" wire:key="factura-filtros">
+    <x-page-header title="🗓️ Agenda de Citas" color="lime" :clickable="true" badge="Nuevo" icon="check"
+        footer="Texto de pie" wire:key="factura-filtros">
 
-
+        @include('livewire.citas.filtroprofesionales')
 
         <div wire:ignore x-data x-init="$nextTick(() => { Livewire.dispatch('calendar3:load'); });">
             <div id="calendar3"></div>
@@ -72,6 +72,10 @@
                         list: 'Lista'
                     },
                     selectable: true,
+                    selectAllow: function(selectInfo) {
+                        // Solo permitir selección si estamos en la vista diaria
+                        return calendar.view.type === 'timeGridDay' || calendar.view.type === 'timeGridWeek';
+                    },
                     select: function(info) {
                         const eventData = {
                             start: info.startStr,
@@ -175,8 +179,8 @@
                         if (tipo === 'grupal') {
                             // Dispara el evento para el modal de selección
 
-                            @this.openGrupalocurrencia('show-grupal-modal-choice',eventData);
-                        } else {
+                            @this.openGrupalocurrencia('show-grupal-modal-choice', eventData);
+                        } else if (tipo === 'individual') {
                             @this.openCitaModal(eventData);
                         }
                     },
@@ -208,9 +212,6 @@
                 //  console.log(updatedEvents.updatedEvents);
 
             });
-
-
-
         </script>
     @endscript
 </div>

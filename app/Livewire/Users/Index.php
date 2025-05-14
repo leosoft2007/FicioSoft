@@ -11,12 +11,37 @@ class Index extends Component
 {
     use WithPagination;
 
+    public $search = '';
+    public $sortField = 'name';
+    public $sortDirection = 'asc';
+
+    protected $queryString = ['search' => ['except' => ''], 'sortField', 'sortDirection'];
+
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
+
+        $this->sortField = $field;
+    }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function render(): View
     {
-        $users = User::paginate();
+        return view('livewire.user.index', [
+            'users' => User::where('name', 'like', '%' . $this->search . '%')
+                ->orWhere('email', 'like', '%' . $this->search . '%')
+                ->orderBy($this->sortField, $this->sortDirection)
+                ->paginate(10)
+        ]);
 
-        return view('livewire.user.index', compact('users'))
-            ->with('i', $this->getPage() * $users->perPage());
     }
 
     public function delete(User $user)
@@ -24,5 +49,6 @@ class Index extends Component
         $user->delete();
 
         return $this->redirectRoute('users.index', navigate: true);
+        session()->flash('message', 'Usuario eliminado correctamente');
     }
 }

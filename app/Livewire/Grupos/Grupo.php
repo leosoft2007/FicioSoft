@@ -77,6 +77,58 @@ class Grupo extends Component
     public $pacientes = [];
     public $profesionales = [];
 
+    public function guardarCita()
+    {
+        $this->validate([
+            'newCita.paciente_id' => 'required|exists:pacientes,id',
+            'newCita.profesional_id' => 'required|exists:profesionals,id',
+            'newCita.fecha' => 'required|date',
+            'newCita.hora_inicio' => 'required|date_format:H:i',
+            'newCita.hora_fin' => 'required|date_format:H:i|after:newCita.hora_inicio',
+            'newCita.observaciones' => 'nullable|string|max:255',
+        ]);
+
+        // Crear la cita
+
+
+        // Verificar si la cita ya existe
+        $existingCita = Cita::where('fecha', $this->newCita['fecha'])
+            ->where('hora_inicio', $this->newCita['hora_inicio'])
+            ->where('hora_fin', $this->newCita['hora_fin'])
+            ->where('clinica_id', $this->clinicaId)
+            ->first();
+
+        if ($existingCita) {
+            session()->flash('error', 'Ya existe una cita en este horario.');
+            return;
+        }
+        // capturar el error de la creación de la cita
+        try {
+            $cita = Cita::create([
+                'paciente_id' => $this->newCita['paciente_id'],
+                'profesional_id' => $this->newCita['profesional_id'],
+                'fecha' => $this->newCita['fecha'],
+                'hora_inicio' => $this->newCita['hora_inicio'],
+                'hora_fin' => $this->newCita['hora_fin'],
+                'observaciones' => $this->newCita['observaciones'],
+                'estado' => 'pendiente',
+                'clinica_id' => $this->clinicaId,
+                'tipo' => 'individual', // o 'grupal' según tu lógica
+            ]);
+        } catch (\Exception $e) {
+            $this->errorMessage = 'Error al crear la cita: ' . $e->getMessage();
+            \Log::error('Error al crear cita: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return;
+        }
+        $this->loadCitas(); // Recargar citas
+        $this->closemodal2();
+
+        $this->reset('newCita', 'showModal2');
+        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+    }
+
     public function openGrupalocurrencia($a, $eventData)
     {
 
@@ -91,9 +143,12 @@ class Grupo extends Component
         $this->clinicaId = $this->user->clinica_id;
         $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->get();
 
-        // Cargar solo profesionales con al menos una cita
-        $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)->get();
-
+        $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)
+            ->whereHas('citas', function ($query) {
+                // Opcional: filtra por fecha si lo necesitas
+                // $query->whereDate('fecha', today()); // Filtrar hoy
+            })
+            ->get();
 
         $this->loadCitas();
     }
@@ -107,7 +162,12 @@ class Grupo extends Component
         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
     }
 
+    public function filtrarPorProfesional($profesionalId)
+    {
 
+        $this->profesionalSeleccionado = $profesionalId;
+        $this->loadCitas();
+    }
 
     public function saveCita()
     {
@@ -144,8 +204,42 @@ class Grupo extends Component
             $this->loadCitas();
             $this->dispatch('modalClosed');
             $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+            session()->flash('message', 'Cita Eliminada exitosamente.');
         }
     }
+    public function deleteCitaGrupal()
+    {
+        if (!$this->editCitaGrupalId) {
+            session()->flash('error', 'No se seleccionó ningún grupo para eliminar.');
+            return;
+        }
+
+        $citaGrupal = CitaGrupal::find($this->editCitaGrupalId);
+
+        if (!$citaGrupal) {
+            session()->flash('error', 'El grupo no fue encontrado.');
+            return;
+        }
+
+        try {
+            $citaGrupal->delete();
+
+            // Reset y actualizaciones
+            $this->editCitaGrupalId = null;
+            $this->showGrupalModal = false;
+            $this->loadCitas();
+
+            $this->dispatch('modalClosed');
+            $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+            session()->flash('message', 'Grupo eliminado exitosamente.');
+        } catch (\Exception $e) {
+            // Log para debugging
+            \Log::error('Error al eliminar grupo: ' . $e->getMessage());
+
+            session()->flash('error', 'Ocurrió un error al eliminar el grupo. Intenta nuevamente.');
+        }
+    }
+
 
     public function openCreateGrupalModal($data)
     {

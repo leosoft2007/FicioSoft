@@ -12,30 +12,39 @@ class Factura extends Model
 {
     use HasFactory;
     use HasAuditable;
-    use HasRoles;  
+    use HasRoles;
 
     protected static function booted()
-{
-    static::addGlobalScope(new ClinicaScope);
+    {
+        static::addGlobalScope(new ClinicaScope);
 
-    static::creating(function ($registro) {
-        if (auth()->check()) {
-            $registro->clinica_id = auth()->user()->clinica_id;
-        }
+        static::creating(function ($registro) {
+            if (auth()->check()) {
+                $registro->clinica_id = auth()->user()->clinica_id;
+            }
 
-        // Generar número de factura secuencial por clínica
-        if (empty($registro->numero_factura) && $registro->clinica_id) {
-            $ultimoNumero = self::withoutGlobalScope(ClinicaScope::class)
-                ->where('clinica_id', $registro->clinica_id)
-                ->orderByDesc('id')
-                ->value('numero_factura');
+            // Generar número de factura secuencial por clínica
+            if (empty($registro->numero_factura) && $registro->clinica_id) {
+                $ultimoNumero = self::withoutGlobalScope(ClinicaScope::class)
+                    ->where('clinica_id', $registro->clinica_id)
+                    ->orderByDesc('id')
+                    ->value('numero_factura');
 
-            $nuevoNumero = self::generarNumeroSecuencial($ultimoNumero);
+                $nuevoNumero = self::generarNumeroSecuencial($ultimoNumero);
 
-            $registro->numero_factura = $nuevoNumero;
-        }
-    });
-}
+                $registro->numero_factura = $nuevoNumero;
+            }
+        });
+
+        static::updating(function ($factura) {
+            // Incrementar campo rectificada
+            $factura->rectificada = ($factura->rectificada ?? 0) + 1;
+
+            // Registrar la fecha de rectificación
+            $factura->fecha_rectificacion = now();
+        });
+    }
+
 
 protected static function generarNumeroSecuencial($ultimoNumero)
 {
@@ -49,7 +58,7 @@ protected static function generarNumeroSecuencial($ultimoNumero)
 
     return 'F' . str_pad($nuevo, 6, '0', STR_PAD_LEFT); // Ejemplo: F000124
 }
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -77,7 +86,7 @@ protected static function generarNumeroSecuencial($ultimoNumero)
     {
         return $this->hasMany(FacturaDetalle::class);
     }
-    
+
 
 
 }

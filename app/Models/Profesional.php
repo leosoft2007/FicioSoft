@@ -49,6 +49,7 @@ class Profesional extends Model
         'codigo_postal',
         'usuario_id',
         'estado_profesional', // activo, inactivo
+        'color',
     ];
     /**
      * The attributes that should be hidden for serialization.

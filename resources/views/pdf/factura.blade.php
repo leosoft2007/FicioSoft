@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Factura {{ $factura->numero_factura }}</title>
-    
+
         <div>
           <!--  <img src="{{ url('storage/logos/mi_logo.png') }}" class="logo"> -->
         </div>
-       
-        
-   
+
+
+
     <style>
         body {
             font-family: sans-serif;
@@ -145,24 +145,24 @@
                 <tr>
                     <td class="text-right">{{ $item->cantidad }}</td>
                     <td>{{ $item->descripcion }}</td>
-                    <td class="text-right">${{ number_format($item->precio_unitario, 2) }}</td>
-                    <td class="text-right">${{ number_format($item->iva, 2) }}</td>
-                    <td class="text-right">${{ number_format($item->subtotal, 2) }}</td>
-                    <td class="text-right">${{ number_format($item->total, 2) }}</td>
+                    <td class="text-right">€{{ number_format($item->precio_unitario, 2) }}</td>
+                    <td class="text-right">€{{ number_format($item->iva, 2) }}</td>
+                    <td class="text-right">€{{ number_format($item->subtotal, 2) }}</td>
+                    <td class="text-right">€{{ number_format($item->total, 2) }}</td>
                 </tr>
             @endforeach
 
             <tr class="total-row">
                 <td colspan="4" class="text-right">Subtotal sin IVA:</td>
-                <td colspan="2" class="text-right">${{ number_format($subtotal, 2) }}</td>
+                <td colspan="2" class="text-right">€{{ number_format($subtotal, 2) }}</td>
             </tr>
             <tr class="total-row">
                 <td colspan="4" class="text-right">Total IVA:</td>
-                <td colspan="2" class="text-right">${{ number_format($ivaTotal, 2) }}</td>
+                <td colspan="2" class="text-right">€{{ number_format($ivaTotal, 2) }}</td>
             </tr>
             <tr class="total-row">
                 <td colspan="4" class="text-right">Total con IVA:</td>
-                <td colspan="2" class="text-right">${{ number_format($subtotal + $ivaTotal, 2) }}</td>
+                <td colspan="2" class="text-right">€{{ number_format($subtotal + $ivaTotal, 2) }}</td>
             </tr>
         </tbody>
     </table>
@@ -170,14 +170,14 @@
         <strong>Comentarios:</strong><br>
         {{ $factura->descripcion }}<br>
     </div>
-   
+
 
     <div style="text-align: center; margin-top: 70px;">
         {{-- Inserta el SVG inline --}}
-        <img src="data:image/svg+xml;base64,{{ $qrSvg }}" 
-             alt="QR Factura" 
+        <img src="data:image/svg+xml;base64,{{ $qrSvg }}"
+             alt="QR Factura"
              style="width: 120px; height: 120px;" />
-            
+
     </div>
 </body>
 </html>

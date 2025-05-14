@@ -104,7 +104,7 @@ Route::get('/pacientes/consentimientos/firmar/{paciente}/{consentimientos}', [Co
     Route::get('/preview-pdf/{id}', [ConsentimientoPacienteController::class, 'generarPdf']);
     // grupos
     Route::get('/grupos', Grupo::class)->name('grupo');
-
+    route::get('/descargarpdf/{id_consentimiento}/{id_paciente}', [ConsentimientoPacienteController::class, 'descargaPdf'])->name('descarga-pdf');
 
 });
 

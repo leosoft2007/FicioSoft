@@ -8,9 +8,9 @@ use Livewire\Form;
 
 class ProfesionalForm extends Form
 {
- 
+
     public ?Profesional $profesionalModel;
-    
+
     public $nombre = '';
     public $apellido = '';
     public $email = '';
@@ -23,8 +23,9 @@ class ProfesionalForm extends Form
     public $clinica_id = '';
     public $especialidad_id = '';
     public $usuario_id = '';
+    public $color = '';
 
-   
+
     public function rules(): array
     {
         return [
@@ -39,7 +40,8 @@ class ProfesionalForm extends Form
 			'codigo_postal' => 'string',
             'clinica_id' => 'numeric',
             'especialidad_id' => 'numeric',
-            'usuario_id' => 'numeric'
+            'usuario_id' => 'numeric',
+            'color' => 'string',
         ];
     }
 
@@ -48,7 +50,7 @@ class ProfesionalForm extends Form
         $clinicaId =auth()->user();
 
         $this->profesionalModel = $profesionalModel;
-        
+
         $this->nombre = $this->profesionalModel->nombre;
         $this->apellido = $this->profesionalModel->apellido;
         $this->email = $this->profesionalModel->email;
@@ -61,12 +63,13 @@ class ProfesionalForm extends Form
         $this->clinica_id = $clinicaId->clinica_id;
         $this->especialidad_id = $this->profesionalModel->especialidad_id;
         $this->usuario_id = $clinicaId->id;
+        $this->color = $this->profesionalModel->color;
     }
 
     public function store(): void
     {
 
-       
+
         $this->profesionalModel->create($this->validate());
 
         $this->reset();
