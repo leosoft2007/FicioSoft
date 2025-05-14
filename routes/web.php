@@ -29,9 +29,7 @@ use Illuminate\Http\Request;
 Route::get('/home', function () {
     return redirect('/dashboard');
 })->name('home');
-Route::get('/', function () {
-    return redirect('/dashboard');
-})->name('home');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

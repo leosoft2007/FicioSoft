@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Providers;
+
 use App\Services\MetadataService;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
