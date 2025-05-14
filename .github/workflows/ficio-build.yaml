@@ -62,7 +62,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: v22.x
+          node-version: v20.x
 
       - name: Build Node assets
         env:
@@ -78,7 +78,7 @@ jobs:
         with:
           api-key: ${{ secrets.IONOS_API_KEY }}
           service-host: api-eu.ionos.space
-          project-id: 30fd02c4-4b27-4a82-af7a-2923515ac754
+          project-id: 1367ccbf-57f4-44cf-898d-08097df9a6e2
           branch-id: ${{ inputs.branch-id }}
           version: ${{ github.sha }}
           folder: ${{ env.DEPLOYMENT_FOLDER }}

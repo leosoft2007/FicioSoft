@@ -21,6 +21,7 @@ deploy:
       - php artisan storage:link
       - php artisan optimize
       - php artisan up
+      
 
   # configuration part, which is taken at ALL FURTHER deployments of this branch
   recurring:
