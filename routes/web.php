@@ -26,14 +26,13 @@ use Livewire\Volt\Volt;
 use Illuminate\Http\Request;
 
 // Route::get('/', function () { return view('welcome');})->name('home');
-Route::get('/', function () {
-    return redirect('/dashboard');
-})->name('home');
+Route::redirect('/', '/login')->name('home');
 
+Route::view('dashboard', 'dashboard')->name('dashboard');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+//Route::view('dashboard', 'dashboard')
+  //  ->middleware(['auth', 'verified'])
+    //->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
