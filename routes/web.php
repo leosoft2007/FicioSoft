@@ -26,7 +26,7 @@ use Livewire\Volt\Volt;
 use Illuminate\Http\Request;
 
 // Route::get('/', function () { return view('welcome');})->name('home');
-Route::get('/home', function () {
+Route::get('/', function () {
     return redirect('/dashboard');
 })->name('home');
 
