@@ -25,8 +25,8 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use Illuminate\Http\Request;
 
-// Route::get('/', function () { return view('welcome');})->name('home');
-Route::redirect('/', '/login')->name('home');
+ Route::get('/', function () { return view('welcome');})->name('home');
+//Route::redirect('/', '/login');
 
 Route::view('dashboard', 'dashboard')->name('dashboard');
 
