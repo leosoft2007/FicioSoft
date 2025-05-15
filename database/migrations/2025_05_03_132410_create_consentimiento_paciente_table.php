@@ -37,7 +37,7 @@ return new class extends Migration
 
         // Índices
         $table->index(['paciente_id', 'consentimiento_id']);
-        $table->index('hash_documento');
+        
         });
     }
 
