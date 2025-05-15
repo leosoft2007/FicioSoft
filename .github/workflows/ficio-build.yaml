@@ -14,7 +14,10 @@ on:
         type: string
 
 env:
-  DEPLOYMENT_FOLDER: ./
+  CI: true
+  SITE_URL: ${{ steps.project.outputs.site-url }}
+  
+    
 
 jobs:
 # Please do not rename this job
@@ -68,9 +71,12 @@ jobs:
         env:
           CI: true
           SITE_URL: ${{ inputs.site-url }}
+          MY_ENV_VAR: value-for-my-env-var
+          MY_SECRET_ENV_VAR: ${{ secrets.MY_SECRET }}
         run: |
           npm ci
           npm run build
+          run: php artisan key:generate --force -n
 
 # Please do not touch the following action
       - name: Store deployment content
