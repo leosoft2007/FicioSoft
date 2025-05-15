@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class ClinicaController extends Controller
 {
     //buscamo el rol Administrador
-    public function init(){
+    public function init1(){
         $admin = Role::where('name', 'Administrador')->first();
         $models = [
             //   'User',
