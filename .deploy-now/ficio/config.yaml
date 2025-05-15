@@ -47,7 +47,7 @@ deploy:
       - php artisan storage:link
       - php artisan optimize
       - php artisan up
-      - php artisan migrate:fresh --seed
+      
 
 # uncomment the following lines to configure cron jobs
 #runtime:
