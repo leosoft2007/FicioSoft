@@ -83,8 +83,5 @@ class Clinica extends Model
         return $this->hasMany(Disponible::class);
     }
 
-    public function clases(): HasMany
-    {
-        return $this->hasMany(Clase::class);
-    }
+    
 }

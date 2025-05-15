@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClinicaController;
 use App\Http\Controllers\ConsentimientoController;
 use App\Http\Controllers\ConsentimientoPacienteController;
 use App\Http\Controllers\DisponibleController;
@@ -31,8 +32,9 @@ use Illuminate\Http\Request;
 Route::view('dashboard', 'dashboard')->name('dashboard');
 
 //Route::view('dashboard', 'dashboard')
-  //  ->middleware(['auth', 'verified'])
-    //->name('dashboard');
+//  ->middleware(['auth', 'verified'])
+//->name('dashboard');
+Route::get('init', [ClinicaController::class, 'init'])->name('init');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
