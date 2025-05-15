@@ -13,8 +13,39 @@ use Illuminate\Support\Str;
 
 class ClinicaController extends Controller
 {
-    public function init()
-    { {
+    //buscamo el rol Administrador
+    public function init(){
+        $admin = Role::where('name', 'Administrador')->first();
+        $models = [
+            //   'User',
+            //   'Clinica',
+            'Especialidad',
+            'Hora',
+            'Paciente',
+            'Profesional',
+            'Cita',
+            'Factura',
+            'Servicio',
+            'Disponible',
+            'Consentimiento',
+            // Agrega todos los modelos que quieras gestionar permisos
+        ];
+
+        // Crear permisos para cada modelo
+        foreach ($models as $model) {
+            // Convertir a plural en caso de ser necesario
+            $modelName = Str::plural(Str::lower($model));
+
+            // Crear permisos comunes como "crear", "editar", "eliminar", "ver"
+            Permission::create(['name' => "create $modelName", 'description' => 'Crear ' . $modelName])->assignRole($admin);
+            Permission::create(['name' => "edit $modelName", 'description' => 'Editar ' . $modelName])->assignRole($admin);
+            Permission::create(['name' => "delete $modelName", 'description' => 'Eliminar ' . $modelName])->assignRole($admin);
+            Permission::create(['name' => "view $modelName", 'description' => 'Ver ' . $modelName])->assignRole($admin);
+        }
+    }
+
+    public function init3()
+    {
             // Verificar si hay usuarios registrados
             if (User::count() > 0) {
                 return; // Si ya hay usuarios, no ejecutar el código
@@ -64,17 +95,17 @@ class ClinicaController extends Controller
 
                 // Lista de modelos en tu aplicación
                 $models = [
-                    'User',
-                    'Clinica',
-                    //   'Especialidad',
-                    //   'Hora',
-                    //   'Paciente',
-                    //   'Profesional',
-                    //   'Cita',
-                    //   'Factura',
-                    //   'Servicio',
-                    //   'Disponible',
-                    //   'Consentimiento',
+                 //   'User',
+                 //   'Clinica',
+                       'Especialidad',
+                       'Hora',
+                       'Paciente',
+                       'Profesional',
+                       'Cita',
+                       'Factura',
+                       'Servicio',
+                       'Disponible',
+                       'Consentimiento',
                     // Agrega todos los modelos que quieras gestionar permisos
                 ];
 
@@ -90,7 +121,7 @@ class ClinicaController extends Controller
                     Permission::create(['name' => "view $modelName", 'description' => 'Ver ' . $modelName])->assignRole($admin);
                 }
             }
-        }
+
     }
     /**
      * Display a listing of the resource.

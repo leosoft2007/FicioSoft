@@ -37,7 +37,7 @@
                     <flux:navlist.item icon="document-currency-euro" :href="route('facturas.index')" :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Lista de Facturas') }}</flux:navlist.item>
                    -->
                     <flux:dropdown position="top" align="start" class="max-lg:hidden">
-                        <flux:profile avatar="{{ asset('storage/images/factura.png') }}" name="Facturas" />
+                        <flux:profile icon="document-currency-euro" name="Facturas" />
                             <flux:menu>
                             <flux:menu.radio.group>
                                 <flux:menu.radio icon="document-currency-euro" :href="route('facturas.create')" :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Crear Factura') }}</flux:menu.radio>
@@ -53,7 +53,7 @@
                             <flux:menu.radio.group>
                                 <flux:menu.item icon="users"  :href="route('agenda')" :current="request()->routeIs('cita.*')" wire:navigate>{{ __('Agenda Completa') }}</flux:menu.radio>
                                 <flux:menu.item icon="document-text" :href="route('grupo')" :current="request()->routeIs('grupo.*')" wire:navigate>{{ __('Clases Grupales') }}</flux:menu.radio>
-                                
+
                             </flux:menu.radio.group>
                             </flux:menu>
                     </flux:dropdown>
