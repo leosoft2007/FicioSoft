@@ -12,13 +12,7 @@ on:
       branch-id:
         required: true
         type: string
-
-env:
-  CI: true
-  SITE_URL: ${{ steps.project.outputs.site-url }}
   
-    
-
 jobs:
 # Please do not rename this job
   build-project:
