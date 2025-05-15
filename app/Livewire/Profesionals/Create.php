@@ -11,18 +11,25 @@ class Create extends Component
 {
     public ProfesionalForm $form;
     public $especialidades =[];
-    
+
 
     public function mount(Profesional $profesional)
     {
         $this->form->setProfesionalModel($profesional);
-       $this->especialidades = Especialidad::all(); // O puedes usar ->pluck('nombre', 'id') si lo prefieres    
-        
+        //especialidad de la clinica
+        $clinicaId = auth()->user()->clinica_id;
+
+        $this->especialidades = Especialidad::where('clinica_id', $clinicaId)->get();
+
+
     }
 
     public function save()
     {
-        $this->form->store();
+
+        $prof = $this->form->store();
+        
+
 
         return $this->redirectRoute('profesionals.index', navigate: true);
     }

@@ -32,30 +32,24 @@
     <div x-show="activeTab === 'informacion'" class="space-y-6">
         <flux:heading size="lg">Información Personal</flux:heading>
         <flux:fieldset class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <flux:field  wire:model="form.nombre">
+
                 <flux:input label="Nombre" type="text" wire:model="form.nombre" placeholder="Ej: Juan" />
-            </flux:field>
-            <flux:field  wire:model="form.apellido">
+
                 <flux:input label="Apellido" type="text" wire:model="form.apellido" placeholder="Ej: Pérez" />
-            </flux:field>
-            <flux:field  wire:model="form.email">
+
                 <flux:input label="Email" type="email" wire:model="form.email" placeholder="Ej: juan@example.com" />
-            </flux:field>
-            <flux:field  wire:model="form.telefono">
+
                 <flux:input label="Teléfono" type="text" wire:model="form.telefono" placeholder="Ej: +54 9 11 1234 5678" />
-            </flux:field>
-            <flux:field  wire:model="form.fecha_nacimiento">
+
                 <flux:input label="Fecha de Nacimiento" type="date" wire:model="form.fecha_nacimiento" />
-            </flux:field>
-            <flux:field  wire:model="form.genero">
+
                 <flux:select label="Género" wire:model="form.genero">
                     <option value="">Selecciona género</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
                     <option value="Otro">Otro</option>
                 </flux:select>
-            </flux:field>
-            <flux:field  wire:model="form.estado_civil">
+
                 <flux:select label="Estado Civil" wire:model="form.estado_civil">
                     <option value="">Selecciona estado civil</option>
                     <option value="Soltero/a">Soltero/a</option>
@@ -63,23 +57,28 @@
                     <option value="Divorciado/a">Divorciado/a</option>
                     <option value="Viudo/a">Viudo/a</option>
                 </flux:select>
-            </flux:field>
-            <flux:field  wire:model="form.ocupacion">
+
                 <flux:input label="Ocupación" type="text" wire:model="form.ocupacion" placeholder="Ej: Médico, Ingeniero..." />
-            </flux:field>
-            <flux:field  wire:model="form.nacionalidad">
+
                 <flux:input label="Nacionalidad" type="text" wire:model="form.nacionalidad" placeholder="Ej: Argentina" />
-            </flux:field>
-            <flux:field  wire:model="form.tipo_documento">
+
                 <flux:select label="Tipo de Documento" wire:model="form.tipo_documento">
                     <option value="">Selecciona tipo de documento</option>
                     <option value="DNI">DNI</option>
                     <option value="Pasaporte">Pasaporte</option>
                 </flux:select>
-            </flux:field>
-            <flux:field label="Número de Documento" wire:model="form.numero_documento">
+
+
                 <flux:input type="text" label="Número de Documento" wire:model="form.numero_documento" placeholder="Ej: 30.123.456" />
-            </flux:field>
+
+
+                <flux:select label="Tipo de Paciente" wire:model="form.tipo_paciente">
+                    <option value="">Selecciona tipo de paciente</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Urgente">Urgente</option>
+                    <option value="Pilates">Pilates</option>
+                </flux:select>
+                <div class="hidden md:block"></div>
         </flux:fieldset>
     </div>
 
@@ -113,6 +112,7 @@
             <flux:field  wire:model="form.telefono_emergencia">
                 <flux:input label="Teléfono de emergencia" type="text" wire:model="form.telefono_emergencia" placeholder="Ej: +34 654987123" />
             </flux:field>
+            <div class="hidden md:block"></div>
         </flux:fieldset>
     </div>
 
@@ -128,7 +128,7 @@
             <flux:field  wire:model="form.historial_medico">
                 <flux:textarea label="Historial Médico" wire:model="form.historial_medico" rows="3" placeholder="Ej: Hipertensión desde 2020" />
             </flux:field>
-            
+
         </flux:fieldset>
     </div>
 
@@ -146,6 +146,10 @@
             <flux:field  wire:model="form.referido_por">
                 <flux:input label="Referido por" type="text" wire:model="form.referido_por" placeholder="Ej: Dr. Carlos Sánchez" />
             </flux:field>
+            <flux:field  wire:model="form.notas">
+                <flux:textarea label="Nota" wire:model="form.notas" rows="3" placeholder="Ej: anotaciones extras" />
+            </flux:field>
+            <div class="hidden md:block"></div>
         </flux:fieldset>
     </div>
 

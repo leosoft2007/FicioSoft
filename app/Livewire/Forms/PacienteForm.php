@@ -9,7 +9,7 @@ use Livewire\Form;
 class PacienteForm extends Form
 {
     public ?Paciente $pacienteModel;
-    
+
     public $nombre = '';
     public $apellido = '';
     public $email = '';
@@ -38,7 +38,7 @@ class PacienteForm extends Form
     public $referido_por = '';
     public $clinica_id = '';
 
-    
+
     public function rules(): array
     {
         return [
@@ -64,12 +64,12 @@ class PacienteForm extends Form
 			'historial_medico' => 'string',
 			'notas' => 'string',
 			'foto' => 'string',
-			'estado_paciente' => 'required|string',
-			'tipo_paciente' => 'required|string',
-            'clinica_id' => 'integer',
-			'referido_por' => 'string',
+			'estado_paciente' => 'string',
+			'tipo_paciente' => 'string',
+  			'referido_por' => 'string',
         ];
     }
+
 
     public function setPacienteModel(Paciente $pacienteModel): void
     {
@@ -78,7 +78,7 @@ class PacienteForm extends Form
 
 
         $this->pacienteModel = $pacienteModel;
-        
+
         $this->nombre = $this->pacienteModel->nombre;
         $this->apellido = $this->pacienteModel->apellido;
         $this->email = $this->pacienteModel->email;
@@ -106,11 +106,20 @@ class PacienteForm extends Form
         $this->tipo_paciente = $this->pacienteModel->tipo_paciente;
         $this->referido_por = $this->pacienteModel->referido_por;
         $this->clinica_id = $clinicaId;
-        
+
     }
 
     public function store(): void
-    {      
+    {
+        if (!is_string($this->foto) || $this->foto === '' || $this->foto === null || is_array($this->foto) || is_integer($this->foto)) {
+            $this->foto = 'sin foto';
+        }
+        try {
+            $data = $this->validate();
+           // dd($data);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->validator->errors()->toArray());
+        }
        
         $this->pacienteModel->create($this->validate());
 

@@ -66,6 +66,7 @@ class Paciente extends Model
         'fecha_nacimiento' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        
     ];
     protected $hidden = [
         'created_at',
@@ -116,7 +117,7 @@ class Paciente extends Model
             ->withTimestamps();
     }
 
-   
+
     public function scopeActivos($query)
     {
         return $query->where('estado_paciente', 'activo');

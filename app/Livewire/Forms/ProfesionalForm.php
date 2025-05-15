@@ -38,7 +38,6 @@ class ProfesionalForm extends Form
 			'ciudad' => 'string',
 			'estado' => 'string',
 			'codigo_postal' => 'string',
-            'clinica_id' => 'numeric',
             'especialidad_id' => 'numeric',
             'usuario_id' => 'numeric',
             'color' => 'string',
@@ -66,13 +65,18 @@ class ProfesionalForm extends Form
         $this->color = $this->profesionalModel->color;
     }
 
-    public function store(): void
+    public function store(): Profesional
     {
 
+        $this->usuario_id = auth()->user()->id;
+        $this->clinica_id = auth()->user()->clinica_id;
 
-        $this->profesionalModel->create($this->validate());
+
+        $profesional = Profesional::create($this->validate());
 
         $this->reset();
+
+        return $profesional;
     }
 
     public function update(): void
