@@ -9,6 +9,7 @@ use App\Models\Paciente;
 use App\Models\Profesional;
 use Livewire\Component;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 use function Pest\Laravel\delete;
 
@@ -145,7 +146,7 @@ class Grupo extends Component
 
         $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)->get();
 
-        
+
 
         //  ->whereHas('citas', function ($query) {
                 // Opcional: filtra por fecha si lo necesitas
@@ -160,8 +161,11 @@ class Grupo extends Component
     {
         $citasIndividuales = Cita::paraCalendario($this->clinicaId, $this->profesionalSeleccionado);
         $citasGrupales = CitaGrupalOcurrencia::paraCalendario($this->clinicaId, $this->profesionalSeleccionado);
+        
+        // $this->citas = $citasIndividuales->merge($citasGrupales)->toArray();
+        $this->citas = collect($citasIndividuales)->merge(collect($citasGrupales))->toArray();
 
-        $this->citas = $citasIndividuales->merge($citasGrupales)->toArray();
+
         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
     }
 

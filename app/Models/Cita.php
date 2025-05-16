@@ -113,7 +113,7 @@ class Cita extends Model
     {
         return $query->whereBetween('fecha', [$fechaInicio, $fechaFin]);
     }
-    public static function paraCalendario(int $clinicaId, ?int $profesionalId = null): \Illuminate\Support\Collection
+    public static function paraCalendario_mysql_ok(int $clinicaId, ?int $profesionalId = null): \Illuminate\Support\Collection
     {
         return self::with([
             'paciente:id,nombre,apellido',
@@ -162,5 +162,55 @@ class Cita extends Model
                     ],
                 ];
             });
+    }
+    public static function paraCalendario(int $clinicaId, ?int $profesionalId = null): \Illuminate\Support\Collection
+    {
+        return self::with([
+            'paciente:id,nombre,apellido',
+            'profesional:id,nombre,color'
+        ])
+            ->select([
+                'id',
+                'paciente_id',
+                'profesional_id',
+                'fecha',
+                'hora_inicio',
+                'hora_fin',
+                'observaciones',
+                'estado',
+                'tipo',
+                'clinica_id'
+            ])
+            ->where('clinica_id', $clinicaId)
+            ->when($profesionalId, fn($q) => $q->where('profesional_id', $profesionalId))
+            ->get()
+            ->map(function ($cita) {
+                $pacienteNombre = $cita->paciente?->nombre . ' ' . $cita->paciente?->apellido;
+                $profesionalNombre = $cita->profesional?->nombre;
+                $color = $cita->profesional?->color ?? '#3b82f6';
+
+                return [
+                    'id' => $cita->id,
+                    'title' => '👤 ' . $profesionalNombre,
+                    'titleHtml' => "👤  <span style='color:gray;'>$profesionalNombre</span> - $pacienteNombre",
+                    'tooltipHtml' => "
+                    <div class='tooltip-container' style='font-size: 14px; line-height: 1.5; color: #333;'>
+                        <strong>Cita Individual</strong> <br>
+                        <strong>Profesional:</strong> $profesionalNombre<br>
+                        <strong>Pacientes:</strong><br>- $pacienteNombre
+                    </div>",
+                    'start' => $cita->fecha->format('Y-m-d') . 'T' . \Carbon\Carbon::parse($cita->hora_inicio)->format('H:i:s'),
+                    'end' => $cita->fecha->format('Y-m-d') . 'T' . \Carbon\Carbon::parse($cita->hora_fin)->format('H:i:s'),
+                    'borderColor' => '#ccc',
+                    'classNames' => ['evento-' . $cita->estado],
+                    'extendedProps' => [
+                        'tipo' => $cita->tipo,
+                        'observaciones' => $cita->observaciones,
+                        'profesional' => [
+                            'color' => $color,
+                        ],
+                    ],
+                ];
+            })->values(); // Asegúrate de limpiar los índices y devolver una colección válida
     }
 }
