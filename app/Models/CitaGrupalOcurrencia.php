@@ -10,6 +10,7 @@ use App\Models\Scopes\ClinicaScope;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class CitaGrupalOcurrencia extends Model
 {
@@ -63,7 +64,7 @@ class CitaGrupalOcurrencia extends Model
         return $this->hasMany(CitaGrupalPaciente::class, 'cita_grupal_ocurrencia_id', 'id');
     }
 
-    public static function paraCalendario(int $clinicaId, ?int $profesionalId = null): \Illuminate\Support\Collection
+    public static function paraCalendario_mysql_ok(int $clinicaId, ?int $profesionalId = null): Collection
     {
         return self::with([
             'citaGrupal.profesional:id,nombre,color',
@@ -123,5 +124,73 @@ class CitaGrupalOcurrencia extends Model
                     ],
                 ];
             });
+    }
+
+
+    public static function paraCalendario(int $clinicaId, ?int $profesionalId = null): Collection
+    {
+        $result = self::with([
+            'citaGrupal.profesional:id,nombre,color',
+            'pacientes.paciente:id,nombre,apellido'
+        ])
+            ->whereHas('citaGrupal', function ($q) use ($clinicaId, $profesionalId) {
+                $q->where('clinica_id', $clinicaId);
+                if ($profesionalId) {
+                    $q->where('profesional_id', $profesionalId);
+                }
+            })
+            ->get();
+
+        if ($result->isEmpty()) {
+            return collect(); // Devuelve una colección vacía si no hay resultados
+        }
+
+        return $result->map(function ($ocurrencia) {
+            $nombre = $ocurrencia->citaGrupal->nombre ?? 'Sin nombre';
+            $pacientes = $ocurrencia->pacientes->pluck('paciente')->filter()->unique('id');
+            $pacienteNombres = $pacientes->map(fn($p) => "{$p->nombre} {$p->apellido}")->join(', ');
+            $profesional = $ocurrencia->citaGrupal->profesional->nombre ?? 'Sin profesional';
+            $color = $ocurrencia->citaGrupal->profesional->color ?? '#3b82f6';
+            $cupo = $ocurrencia->cuposDisponibles();
+
+            return [
+                'id' => 'grupal-ocurrencia-' . $ocurrencia->id,
+                'nombre' => $nombre,
+                'title' => '👥 ' . $profesional . ' ' . $pacienteNombres,
+                'titleHtml' => "👥 <span style='color:gray;'>$profesional</span> - $pacienteNombres",
+                'tooltipHtml' => "
+            <div class='tooltip-container'>
+                <div class='tooltip-row'>
+                    <strong class='tooltip-label'>Grupo:</strong>
+                    <span class='tooltip-value'>$nombre</span>
+                </div>
+                <div class='tooltip-row'>
+                    <strong class='tooltip-label'>Cupo disponible:</strong>
+                    <span class='tooltip-value'>$cupo</span>
+                </div>
+                <div class='tooltip-row'>
+                    <strong class='tooltip-label'>Profesional:</strong>
+                    <span class='tooltip-value tooltip-professional'>$profesional</span>
+                </div>
+                <div>
+                    <strong class='tooltip-patients-title'>Integrantes:</strong>
+                    <div class='tooltip-patients'>
+                        " . $pacientes->pluck('nombre')->join('<br>') . "
+                    </div>
+                </div>
+            </div>",
+                'start' => \Carbon\Carbon::parse($ocurrencia->fecha)->format('Y-m-d') . 'T' . ($ocurrencia->hora_inicio ?? '00:00:00'),
+                'end' => \Carbon\Carbon::parse($ocurrencia->fecha)->format('Y-m-d') . 'T' . ($ocurrencia->hora_fin ?? '00:00:00'),
+                'borderColor' => '#ccc',
+                'classNames' => ['evento-' . $ocurrencia->estado],
+                'extendedProps' => [
+                    'tipo' => 'grupal',
+                    'observaciones' => $ocurrencia->observaciones ?? '',
+                    'profesional' => [
+                        'color' => $color,
+                    ],
+                ],
+            ];
+        });
     }
 }
