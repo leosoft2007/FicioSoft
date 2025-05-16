@@ -50,7 +50,7 @@ footer="Texto de pie"
 
 
 
-                    <flux:select label="➕ Agregar Servicios" wire:model="servicio_id" >
+                    <flux:select label="➕ Agregar Servicios" wire:model="servicio_id">
                         <option value="">Seleccione un servicio</option>
                         @foreach($serviciosDisponibles as $servicio)
                             <option value="{{ $servicio->id }}">{{ $servicio->nombre }} - €{{ number_format($servicio->precio, 2) }}</option>
