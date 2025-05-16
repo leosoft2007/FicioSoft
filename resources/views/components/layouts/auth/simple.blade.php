@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
-    <head>
-        @include('partials.head')
-    </head>
-    <body class="min-h-screen bg-white antialiased dark:bg-linear-to-b dark:from-neutral-950 dark:to-neutral-900">
-        <div class="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-            <div class="flex w-full max-w-sm flex-col gap-2">
-                <a href="{{ route('home') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
-                    <span class="flex h-9 w-9 mb-1 items-center justify-center rounded-md">
-                        <x-app-logo-icon class="size-9 fill-current text-black dark:text-white" />
+<head>
+    @include('partials.head')
+</head>
+<body class="min-h-screen bg-white antialiased dark:bg-gradient-to-b dark:from-neutral-950 dark:to-neutral-900">
+    <div class="flex min-h-screen items-center justify-center p-6 md:p-10">
+        <div class="w-full max-w-md rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-lg p-8 space-y-6">
+            <!-- Logo / Nombre -->
+            <div class="text-center">
+                <a href="{{ route('home') }}" wire:navigate>
+                    <span class="inline-block bg-pink-100 dark:bg-pink-800 text-pink-900 dark:text-white px-4 py-2 rounded-xl text-2xl font-bold">
+                        FisioSistem
                     </span>
-                    <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
                 </a>
-                <div class="flex flex-col gap-6">
-                    {{ $slot }}
-                </div>
+            </div>
+
+            <!-- Slot de contenido del login -->
+            <div>
+                {{ $slot }}
             </div>
         </div>
-        @fluxScripts
-    </body>
+    </div>
+    @fluxScripts
+</body>
 </html>

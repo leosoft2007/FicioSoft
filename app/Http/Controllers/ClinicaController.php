@@ -44,7 +44,7 @@ class ClinicaController extends Controller
         }
     }
 
-    public function init3()
+    public function init()
     {
             // Verificar si hay usuarios registrados
             if (User::count() > 0) {
@@ -95,8 +95,8 @@ class ClinicaController extends Controller
 
                 // Lista de modelos en tu aplicación
                 $models = [
-                 //   'User',
-                 //   'Clinica',
+                    'User',
+                    'Clinica',
                        'Especialidad',
                        'Hora',
                        'Paciente',
