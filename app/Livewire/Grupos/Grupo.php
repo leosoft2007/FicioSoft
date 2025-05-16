@@ -144,7 +144,10 @@ class Grupo extends Component
         $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->get();
 
         $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)->get();
-          //  ->whereHas('citas', function ($query) {
+
+        
+
+        //  ->whereHas('citas', function ($query) {
                 // Opcional: filtra por fecha si lo necesitas
                 // $query->whereDate('fecha', today()); // Filtrar hoy
            // })
