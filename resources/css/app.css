@@ -220,3 +220,70 @@ select:focus[data-flux-control] {
     font-weight: 600;
 }
 
+@media (max-width: 640px) {
+    .fc-toolbar.fc-header-toolbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .fc-toolbar.fc-header-toolbar .fc-toolbar-chunk {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 0.25rem;
+    }
+}
+
+/* Botones redondos, compactos y modernos */
+.fc .fc-button {
+    font-size: 0.75rem;
+    /* texto más pequeño */
+    padding: 0.4rem 0.6rem;
+    /* menos padding */
+    border-radius: 9999px;
+    /* totalmente redondos */
+    background-color: #f3f4f6;
+    /* gris claro */
+    color: #111827;
+    /* texto oscuro */
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* profundidad */
+    transition: all 0.2s ease-in-out;
+}
+
+.fc .fc-button:hover {
+    background-color: #e5e7eb;
+    /* más oscuro al pasar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+    /* levanta un poco */
+}
+
+.fc .fc-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #60a5fa;
+    /* anillo azul suave */
+}
+
+/* Botón activo */
+.fc .fc-button-active {
+    background-color: #3b82f6;
+    /* azul fuerte */
+    color: white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Espaciado entre botones */
+.fc .fc-toolbar .fc-button {
+    margin: 0 0.25rem;
+}
+
+

@@ -6,6 +6,8 @@
     @endassets
 
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+  
+
 
 
     <x-page-header title="🗓️ Agenda de Citas" color="lime" :clickable="true" badge="Nuevo" icon="check"
@@ -58,7 +60,7 @@
                     nowIndicator: true,
                     height: 'auto',
                     hiddenDays: [0],
-                    slotDuration: '00:15:00',
+                    slotDuration: '00:30:00',
                     headerToolbar: {
                         left: 'prev,next today',
                         center: 'title',
@@ -69,12 +71,13 @@
                         month: 'Mes',
                         week: 'Semana',
                         day: 'Día',
-                        list: 'Lista'
+                        list: '📃'
                     },
                     selectable: true,
                     selectAllow: function(selectInfo) {
                         // Solo permitir selección si estamos en la vista diaria
-                        return calendar.view.type === 'timeGridDay' || calendar.view.type === 'timeGridWeek';
+                        return calendar.view.type === 'timeGridDay' || calendar.view.type ===
+                        'timeGridWeek';
                     },
                     select: function(info) {
                         const eventData = {
@@ -86,6 +89,8 @@
                         @this.set('datosSeleccion', eventData);
                         @this.set('mostrarSelectorTipoCita', true); // abrir modal de tipo de cita
                     },
+
+
                     events: @json($citas),
 
                     eventDidMount: function(info) {
@@ -161,7 +166,9 @@
                         }
                     },
 
-                    dateClick: function(info) {
+
+
+                dateClick: function(info) {
                         calendar.changeView('timeGridDay', info.dateStr);
                     },
 
@@ -186,11 +193,11 @@
                     },
 
 
-                });
+            });
 
 
 
-                calendar.render();
+            calendar.render();
             });
 
             // ✅ Refrescar eventos correctamente desde Livewire
