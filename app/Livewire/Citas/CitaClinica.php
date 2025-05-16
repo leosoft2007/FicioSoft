@@ -9,7 +9,7 @@ use App\Models\Profesional;
 use App\Models\Servicio;
 use Livewire\Component;
 use Illuminate\Support\Carbon;
- 
+
 
 class CitaClinica extends Component
 {
@@ -46,12 +46,12 @@ class CitaClinica extends Component
         $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->get();
 
         // Cargar solo profesionales con al menos una cita
-        $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)
-            ->whereHas('citas', function ($query) {
+        $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)->get();
+          //  ->whereHas('citas', function ($query) {
                 // Opcional: filtra por fecha si lo necesitas
                 // $query->whereDate('fecha', today()); // Filtrar hoy
-            })
-            ->get();
+            //})
+
 
 
         $this->loadCitas();

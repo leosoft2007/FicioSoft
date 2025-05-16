@@ -10,6 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Traits\HasAuditable;
 use App\Models\Scopes\ClinicaScope;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CitaGrupal extends Model
 {
@@ -118,14 +119,31 @@ class CitaGrupal extends Model
             $fecha->addWeeks($intervalo);
         }
     }
-    public function asignarPacientes(array $pacientesIds)
+    public function asignarPacientes_anterior(array $pacientesIds)
     {
           foreach ($this->ocurrencias as $ocurrencia) {
              $datos = collect($pacientesIds)->map(fn($id) => ['paciente_id' => $id])->all();
              $ocurrencia->pacientes()->createMany($datos);
          }
 
-           }
+    }
+
+    public function asignarPacientes(array $pacientesIds)
+    {
+        //id de clinica
+        $clinicaId = $this->clinica_id;
+        foreach ($this->ocurrencias as $ocurrencia) {
+            $datos = collect($pacientesIds)->map(fn($id) => [
+                'paciente_id' => $id,
+                'cita_grupal_ocurrencia_id' => $ocurrencia->id,
+                'clinica_id' => $clinicaId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ])->all();
+
+            DB::table('cita_grupal_pacientes')->insert($datos);
+        }
+    }
 }
 
 
