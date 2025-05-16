@@ -146,6 +146,11 @@ class CitaGrupalOcurrencia extends Model
         }
 
         return $result->map(function ($ocurrencia) {
+            // Validar si las relaciones existen
+            if (!$ocurrencia->citaGrupal || !$ocurrencia->citaGrupal->profesional) {
+                return []; // O manejarlo como mejor convenga
+            }
+
             $nombre = $ocurrencia->citaGrupal->nombre ?? 'Sin nombre';
             $pacientes = $ocurrencia->pacientes->pluck('paciente')->filter()->unique('id');
             $pacienteNombres = $pacientes->map(fn($p) => "{$p->nombre} {$p->apellido}")->join(', ');
