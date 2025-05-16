@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dropColumn(['color', 'icono']);
 
             // Agregar la nueva columna "iva"
-            $table->decimal('iva', 3, 2)->after('precio'); // IVA como porcentaje
+            $table->decimal('iva', 2, 2)->after('precio'); // IVA como porcentaje
         });
     }
 

@@ -35,13 +35,7 @@ class ServicioFactory extends Factory
             'descripcion' => $this->faker->sentence(),
             'precio' => $this->faker->randomElement([30, 45, 60, 90, 120]),
             'estado' => $this->faker->randomElement(['activo', 'inactivo']),
-            'color' => $this->faker->randomElement(['#3b82f6', '#10b981', '#f59e0b', '#ef4444']),
-            'icono' => $this->faker->randomElement([
-                'fa-solid fa-calendar',
-                'fa-solid fa-stethoscope',
-                'fa-solid fa-user-nurse',
-                'fa-solid fa-heart',
-            ]),
+            'iva' => $this->faker->randomElement([0, 0.21]),
         ];
     }
 }
