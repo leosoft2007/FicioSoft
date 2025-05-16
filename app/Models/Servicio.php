@@ -26,7 +26,7 @@ class Servicio extends Model
         });
     }
     /** @use HasFactory<\Database\Factories\ServicioFactory> */
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -37,9 +37,8 @@ class Servicio extends Model
         'nombre',
         'descripcion',
         'precio',
+        'iva',
         'estado',
-        'color',
-        'icono',
     ];
     public function clinica()
     {
@@ -53,7 +52,7 @@ class Servicio extends Model
     {
         return $this->hasMany(Cita::class);
     }
-    
+
     public function scopeActivos($query)
     {
         return $query->where('estado', 'activo');
@@ -62,5 +61,5 @@ class Servicio extends Model
     {
         return $query->where('estado', 'inactivo');
     }
-    
+
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->decimal('precio', 10, 2);
             $table->string('estado')->default('activo'); // activo, inactivo
-            $table->string('color')->default('#3b82f6'); // Color para el calendario
+            $table->string('color')->default('#3b82f6'); 
             $table->string('icono')->default('fa-solid fa-calendar'); // Icono para el calendario
             $table->timestamps();
         });
