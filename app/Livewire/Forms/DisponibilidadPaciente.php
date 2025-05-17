@@ -24,6 +24,8 @@ class DisponibilidadPaciente extends Component
 
     public function save()
     {
+        $this->paciente_id = $this->paciente->id; // Asegúrate de asociar el ID del paciente
+
         $this->validate([
             'paciente_id' => 'required|exists:pacientes,id',
             'dia' => 'required|in:lun,mar,mie,jue,vie,sab,dom',
@@ -43,9 +45,9 @@ class DisponibilidadPaciente extends Component
     }
     public function ver($id)
     {
-        
+
         $disponibilidades = Disponible::where('paciente_id', $id)->get();
-        
+
         $diasSemana = [
             'lun' => 0,
             'mar' => 1,
@@ -56,7 +58,7 @@ class DisponibilidadPaciente extends Component
             'dom' => 6,
         ];
 
-        
+
 
         foreach ($disponibilidades as $disp) {
             if (!array_key_exists($disp->dia, $diasSemana)) continue;
@@ -72,30 +74,37 @@ class DisponibilidadPaciente extends Component
             ];
 
 
-            
+
         }
-      
+
         return $this->eventos;
     }
 
 
 
     public function store($st, $en)
-        {
+    {
+        $start = new Carbon($st);
+        $end = new Carbon($en);
 
-                $start = new Carbon($st);
-                $end = new Carbon($en);
+        $diasSemana = [
+            1 => 'lun',
+            2 => 'mar',
+            3 => 'mie',
+            4 => 'jue',
+            5 => 'vie',
+            6 => 'sab',
+            7 => 'dom',
+        ];
 
-                $this->paciente->disponibles()->create([
-                    'dia' => $start->dayOfWeekIso, // Lunes = 1
-                    'hora_inicio' => $start->format('H:i:s'),
-                    'hora_fin' => $end->format('H:i:s'),
-                ]);
+        $this->paciente->disponibles()->create([
+            'dia' => $diasSemana[$start->dayOfWeekIso], // Mapea el número al día correspondiente
+            'hora_inicio' => $start->format('H:i:s'),
+            'hora_fin' => $end->format('H:i:s'),
+        ]);
 
-            
-
-            $this->dispatch('eventoActualizado'); // para recargar el calendario
-        }
+        $this->dispatch('eventoActualizado'); // para recargar el calendario
+    }
 
         public function eliminar($id)
         {
@@ -107,7 +116,7 @@ class DisponibilidadPaciente extends Component
     {
         $paciente = Paciente::find($this->paciente_id);
         $disponibilidad = $this->ver($this->paciente_id);
-        
+
 
         return view('livewire.paciente.disponibilidad-paciente', compact('paciente'));
     }
