@@ -7,17 +7,17 @@
     x-data="{
         tab: 'general',
         resetTab() {
-            console.log('ResetTab function called');
             this.tab = 'general';
         }
     }"
     x-init="
-        console.log('x-init executed');
-        Livewire.on('resetTab', () => {
-            console.log('Resetting tab to general'); // Confirma si este log aparece
+    setTimeout(function() {
+       // console.log('x-init executed');
+        Livewire.on('resetTab', function() {
             resetTab();
         });
-    "
+    }, 50);
+"
 >
     <div @click.away="$wire.closeGrupalModal()" class="bg-white rounded-lg shadow-xl overflow-hidden">
 
