@@ -61,7 +61,7 @@ class Grupo extends Component
     public $hora_inicio;
     public $hora_fin;
     public $errorMessage = null;
-    protected $listeners = ['openCreateModal', 'openCitaGrupalModal', 'openCitaModal', 'abrirOcurrencia'];
+    protected $listeners = ['openCreateModal', 'openCitaGrupalModal', 'openCitaModal', 'abrirOcurrencia', 'resetTab'];
 
     public $datosSeleccion;
     public $mostrarSelectorTipoCita = false;
@@ -161,7 +161,7 @@ class Grupo extends Component
     {
         $citasIndividuales = Cita::paraCalendario($this->clinicaId, $this->profesionalSeleccionado);
         $citasGrupales = CitaGrupalOcurrencia::paraCalendario($this->clinicaId, $this->profesionalSeleccionado);
-        
+
         // $this->citas = $citasIndividuales->merge($citasGrupales)->toArray();
         $this->citas = collect($citasIndividuales)->merge(collect($citasGrupales))->toArray();
 
@@ -233,7 +233,10 @@ class Grupo extends Component
 
             // Reset y actualizaciones
             $this->editCitaGrupalId = null;
+            $this->dispatch('resetTab');
+
             $this->showGrupalModal = false;
+
             $this->loadCitas();
 
             $this->dispatch('modalClosed');
@@ -260,6 +263,7 @@ class Grupo extends Component
         $this->newCitaGrupal['hora_inicio'] = $start->format('H:i');
         $this->newCitaGrupal['hora_fin'] = $end->format('H:i');
 
+        $this->dispatch('resetTab');
 
 
         $this->showGrupalModal = true;
@@ -315,6 +319,10 @@ class Grupo extends Component
     protected function finalizarAccionGrupal(string $mensaje)
     {
         $this->reset('newCitaGrupal');
+
+        $this->dispatch('resetTab');
+
+
         $this->showGrupalModal = false;
         $this->loadCitas();
         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
@@ -463,6 +471,9 @@ class Grupo extends Component
             'pacientes' => $cita->pacientesIndirectos()->pluck('id')->toArray(), // todos los pacientes
             'nombre' => $cita->nombre,
         ];
+        // Emitir evento para resetear la pestaña activa
+        $this->dispatch('resetTab');
+
 
         // Mostrar modal
         $this->showGrupalModal = true;

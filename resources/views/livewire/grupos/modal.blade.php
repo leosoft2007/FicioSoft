@@ -1,4 +1,21 @@
-<flux:modal wire:model="showGrupalModal" variant='bare' class="w-full max-w-4xl" :dismissible="false" hide-close-button>
+<flux:modal
+    wire:model="showGrupalModal"
+    variant="bare"
+    class="w-full max-w-4xl"
+    :dismissible="false"
+    hide-close-button
+    x-data="{
+        tab: 'general',
+        resetTab() {
+            this.tab = 'general';
+        }
+    }"
+    x-init="
+        Livewire.on('resetTab', () => {
+            resetTab();
+        });
+    "
+>
     <div @click.away="$wire.closeGrupalModal()" class="bg-white rounded-lg shadow-xl overflow-hidden">
 
         <!-- Encabezado del modal -->
@@ -15,7 +32,7 @@
             </div>
         </div>
 
-        <div x-data="{ tab: 'general' }" class="p-4 min-h-[30rem] flex flex-col justify-between">
+        <div class="p-4 min-h-[30rem] flex flex-col justify-between">
 
             <!-- Pestañas mejoradas -->
             <div class="flex border-b border-gray-200 mb-6">
