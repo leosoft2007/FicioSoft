@@ -173,6 +173,17 @@
                                                 </svg>
                                                 Disponibilidad
                                             </flux:button>
+                                            <flux:button
+                                                size="sm"
+                                               href=""
+                                                class="flex items-center gap-1"
+                                            >
+                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h13M5 12H3m6 0a9 9 0 1118 0 9 9 0 01-18 0z"/>
+                                                </svg>
+                                                Ver Cupo
+                                            </flux:button>
+
 
                                             @can('delete pacientes')
                                             <flux:button
@@ -215,4 +226,6 @@
             </div>
         </div>
     </div>
+
+
 </section>

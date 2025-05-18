@@ -81,6 +81,21 @@ class CitaGrupal extends Model
             ->values();
     }
 
+    public function pacientes()
+    {
+        return $this->hasManyThrough(
+            Paciente::class,
+            CitaGrupalOcurrencia::class,
+            'cita_grupal_id', // Foreign key en cita_grupal_ocurrencias
+            'id',             // Foreign key en pacientes
+            'id',             // Local key en cita_grupals
+            'id'              // Local key en cita_grupal_ocurrencias
+        )
+            ->join('cita_grupal_pacientes', 'cita_grupal_pacientes.cita_grupal_ocurrencia_id', '=', 'cita_grupal_ocurrencias.id')
+            ->whereColumn('cita_grupal_pacientes.paciente_id', '=', 'pacientes.id')
+            ->distinct();
+    }
+
     public function ocurrencias()
     {
         return $this->hasMany(CitaGrupalOcurrencia::class);
@@ -143,6 +158,20 @@ class CitaGrupal extends Model
 
             DB::table('cita_grupal_pacientes')->insert($datos);
         }
+    }
+
+    public function pacientesCompatibles()
+    {
+        $pacientes = Paciente::with('disponibles')->get();
+
+        return $pacientes->filter(function ($paciente) {
+            foreach ($this->ocurrencias as $ocurrencia) {
+                if ($ocurrencia->cuposDisponibles() > 0 && $ocurrencia->pacientePuedeAsistir($paciente)) {
+                    return true;
+                }
+            }
+            return false;
+        })->values(); // resetear índices
     }
 }
 

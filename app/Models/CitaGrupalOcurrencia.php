@@ -35,6 +35,7 @@ class CitaGrupalOcurrencia extends Model
     {
         $cupoMaximo = $this->citaGrupal->cupo_maximo ?? 0;
         $ocupados = $this->pacientes()->count();
+
         return max($cupoMaximo - $ocupados, 0);
     }
 
@@ -62,6 +63,17 @@ class CitaGrupalOcurrencia extends Model
     public Function pacientes(): HasMany
     {
         return $this->hasMany(CitaGrupalPaciente::class, 'cita_grupal_ocurrencia_id', 'id');
+    }
+
+    public function pacientePuedeAsistir(Paciente $paciente): bool
+    {
+        $diaSemana = strtolower(\Carbon\Carbon::parse($this->fecha)->locale('es')->isoFormat('ddd')); // 'lun', 'mar', etc.
+        
+        return $paciente->disponibles()
+            ->where('dia', $diaSemana)
+            ->where('hora_inicio', '<=', $this->hora_inicio)
+            ->where('hora_fin', '>=', $this->hora_fin)
+            ->exists();
     }
 
     public static function paraCalendario_mysql_ok(int $clinicaId, ?int $profesionalId = null): Collection

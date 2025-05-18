@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pacientes;
 
+use App\Livewire\Grupos\Grupo;
 use App\Models\Paciente;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -17,7 +18,7 @@ class Index extends Component
 
 public $sortField = 'nombre';
 public $sortDirection = 'asc';
-    
+
     public function mount()
     {
         $this->categorias = Paciente::all()->map(function ($cat) {
@@ -27,24 +28,24 @@ public $sortDirection = 'asc';
             ];
         })->toArray();
     }
-    
-    
+
+
     public function render(): View
     {
         // buscar por nombre y apellido
-       
+
             $pacientes = Paciente::query()
     ->where('nombre', 'like', '%' . $this->buscar . '%')
     ->orWhere('apellido', 'like', '%' . $this->buscar . '%')
     ->orderBy($this->sortField, $this->sortDirection)
     ->paginate($this->perPage);
 
-       
+
 
         return view('livewire.paciente.index', compact('pacientes'))
             ->with('i', $this->getPage() * $pacientes->perPage());
 
-        
+
     }
     public function updatedCategoriaId($value)
         {
@@ -71,4 +72,7 @@ public function toggleSortDirection()
 {
     return $this->sortDirection === 'asc' ? 'desc' : 'asc';
 }
+
+   
+
 }

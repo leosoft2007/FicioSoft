@@ -44,8 +44,9 @@ class PacienteForm extends Form
         return [
 			'nombre' => 'required|string',
 			'apellido' => 'required|string',
-			'email' => 'required|string',
-			'telefono' => 'string',
+            // validacion para el email
+            'email' => 'required|email|unique:pacientes,email',
+            'telefono' => 'string',
 			'direccion' => 'string',
 			'ciudad' => 'string',
 			'estado' => 'string',
@@ -120,7 +121,7 @@ class PacienteForm extends Form
         } catch (\Illuminate\Validation\ValidationException $e) {
             dd($e->validator->errors()->toArray());
         }
-       
+
         $this->pacienteModel->create($this->validate());
 
         $this->reset();

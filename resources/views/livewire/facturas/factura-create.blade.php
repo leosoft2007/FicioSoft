@@ -50,7 +50,7 @@ footer="Texto de pie"
 
 
 
-                    <flux:select label="➕ Agregar Servicios" wire:model="servicio_id">
+                    <flux:select label="➕ Agregar Servicios" wire:model.live="servicio_id">
                         <option value="">Seleccione un servicio</option>
                         @foreach($serviciosDisponibles as $servicio)
                             <option value="{{ $servicio->id }}">{{ $servicio->nombre }} - €{{ number_format($servicio->precio, 2) }}</option>
@@ -63,7 +63,7 @@ footer="Texto de pie"
                 </div>
                 <div class="w-28">
 
-                    <flux:input label="IVA (%)" type="number" wire:model="ivaInput" min="0" max="100" />
+                    <flux:input label="IVA (%)" type="number" wire:model.live="ivaInput" min="0" max="100" />
                 </div>
                 <button type="button" wire:click="addServicio" class="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700">Agregar</button>
             </div>

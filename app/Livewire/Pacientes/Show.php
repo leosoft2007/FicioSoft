@@ -14,7 +14,7 @@ class Show extends Component
     public $listaConsentimientos = [];
 
     public function mount(Paciente $paciente)
-    {   
+    {
         $this->listaConsentimientos = $paciente->consentimientos;
         $this->form->setPacienteModel($paciente);
     }
@@ -22,7 +22,7 @@ class Show extends Component
     public function firmarConsentimiento()
 {
     if ($this->consentimientoSeleccionado === 0) return;
- 
+
    return redirect()->route('consentimiento.firmar', [
     'paciente' => $this->form->pacienteModel->id,
     'consentimientos' => $this->consentimientoSeleccionado]);
@@ -32,10 +32,15 @@ class Show extends Component
 
     public function render()
     {
+        ;
+        // Resto de tu código...
+       
+
         $clinica_id = auth()->user()->clinica->id;
         $this->authorize('view pacientes');
         $consentimientos= Consentimiento::where('clinica_id', $clinica_id)->get();
         $paciente = $this->form->pacienteModel;
-        return view('livewire.paciente.show', compact('paciente', 'consentimientos'));
+        $citas = $paciente->citas()->with(['profesional', 'servicio'])->latest()->paginate(10);
+        return view('livewire.paciente.show', compact('paciente', 'consentimientos','citas'));
     }
 }

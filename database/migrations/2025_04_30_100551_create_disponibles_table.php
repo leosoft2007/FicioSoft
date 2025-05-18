@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('clinica_id')->constrained('clinicas')->onDelete('cascade');
             $table->enum('dia', ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom']);
             $table->time('hora_inicio');
-            $table->time('hora_fin');
+            $table->time('hora_fin'); 
             $table->timestamps();
         });
     }

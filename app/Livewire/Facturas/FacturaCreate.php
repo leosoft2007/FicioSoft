@@ -29,6 +29,16 @@ class FacturaCreate extends Component
     public $facturaId;
     public $titulo = 'Crear Factura';
 
+    public function updatedServicioId($servicioId)
+    {
+        $servicio = Servicio::find($servicioId); // Busca el servicio seleccionado
+    
+        if ($servicio) {
+            $this->ivaInput = $servicio->iva * 100; // Actualiza el IVA del servicio seleccionado
+        } else {
+            $this->ivaInput = 0; // Resetea el valor de IVA si no hay servicio seleccionado
+        }
+    }
 
     public function mount($facturaId = null)
 {

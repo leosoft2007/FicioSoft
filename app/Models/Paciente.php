@@ -66,7 +66,7 @@ class Paciente extends Model
         'fecha_nacimiento' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        
+
     ];
     protected $hidden = [
         'created_at',
@@ -139,5 +139,20 @@ class Paciente extends Model
     public function getNombreCompletoAttribute()
     {
         return $this->nombre . ' ' . $this->apellido;
+    }
+
+    public function gruposDisponibles()
+    {
+        $grupos = CitaGrupal::with('ocurrencias')->get();
+
+        return $grupos->filter(function ($grupo) {
+            foreach ($grupo->ocurrencias as $ocurrencia) {
+
+                if ($ocurrencia->cuposDisponibles() > 0 && $ocurrencia->pacientePuedeAsistir($this)) {
+                    return true;
+                }
+            }
+            return false;
+        });
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\DisponibleController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\FirmaController;
 use App\Livewire\Citas\CitaClinica;
+use App\Livewire\Consultas\VerGruposDePaciente;
 use App\Livewire\Facturas\FacturaCreate;
 use App\Livewire\Facturas\FacturaIndex;
 use App\Livewire\Facturas\FacturaListado;
@@ -20,6 +21,8 @@ use App\Livewire\RolesPermissions;
 use App\Livewire\TestInput;
 use App\Livewire\Users\Create;
 use App\Livewire\Users\Index;
+use App\Models\CitaGrupal;
+use App\Models\CitaGrupalOcurrencia;
 use App\Models\ConsentimientoPaciente;
 use App\Models\Paciente;
 use Illuminate\Support\Facades\Route;
@@ -111,6 +114,8 @@ Route::get('/pacientes/consentimientos/firmar/{paciente}/{consentimientos}', [Co
     Route::get('/servicios/show/{servicio}', \App\Livewire\Servicios\Show::class)->name('servicios.show');
     Route::get('/servicios/update/{servicio}', \App\Livewire\Servicios\Edit::class)->name('servicios.edit');
 
+    // routes/api.php
+   
 });
 
 

@@ -95,4 +95,15 @@ class Profesional extends Model
         return $this->hasMany(CitaGrupal::class);
     }
 
+    public function ocurrenciasDeCitasGrupales()
+    {
+        return $this->hasManyThrough(
+            CitaGrupalOcurrencia::class,
+            CitaGrupal::class,
+            'profesional_id', // FK en cita_grupals
+            'cita_grupal_id', // FK en cita_grupal_ocurrencias
+            'id', // Local key en profesionales
+            'id'  // Local key en cita_grupals
+        );
+    }
 }
