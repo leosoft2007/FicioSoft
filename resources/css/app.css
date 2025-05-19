@@ -286,4 +286,13 @@ select:focus[data-flux-control] {
     margin: 0 0.25rem;
 }
 
+button div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+svg {
+    display: block;
+    /* Elimina cualquier espacio en blanco adicional alrededor del SVG */
+}

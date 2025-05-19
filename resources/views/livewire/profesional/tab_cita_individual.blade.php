@@ -20,7 +20,8 @@
                         <td class="py-4 text-sm text-gray-900">{{ $cita->paciente->nombre_completo ?? 'N/A' }}</td>
                         <td class="py-4 text-sm text-gray-500">{{ $cita->servicio->nombre ?? 'N/A' }}</td>
                         <td class="py-4 text-sm text-gray-500">{{ $cita->fecha->format('d/m/Y') }}</td>
-                        <td class="py-4 text-sm text-gray-500">{{ $cita->hora_inicio }} - {{ $cita->hora_fin }}</td>
+
+                        <td class="py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($cita->hora_inicio )->format('H:i') }} - {{ \Carbon\Carbon::parse($cita->hora_fin )->format('H:i') }}</td>
                         <td class="py-4 text-sm text-center">
                             <div class="flex justify-center space-x-2">
                                 <!-- Estado Pendiente -->

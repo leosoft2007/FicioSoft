@@ -4,6 +4,7 @@ namespace App\Livewire\Profesionals;
 
 use App\Livewire\Forms\ProfesionalForm;
 use App\Models\Cita;
+use App\Models\CitaGrupalOcurrencia;
 use App\Models\Profesional;
 use Livewire\Component;
 use Livewire\Livewire;
@@ -45,7 +46,35 @@ class Show extends Component
             $this->mensaje = 'El estado de la cita fue actualizado a PENDIENTE';
             $this->color = 'yellow';
         }
-       
+
+    }
+    public function actualizarEstadoOcurrencia($id, $estado)
+    {
+
+        $cita = CitaGrupalOcurrencia::findOrFail($id);
+
+        // Validar que el estado sea válido
+        if (!in_array($estado, ['pendiente', 'confirmado', 'cancelado'])) {
+            return;
+        }
+
+        // Actualizar el estado en la base de datos
+        $cita->estado = $estado;
+        $cita->save();
+
+        // Configura el mensaje y el color según el estado
+        if ($estado == 'cancelado') {
+
+            $this->mensaje = 'El estado de la cita fue actualizado a CANCELADO';
+            $this->color = 'red';
+        } elseif ($estado == 'confirmado') {
+            $this->mensaje = 'El estado de la cita fue actualizado a CONFIRMADO';
+            $this->color = 'green';
+        } else {
+            $this->mensaje = 'El estado de la cita fue actualizado a PENDIENTE';
+            $this->color = 'yellow';
+        }
+
     }
 
 
