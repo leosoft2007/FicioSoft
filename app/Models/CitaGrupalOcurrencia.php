@@ -19,6 +19,7 @@ class CitaGrupalOcurrencia extends Model
     use HasAuditable;
     use HasRoles;
     protected $fillable = ['fecha', 'hora_inicio', 'hora_fin', 'estado', 'cita_grupal_id', 'clinica_id'];
+    
 
     protected static function booted()
     {
@@ -68,7 +69,7 @@ class CitaGrupalOcurrencia extends Model
     public function pacientePuedeAsistir(Paciente $paciente): bool
     {
         $diaSemana = strtolower(\Carbon\Carbon::parse($this->fecha)->locale('es')->isoFormat('ddd')); // 'lun', 'mar', etc.
-        
+
         return $paciente->disponibles()
             ->where('dia', $diaSemana)
             ->where('hora_inicio', '<=', $this->hora_inicio)

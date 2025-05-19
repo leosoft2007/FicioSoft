@@ -53,7 +53,7 @@ class CitaFactory extends Factory
             'hora_inicio'    => $start->format('H:i:s'),
             'hora_fin'       => $end->format('H:i:s'),
             'tipo'           => 'individual',
-            'estado'         => $this->faker->randomElement(['pendiente', 'confirmado', 'cancelado']),
+            'estado'         => $this->faker->randomElement(['pendiente', 'confirmada', 'cancelado']),
             'observaciones'  => $this->faker->optional()->sentence(),
         ];
     }

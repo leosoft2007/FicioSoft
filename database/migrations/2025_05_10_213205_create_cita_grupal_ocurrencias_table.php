@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('fecha');
             $table->time('hora_inicio');
             $table->time('hora_fin');
-            $table->enum('estado', ['pendiente', 'cancelado', 'completado'])->default('pendiente');
+            $table->enum('estado', ['pendiente', 'cancelado', 'confirmada'])->default('pendiente');
             $table->timestamps();
         });
     }

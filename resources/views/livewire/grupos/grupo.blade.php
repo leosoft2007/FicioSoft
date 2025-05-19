@@ -6,7 +6,7 @@
     @endassets
 
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
-  
+
 
 
 
