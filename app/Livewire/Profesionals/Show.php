@@ -6,11 +6,14 @@ use App\Livewire\Forms\ProfesionalForm;
 use App\Models\Cita;
 use App\Models\Profesional;
 use Livewire\Component;
+use Livewire\Livewire;
 
 class Show extends Component
 {
     public ProfesionalForm $form;
     public $profesional_seleccionado;
+    public $mensaje;
+    public $color;
 
     public function mount(Profesional $profesional)
     {
@@ -30,17 +33,19 @@ class Show extends Component
         $cita->estado = $estado;
         $cita->save();
 
-        // Recargar las citas para reflejar los cambios
+        // Configura el mensaje y el color según el estado
         if ($estado == 'cancelado') {
-            session()->flash('cancelado', "El estado de la cita fue actualizado a '{$estado}'.");
+
+            $this->mensaje = 'El estado de la cita fue actualizado a CANCELADO';
+            $this->color = 'red';
         } elseif ($estado == 'confirmado') {
-            session()->flash('confirmado', "El estado de la cita fue actualizado a '{$estado}'.");
+            $this->mensaje = 'El estado de la cita fue actualizado a CONFIRMADO';
+            $this->color = 'green';
         } else {
-            session()->flash('pendiente', "El estado de la cita fue actualizado a '{$estado}'.");
+            $this->mensaje = 'El estado de la cita fue actualizado a PENDIENTE';
+            $this->color = 'yellow';
         }
-
-        return redirect()->back();
-
+       
     }
 
 

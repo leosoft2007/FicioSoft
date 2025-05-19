@@ -17,23 +17,27 @@
     <x-page-header title="{{ __('Detalles del Profesional') }}" subtitle="{{ __('Información completa') }}"
         color="blue" />
 
-    @if (session()->has('confirmado'))
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition
-            class="fixed top-6 right-6 max-w-md w-auto bg-green-100 border border-green-400 text-green-900 text-lg font-semibold px-6 py-4 rounded-xl shadow-2xl z-50">
-            {{ session('confirmado') }}
+        <div>
+            <!-- Mensaje Dinámico -->
+            <div x-data="{ show: false }"
+                 x-init="$watch(() => $wire.mensaje, value => {
+                    if (value) {
+                        show = true;
+                        setTimeout(() => show = false, 4000);
+                    }
+                 })"
+                 x-show="show"
+                 x-transition
+                 class="fixed top-6 right-6 max-w-md w-auto px-6 py-4 rounded-xl shadow-2xl z-50"
+                 :class="{
+                    'bg-green-100 border-green-400 text-green-900': $wire.color === 'green',
+                    'bg-red-100 border-red-400 text-red-900': $wire.color === 'red',
+                    'bg-yellow-100 border-yellow-400 text-yellow-900': $wire.color === 'yellow',
+                 }">
+                <span x-text="$wire.mensaje"></span>
+            </div>
         </div>
-    @elseif (session()->has('cancelado'))
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition
-            class="fixed top-6 right-6 max-w-md w-auto bg-red-100 border border-red-400 text-red-900 text-lg font-semibold px-6 py-4 rounded-xl shadow-2xl z-50">
-            {{ session('cancelado') }}
-        </div>
-    @elseif (session()->has('pendiente'))
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition
-            class="fixed top-6 right-6 max-w-md w-auto bg-yellow-100 border border-yellow-400 text-yellow-900 text-lg font-semibold px-6 py-4 rounded-xl shadow-2xl z-50">
-            {{ session('pendiente') }}
-        </div>
-    @endif
-
+       
 
 
     <div class="py-12">
