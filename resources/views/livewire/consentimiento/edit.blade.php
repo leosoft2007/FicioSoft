@@ -1,17 +1,17 @@
 <section class="w-full">
-    
-    <x-page-header 
+
+    <x-page-header
     title="{{ __('Consentimientos') }}"
     subtitle="Actualizar {{ __('Consentimiento') }}"
-    color="pink" 
-    :clickable="true" 
-    badge="Nuevo" 
-    icon="check" 
-    footer="Texto de pie" 
+    color="pink"
+    :clickable="true"
+    badge="Nuevo"
+    icon="check"
+    footer="Texto de pie"
     wire:key="factura-filtros"
     >
     </x-page-header>
-    
+
 
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">

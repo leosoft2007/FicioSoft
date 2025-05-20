@@ -26,7 +26,7 @@ class Index extends Component
 
     public function delete(Consentimiento $consentimiento)
     {
-        $this->authorize('delet consentimientos');
+        $this->authorize('delete consentimientos');
         $consentimiento->delete();
 
         return $this->redirectRoute('consentimientos.index', navigate: true);

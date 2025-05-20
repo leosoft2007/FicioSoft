@@ -8,7 +8,7 @@ use Livewire\Form;
 class EspecialidadForm extends Form
 {
     public ?Especialidad $especialidadModel;
-    
+
     public $nombre = '';
     public $descripcion = '';
     public $clinica_id;
@@ -18,14 +18,14 @@ class EspecialidadForm extends Form
         return [
 			'nombre' => 'required|string',
 			'descripcion' => 'string',
-            'clinica_id' => 'required',
+            
         ];
     }
 
     public function setEspecialidadModel(Especialidad $especialidadModel): void
     {
         $this->especialidadModel = $especialidadModel;
-        
+
         $this->nombre = $this->especialidadModel->nombre;
         $this->descripcion = $this->especialidadModel->descripcion;
     }

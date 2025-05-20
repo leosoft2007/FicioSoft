@@ -19,7 +19,7 @@ class Edit extends Component
     {
         $this->authorize('edit especialidads');
         $this->form->update();
-
+        
         return $this->redirectRoute('especialidads.index', navigate: true);
     }
 
