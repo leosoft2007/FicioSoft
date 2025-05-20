@@ -1,3 +1,5 @@
+<!-- -- Modal para crear una nueva cita  individual-->
+
 <flux:modal wire:model="showModal2" variant='bare' class="md:w-[600px]" :dismissible="false" hide-close-button>
         <div @click.away="$wire.closeModal2()" class="bg-white rounded-lg shadow-xl overflow-hidden">
             <!-- Encabezado del modal -->
@@ -44,6 +46,7 @@
                                 </option>
                             @endforeach
                         </flux:select>
+
                     </div>
                     <div>
                         <flux:select label="Profesional" wire:model="newCita.profesional_id" class="w-full">

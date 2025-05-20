@@ -19,7 +19,7 @@ class Index extends Component
     protected $queryString = ['search' => ['except' => ''], 'sortField', 'sortDirection'];
     public function render(): View
     {
-       
+
         return view('livewire.especialidad.index', [
             'especialidads' => Especialidad::where('nombre', 'like', '%' . $this->search . '%')
                 ->orWhere('descripcion', 'like', '%' . $this->search . '%')
@@ -45,6 +45,7 @@ class Index extends Component
     }
     public function delete(Especialidad $especialidad)
     {
+        $this->authorize('delete especialidads');
         $especialidad->delete();
 
         return $this->redirectRoute('especialidads.index', navigate: true);

@@ -1,3 +1,5 @@
+<!-- Modal para editar cita individual -->
+
 <flux:modal wire:model="showModal" variant='bare' class="md:w-[600px]" :dismissible="false">
         <div @click.away="$wire.closeModal()" class="bg-white rounded-lg shadow-xl overflow-hidden">
             <!-- Encabezado del modal -->
@@ -30,7 +32,7 @@
                             </div>
                         </div>
 
-                        <!-- Sección Fecha/Hora --> 
+                        <!-- Sección Fecha/Hora -->
                         <div class="grid grid-cols-1 gap-4">
                             <flux:input label="Fecha" type="date" wire:model="selectedCita.fecha" class="w-full" />
 

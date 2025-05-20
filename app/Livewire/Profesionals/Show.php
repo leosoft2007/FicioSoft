@@ -81,6 +81,7 @@ class Show extends Component
     public function render()
 
     {
+        $this->authorize('view profesionals');
         // Citas individuales con relaciones
         $citasIndividuales = $this->profesional_seleccionado->citas()
             ->with(['paciente', 'servicio', 'clinica'])

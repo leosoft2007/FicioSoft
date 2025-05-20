@@ -35,6 +35,7 @@ class Index extends Component
 
     public function render(): View
     {
+        $this->authorize('view users');
         return view('livewire.user.index', [
             'users' => User::where('name', 'like', '%' . $this->search . '%')
                 ->orWhere('email', 'like', '%' . $this->search . '%')
@@ -46,6 +47,7 @@ class Index extends Component
 
     public function delete(User $user)
     {
+        $this->authorize('delete users');
         $user->delete();
 
         return $this->redirectRoute('users.index', navigate: true);

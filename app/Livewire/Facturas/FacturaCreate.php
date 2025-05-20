@@ -32,7 +32,7 @@ class FacturaCreate extends Component
     public function updatedServicioId($servicioId)
     {
         $servicio = Servicio::find($servicioId); // Busca el servicio seleccionado
-    
+
         if ($servicio) {
             $this->ivaInput = $servicio->iva * 100; // Actualiza el IVA del servicio seleccionado
         } else {
@@ -73,6 +73,7 @@ class FacturaCreate extends Component
 
     public function addServicio()
     {
+
         $servicio = Servicio::find($this->servicio_id);
 
         if (!$servicio) return;
@@ -111,6 +112,7 @@ class FacturaCreate extends Component
 
     public function save()
     {
+        $this->authorize('create facturas');
         $this->validate([
             'paciente_id' => 'required',
             'fecha' => 'required|date',
@@ -194,6 +196,7 @@ class FacturaCreate extends Component
 
         public function render()
         {
+        $this->authorize('create facturas');
             if ($this->facturaId) {
                 $factura = Factura::with(['paciente', 'clinica', 'detalles'])->findOrFail($this->facturaId);
                 $this->titulo = 'Actualizar Factura - ' . $factura ->numero_factura;

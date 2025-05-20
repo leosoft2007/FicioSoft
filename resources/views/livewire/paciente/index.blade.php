@@ -132,7 +132,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex justify-end gap-2">
-                                            @can('view pacientes')
+
                                             <flux:button
                                                 size="sm"
                                                 wire:navigate
@@ -145,9 +145,9 @@
                                                 </svg>
                                                 Ver
                                             </flux:button>
-                                            @endcan
+                                           
 
-                                            @can('edit pacientes')
+
                                             <flux:button
                                                 size="sm"
                                                 variant="primary"
@@ -160,7 +160,7 @@
                                                 </svg>
                                                 Editar
                                             </flux:button>
-                                            @endcan
+
 
                                             <flux:button
                                                 size="sm"
@@ -185,7 +185,7 @@
                                             </flux:button>
 
 
-                                            @can('delete pacientes')
+
                                             <flux:button
                                                 size="sm"
                                                 variant="danger"
@@ -198,7 +198,7 @@
                                                 </svg>
                                                 Eliminar
                                             </flux:button>
-                                            @endcan
+
                                         </div>
                                     </td>
                                 </tr>

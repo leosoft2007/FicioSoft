@@ -1,4 +1,4 @@
-<!-- Modal de selección para citas grupales -->
+<!-- Modal cuando selecciono una cita grupal para editarla y decidir si modifiar una o el grupo -->
 <div x-data="{
     show: false,
     eventData: null,

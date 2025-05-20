@@ -17,6 +17,7 @@ class Create extends Component
 
     public function save()
     {
+        $this->authorize('create consentimientos');
         $this->form->clinica_id = auth()->user()->clinica->id;
         $this->form->store();
 
@@ -25,6 +26,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create consentimientos');
         return view('livewire.consentimiento.create');
     }
 }

@@ -17,6 +17,7 @@ class Show extends Component
 
     public function render()
     {
+        $this->authorize('view users');
         return view('livewire.user.show', ['user' => $this->form->userModel]);
     }
 }

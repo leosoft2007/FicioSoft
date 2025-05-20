@@ -41,10 +41,11 @@ class Index extends Component
 
         $this->sortField = $field;
     }
-   
+
 
     public function delete(Servicio $servicio)
     {
+        $this->authorize('delete servicios');
         $servicio->delete();
 
         return $this->redirectRoute('servicios.index', navigate: true);

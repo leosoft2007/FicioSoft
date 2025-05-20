@@ -1,3 +1,5 @@
+<!-- Modal para decidir que tipo de cita crear individual grupal -->
+
 @if($mostrarSelectorTipoCita)
     <div
         x-transition:enter="ease-out duration-300"

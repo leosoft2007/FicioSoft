@@ -20,7 +20,7 @@ class Edit extends Component
     {
         $this->user = $user;
         $this->form->setUserModel($user);
-       
+
 
         $this->roles = Role::all();
         $this->role = optional($user->roles->first())->id;
@@ -29,6 +29,7 @@ class Edit extends Component
 
     public function save()
     {
+        $this->authorize('edit users');
         $this->form->role = $this->role;
         $this->form->persist();
 
@@ -37,6 +38,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('edit users');
         return view('livewire.user.edit');
     }
 }

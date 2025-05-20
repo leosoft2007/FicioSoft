@@ -17,6 +17,7 @@ class Create extends Component
 
     public function save()
     {
+        $this->authorize('create clinicas');
         $this->form->store();
 
         return $this->redirectRoute('clinicas.index', navigate: true);
@@ -24,6 +25,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create clinicas');
         return view('livewire.clinica.create');
     }
 }

@@ -15,10 +15,10 @@ class Index extends Component
     {
         // identificamos el usuario autenticado
         $clinica = auth()->user()->clinica;
-        
+
         // listamos los concentimientos de la clinica
         $consentimientos = Consentimiento::where('clinica_id', $clinica->id)->paginate();
-        
+
 
         return view('livewire.consentimiento.index', compact('consentimientos'))
             ->with('i', $this->getPage() * $consentimientos->perPage());
@@ -26,6 +26,7 @@ class Index extends Component
 
     public function delete(Consentimiento $consentimiento)
     {
+        $this->authorize('delet consentimientos');
         $consentimiento->delete();
 
         return $this->redirectRoute('consentimientos.index', navigate: true);

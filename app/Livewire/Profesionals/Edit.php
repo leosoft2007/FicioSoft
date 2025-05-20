@@ -20,6 +20,7 @@ class Edit extends Component
 
     public function save()
     {
+        $this->authorize('edit profesionals');
         $this->form->update();
 
         return $this->redirectRoute('profesionals.index', navigate: true);
@@ -27,6 +28,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('edit profesionals');
         return view('livewire.profesional.edit');
     }
 }

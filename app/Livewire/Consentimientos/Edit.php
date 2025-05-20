@@ -17,6 +17,7 @@ class Edit extends Component
 
     public function save()
     {
+        $this->authorize('edit consentimientos');
         $this->form->update();
 
         return $this->redirectRoute('consentimientos.index', navigate: true);
@@ -24,6 +25,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('edit consentimientos');
         return view('livewire.consentimiento.edit');
     }
 }

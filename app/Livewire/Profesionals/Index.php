@@ -22,7 +22,7 @@ public function sortBy($field)
     } else {
         $this->sortDirection = 'asc';
     }
-    
+
     $this->sortField = $field;
 }
     public function render(): View
@@ -46,6 +46,7 @@ public function sortBy($field)
 
     public function delete(Profesional $profesional)
     {
+        $this->authorize('delete profesionals');
         $profesional->delete();
 
         return $this->redirectRoute('profesionals.index', navigate: true);

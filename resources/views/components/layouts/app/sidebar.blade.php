@@ -20,15 +20,15 @@
                     wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
 
                 <flux:navlist.item icon="academic-cap" :href="route('especialidads.index')"
-                    :current="request()-> routeIs('especialidad.*')" wire:navigate>{{ __('Especialidad') }}
+                    :current="request()-> routeIs('especialidads.*')" wire:navigate>{{ __('Especialidad') }}
                 </flux:navlist.item>
 
                 <flux:navlist.item icon="user-circle" :href="route('profesionals.index')"
-                    :current="request()-> routeIs('profesional.*')" wire:navigate>{{ __('Profesionales') }}
+                    :current="request()-> routeIs('profesionals.*')" wire:navigate>{{ __('Profesionales') }}
                 </flux:navlist.item>
 
                 <flux:navlist.item icon="user-group" :href="route('pacientes.index')"
-                    :current="request()-> routeIs('paciente.*')" wire:navigate>{{ __('Pacientes') }}</flux:navlist.item>
+                    :current="request()-> routeIs('pacientes.*')" wire:navigate>{{ __('Pacientes') }}</flux:navlist.item>
 
                 <flux:navlist.item icon="pencil-square" :href="route('consentimientos.index')"
                     :current="request()-> routeIs('consentimientos.*')" wire:navigate>{{ __('Concentimiento') }}
@@ -50,13 +50,13 @@
                         <flux:menu.radio.group>
 
                     <flux:navlist.item  icon="document-currency-euro" :href="route('facturas.create')"
-                        :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Crear Factura') }}
+                        :current="request()->routeIs('facturas.*')" wire:navigate>{{ __('Crear Factura') }}
                     </flux:navlist.item>
                     <flux:navlist.item icon="document-currency-euro" :href="route('facturas.index')"
-                        :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Lista de Facturas') }}
+                        :current="request()->routeIs('facturas.*')" wire:navigate>{{ __('Lista de Facturas') }}
                     </flux:navlist.item>
                     <flux:navlist.item icon="document-currency-euro" :href="route('facturas.listado')"
-                        :current="request()->routeIs('factura.*')" wire:navigate>{{ __('Listados') }}
+                        :current="request()->routeIs('facturas.*')" wire:navigate>{{ __('Listados') }}
                     </flux:navlist.item>
                     <flux:navlist.item icon="document-currency-euro" :href="route('servicios.index')"
                         :current="request()->routeIs('servicios.*')" wire:navigate>{{ __('Servicios') }}
@@ -67,7 +67,7 @@
 
 
               <!--  <flux:menu.item icon="users" :href="route('agenda')" :current="request()->routeIs('cita.*')" wire:navigate>{{ __('Agenda Completa') }}</flux:menu.radio>-->
-                    <flux:menu.item icon="document-text" :href="route('grupo')" :current="request()->routeIs('grupo.*')" wire:navigate>{{ __('Agenda') }} </flux:menu.radio>
+                    <flux:menu.item icon="document-text" :href="route('grupo')" :current="request()->routeIs('grupo')" wire:navigate>{{ __('Agenda') }} </flux:menu.radio>
 
 
 

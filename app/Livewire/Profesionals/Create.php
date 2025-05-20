@@ -26,9 +26,9 @@ class Create extends Component
 
     public function save()
     {
-
+        $this->authorize('create profesionals');
         $prof = $this->form->store();
-        
+
 
 
         return $this->redirectRoute('profesionals.index', navigate: true);
@@ -36,6 +36,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create profesionals');
         return view('livewire.profesional.create');
     }
 }

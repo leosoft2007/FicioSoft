@@ -17,6 +17,7 @@ class Show extends Component
 
     public function render()
     {
+        $this->authorize('view consentimientos');
         return view('livewire.consentimiento.show', ['consentimiento' => $this->form->consentimientoModel]);
     }
 }

@@ -1,3 +1,5 @@
+<!-- Modal para modificar ocurrencia de cita grupal -->
+
 <flux:modal wire:model="showOcurrenciaUnicaModal" variant='bare' class="w-full max-w-3xl" :dismissible="false" hide-close-button>
     <div @click.away="$wire.closeOcurrenciaUnicaModal()" class="bg-white rounded-lg shadow-xl overflow-hidden">
 

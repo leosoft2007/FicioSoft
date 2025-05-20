@@ -49,12 +49,13 @@ class FacturaListado extends Component
         } else {
             $this->sortDirection = 'asc';
         }
-        
+
         $this->sortField = $field;
     }
 
     public function render()
     {
+        $this->authorize('view facturas');
         $this->clinica_id = auth()->user()->clinica_id;
 
         $query = Factura::with(['paciente', 'clinica'])
@@ -80,8 +81,8 @@ class FacturaListado extends Component
 
         $facturas = $query->paginate($this->porPagina);
         //clinica del usuario autenticado
-        
-       
+
+
 
         return view('livewire.facturas.factura-listado', [
             'facturas' => $facturas,
@@ -97,7 +98,7 @@ class FacturaListado extends Component
     public function exportarPdf()
 {
     $facturas = $this->getFacturasForExport();
-   
+
     $pdf = Pdf::loadView('pdf.facturas-pdf-listado', [
         'facturas' => $facturas,
         'fechaInicio' => $this->fechaInicio,
@@ -105,7 +106,7 @@ class FacturaListado extends Component
         'estado' => $this->estado,
         'clinica' => $this->clinica_id ? Clinica::find($this->clinica_id)->nombre : 'Todas'
     ]);
-    
+
     return response()->streamDownload(
         fn () => print($pdf->output()),
         "facturas_{$this->fechaInicio}_a_{$this->fechaFin}.pdf"
@@ -115,7 +116,7 @@ class FacturaListado extends Component
 public function exportarExcel()
 {
     return Excel::download(
-        new FacturasExport($this->getFacturasForExport()), 
+        new FacturasExport($this->getFacturasForExport()),
         "facturas_{$this->fechaInicio}_a_{$this->fechaFin}.xlsx"
     );
 }
@@ -145,4 +146,4 @@ protected function getFacturasForExport()
         ->get();
 }
 }
-    
+

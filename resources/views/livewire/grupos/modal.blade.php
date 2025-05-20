@@ -1,3 +1,4 @@
+<!-- Modal para crear una nueva cita grupal o modificar -->
 <flux:modal
     wire:model="showGrupalModal"
     variant="bare"

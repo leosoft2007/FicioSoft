@@ -10,6 +10,7 @@ use App\Models\Profesional;
 use Livewire\Component;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 
 use function Pest\Laravel\delete;
 
@@ -75,11 +76,21 @@ class Grupo extends Component
 
     ];
 
-    public $pacientes = [];
+
     public $profesionales = [];
+    public $paciente_id = null;
+
+    public $search = ''; // Campo de búsqueda
+    public $pacientes = []; // Opciones cargadas dinámicamente
+    public $selectedPaciente = null; // Paciente seleccionado
+    public $pacientesbusqueda = []; // Opciones cargadas dinámicamente
+
+
 
     public function guardarCita()
     {
+
+
         $this->validate([
             'newCita.paciente_id' => 'required|exists:pacientes,id',
             'newCita.profesional_id' => 'required|exists:profesionals,id',
@@ -142,7 +153,10 @@ class Grupo extends Component
     {
         $this->user = auth()->user();
         $this->clinicaId = $this->user->clinica_id;
-        $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->get();
+        // $this->pacientesbusqueda = Paciente::where('clinica_id', $this->clinicaId)->get()->mapWithKeys(fn($p) => [$p->id => "{$p->nombre} {$p->apellido}"])->toArray();
+
+
+        $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->orderby('apellido')->get();
 
         $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)->get();
 
@@ -156,6 +170,9 @@ class Grupo extends Component
 
         $this->loadCitas();
     }
+
+   
+
 
     public function loadCitas()
     {

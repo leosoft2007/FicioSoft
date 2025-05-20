@@ -10,7 +10,7 @@ use Livewire\WithPagination;
 class Index extends Component
 {
     use WithPagination;
-    
+
     public function render(): View
     {
         // implementamos busqueda por nombre y amellido
@@ -23,6 +23,7 @@ class Index extends Component
 
     public function delete(Clinica $clinica)
     {
+        $this->authorize('delete clinicas');
         $clinica->delete();
 
         return $this->redirectRoute('clinicas.index', navigate: true);

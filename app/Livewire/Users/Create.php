@@ -23,6 +23,7 @@ class Create extends Component
 
     public function save()
     {
+        $this->authorize('create users');
         $this->form->role = $this->role;
         $this->form->persist();
 
@@ -31,6 +32,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create users');
         return view('livewire.user.create');
     }
 }

@@ -1,7 +1,7 @@
 <section class="w-full">
-    
-    <x-page-header 
-    title="{{ __('Show') }}" 
+
+    <x-page-header
+    title="{{ __('Show') }}"
     subtitle="Lista de {{ __('Especialidads') }}"
     color="purple"/>
 
@@ -11,7 +11,8 @@
                 <div class="w-full">
                     <div class="sm:flex sm:items-center">
                         <div class="sm:flex-auto">
-                            <p class="mt-2 text-sm text-gray-700">Details of {{ __('Especialidad') }}</p>
+                            <p class="mt-2 text-sm text-gray-700">Detalles de {{ __('Especialidad') }}</p>
+                         
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                             <flux:button variant="primary"  :href="route('especialidads.index')">{{ __('Back') }}</flux:butt>
@@ -23,7 +24,7 @@
                             <div class="inline-block min-w-full py-2 align-middle">
                                 <div class="mt-6 border-t border-gray-100">
                                     <dl class="divide-y divide-gray-100">
-                                        
+
                                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                             <dt class="text-sm font-medium leading-6 text-gray-900">Nombre</dt>
                                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $especialidad->nombre }}</dd>

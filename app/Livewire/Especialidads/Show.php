@@ -17,6 +17,7 @@ class Show extends Component
 
     public function render()
     {
+        $this->authorize('view especialidads');
         return view('livewire.especialidad.show', ['especialidad' => $this->form->especialidadModel]);
     }
 }
