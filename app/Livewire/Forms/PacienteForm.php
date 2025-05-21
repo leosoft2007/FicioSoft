@@ -32,7 +32,7 @@ class PacienteForm extends Form
     public $medicamentos = '';
     public $historial_medico = '';
     public $notas = '';
-    public $foto = '';
+    public $foto = null;
     public $estado_paciente = '';
     public $tipo_paciente = '';
     public $referido_por = '';
@@ -64,8 +64,8 @@ class PacienteForm extends Form
 			'medicamentos' => 'string',
 			'historial_medico' => 'string',
 			'notas' => 'string',
-			'foto' => 'string',
-			'estado_paciente' => 'string',
+            'foto' => 'string', // max 2MB
+            'estado_paciente' => 'string',
 			'tipo_paciente' => 'string',
   			'referido_por' => 'string',
         ];
@@ -112,15 +112,7 @@ class PacienteForm extends Form
 
     public function store(): void
     {
-        if (!is_string($this->foto) || $this->foto === '' || $this->foto === null || is_array($this->foto) || is_integer($this->foto)) {
-            $this->foto = 'sin foto';
-        }
-        try {
-            $data = $this->validate();
-           // dd($data);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->validator->errors()->toArray());
-        }
+        
 
         $this->pacienteModel->create($this->validate());
 

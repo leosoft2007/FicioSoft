@@ -155,11 +155,34 @@
 
     <div x-show="activeTab === 'foto'" class="space-y-6">
         <flux:heading size="lg">Foto</flux:heading>
-        <flux:fieldset class="grid grid-cols-1 gap-6">
-            <flux:field label="Foto del paciente" wire:model="form.foto">
-                <flux:input type="file" wire:model="form.foto" />
-            </flux:field>
-        </flux:fieldset>
+        @if ($paciente->foto)
+            <img src="{{ asset('storage/' . $paciente->foto) }}" class="w-32 h-32 rounded-full object-cover border" />
+
+        @endif
+        <div x-data="{ preview: null }" class="space-y-4">
+            <flux:input
+                type="file"
+                wire:model="foto"
+                accept="image/*"
+                capture="environment"
+                @change="
+                    const file = $event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = e => preview = e.target.result;
+                        reader.readAsDataURL(file);
+                    }
+                "
+            />
+
+            <template x-if="preview">
+                <img :src="preview" class="w-32 h-32 rounded-full object-cover border" />
+            </template>
+
+            @error('form.foto') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
+
+
     </div>
 
     <!-- Acciones -->
