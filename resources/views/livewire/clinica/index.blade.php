@@ -41,10 +41,11 @@
                                 {{ $clinica->email }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">
-                                <a href="{{ route('clinicas.edit', $clinica->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Editar</a>
-                                <button wire:click="delete({{ $clinica->id }})" class="text-red-600 hover:text-red-900">
+                                <flux:button href="{{ route('clinicas.show', $clinica->id) }}" class="text-blue-600 hover:text-blue-900 mr-3">Ver</flux:button>
+                                <flux:button variant="primary" href="{{ route('clinicas.edit', $clinica->id) }}" class=" mr-3">Editar</flux:button>
+                                <flux:button variant="danger" wire:click="delete({{ $clinica->id }})" class="text-red-600 hover:text-red-900">
                                     Eliminar
-                                </button>
+                                </flux:button>
                             </td>
                         </tr>
                     @empty

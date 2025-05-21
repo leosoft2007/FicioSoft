@@ -46,21 +46,21 @@
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
 
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $consentimiento->titulo }}</td>
-										
+
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 overflow-hidden text-ellipsis max-w-[250px]">{{ $consentimiento->contenido }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $consentimiento->tipo }}</td>
 
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                                <a wire:navigate href="{{ route('consentimientos.show', $consentimiento->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
-                                                <a wire:navigate href="{{ route('consentimientos.edit', $consentimiento->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
-                                                <button
+                                                <flux:button wire:navigate href="{{ route('consentimientos.show', $consentimiento->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</flux:button>
+                                                <flux:button wire:navigate href="{{ route('consentimientos.edit', $consentimiento->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</flux:button>
+                                                <flux:button variant="danger"
                                                     class="text-red-600 font-bold hover:text-red-900"
                                                     type="button"
                                                     wire:click="delete({{ $consentimiento->id }})"
                                                     wire:confirm="Are you sure you want to delete?"
                                                 >
                                                     {{ __('Delete') }}
-                                                </button>
+                                                </flux:button>
                                             </td>
                                         </tr>
                                     @endforeach

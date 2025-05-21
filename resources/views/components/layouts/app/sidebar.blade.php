@@ -102,13 +102,9 @@
     <flux:spacer/>
 
         <flux:navlist variant="outline">
-            <flux:navlist.item icon="camera" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-            </flux:navlist.item>
 
-            <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
-                {{ __('Documentation') }}
-            </flux:navlist.item>
+        <!-- -- Settings -->
+
         </flux:navlist>
 
         <!-- Desktop User Menu -->

@@ -8,6 +8,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
+// esta clase se encarga de verificar si el usuario tiene el permiso de acceder al sistema
+// si no lo tiene, se cierra la sesión y se lanza una excepción de autorización
+// el evento se dispara después de que el usuario inicia sesión
+// el evento Login se dispara después de que el usuario inicia sesión
+
 class CheckUserPermissionAfterLogin
 {
     public function handle(Login $event)
@@ -31,5 +36,5 @@ class CheckUserPermissionAfterLogin
     /**
      * Handle the event.
      */
-    
+
 }

@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Models\CitaGrupal;
 
+
+
 class CitaGrupalOcurrenciaController extends Controller
 {
     function generarOcurrencias(CitaGrupal $citaGrupal)

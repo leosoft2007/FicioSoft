@@ -18,8 +18,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
     use HasAuditable;
-    use HasRoles;   
-    
+    use HasRoles;
+
 
     /**
      * The attributes that are mass assignable.
@@ -27,7 +27,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $perPage = 20;
-    
+
     protected $fillable = [
         'name',
         'email',
@@ -44,7 +44,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'last_seen' => 'datetime',
+    ];
     /**
      * Get the attributes that should be cast.
      *
@@ -72,7 +75,7 @@ class User extends Authenticatable
     {
             return $this->belongsTo(Clinica::class);
     }
-    
-  
-    
+
+
+
 }

@@ -155,4 +155,12 @@ class Paciente extends Model
             return false;
         });
     }
+    public function getInitialsAttribute(): string
+    {
+        $words = preg_split('/\s+/', trim($this->nombre . ' ' . $this->apellido));
+        return strtoupper(
+            substr($words[0] ?? '', 0, 1) .
+                substr($words[1] ?? '', 0, 1)
+        );
+    }
 }

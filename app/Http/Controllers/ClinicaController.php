@@ -13,36 +13,7 @@ use Illuminate\Support\Str;
 
 class ClinicaController extends Controller
 {
-    //buscamo el rol Administrador
-    public function init1(){
-        $admin = Role::where('name', 'Administrador')->first();
-        $models = [
-            //   'User',
-            //   'Clinica',
-            'Especialidad',
-            'Hora',
-            'Paciente',
-            'Profesional',
-            'Cita',
-            'Factura',
-            'Servicio',
-            'Disponible',
-            'Consentimiento',
-            // Agrega todos los modelos que quieras gestionar permisos
-        ];
 
-        // Crear permisos para cada modelo
-        foreach ($models as $model) {
-            // Convertir a plural en caso de ser necesario
-            $modelName = Str::plural(Str::lower($model));
-
-            // Crear permisos comunes como "crear", "editar", "eliminar", "ver"
-            Permission::create(['name' => "create $modelName", 'description' => 'Crear ' . $modelName])->assignRole($admin);
-            Permission::create(['name' => "edit $modelName", 'description' => 'Editar ' . $modelName])->assignRole($admin);
-            Permission::create(['name' => "delete $modelName", 'description' => 'Eliminar ' . $modelName])->assignRole($admin);
-            Permission::create(['name' => "view $modelName", 'description' => 'Ver ' . $modelName])->assignRole($admin);
-        }
-    }
 
     public function init()
     {
@@ -126,6 +97,12 @@ class ClinicaController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
+
+    
+
+
     public function index()
     {
         //

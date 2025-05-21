@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Profesional;
 use Illuminate\Support\Facades\Auth;
 
+
 class CardCitasPorProfesional extends Component
 {
      public $citasPorProfesional = [];
@@ -37,7 +38,7 @@ class CardCitasPorProfesional extends Component
 
     public function render()
     {
-        
+
         return view('livewire.card.card-citas-por-profesional');
     }
 }

@@ -1,7 +1,7 @@
 <x-layouts.app :title="__('Dashboard')">
 
 
-    
+
 
     <div class="py-6">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -14,6 +14,7 @@
                 <livewire:card.card-profesionales-activos />
             </div>
 
+
             <!-- Segunda fila: Gráficos y listados -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <livewire:card.card-citas-por-profesional />
@@ -23,5 +24,10 @@
             <!-- Tercera fila: Próximas Citas -->
             <livewire:card.card-proximas-citas />
         </div>
+        @role('Administrador')
+        <div wire:poll.5s>
+            @livewire('card.usuarios-conectados')
+        </div>
+        @endrole
     </div>
 </x-layouts.app>

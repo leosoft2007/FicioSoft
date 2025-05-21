@@ -6,6 +6,9 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cita;
 
+// este componente se encarga de mostrar el total de citas del dia y el total de citas confirmadas del dia
+// en la vista se mostrara el total de citas y el total de citas confirmadas
+// el componente se actualizara cada 5 segundos
 class CardCitasHoy extends Component
 {
     public $citasHoy = 0;

@@ -32,7 +32,7 @@ use Illuminate\Http\Request;
  Route::get('/', function () { return view('welcome');})->name('home');
 //Route::redirect('/', '/login');
 
-Route::view('dashboard', 'dashboard')->name('dashboard');
+
 
 //Route::view('dashboard', 'dashboard')
 //  ->middleware(['auth', 'verified'])
@@ -40,6 +40,10 @@ Route::view('dashboard', 'dashboard')->name('dashboard');
 Route::get('init', [ClinicaController::class, 'init'])->name('init');
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::view('dashboard', 'dashboard')->name('dashboard');
+    
+
     Route::redirect('settings', 'settings/profile');
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
@@ -115,7 +119,7 @@ Route::get('/pacientes/consentimientos/firmar/{paciente}/{consentimientos}', [Co
     Route::get('/servicios/update/{servicio}', \App\Livewire\Servicios\Edit::class)->name('servicios.edit');
 
     // routes/api.php
-   
+
 });
 
 
