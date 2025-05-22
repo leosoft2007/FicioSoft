@@ -109,7 +109,7 @@
                                 placement: 'top',
                                 maxWidth: 300,
                                 trigger: 'mouseenter focus', // Solo mouse y teclado, no 'click'
-                                touch: false, // Desactiva tooltips en touch por defecto
+                                touch: ['hold', 500], // 👈 long press en móvil (medio segundo)
                                 onShow(instance) {
                                     // Si es touch, ocultar el tooltip después de un tiempo
                                     if ('ontouchstart' in window) {
