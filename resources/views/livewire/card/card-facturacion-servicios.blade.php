@@ -1,8 +1,9 @@
-<div class="bg-white shadow rounded-lg overflow-hidden lg:col-span-2">
+<!-- filepath: resources/views/livewire/card/card-facturacion-servicios.blade.php -->
+<div class="bg-white shadow rounded-lg overflow-hidden lg:col-span-2 h-full flex flex-col">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
         <h3 class="text-lg font-medium text-gray-900">Facturación por Servicio (Últimos 30 días)</h3>
     </div>
-    <div class="p-6">
+    <div class="flex-1 p-6">
         <!-- Listado de servicios -->
         <ul class="space-y-4">
             @php
@@ -26,8 +27,8 @@
                         </div>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                            class="rounded-full h-2 transition-all duration-500 ease-in-out" 
+                        <div
+                            class="rounded-full h-2 transition-all duration-500 ease-in-out"
                             style="width: {{ $porcentaje }}%; background-color: {{ $color }};">
                         </div>
                     </div>

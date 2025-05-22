@@ -1,8 +1,9 @@
-<div class="bg-white shadow rounded-lg overflow-hidden">
+<!-- filepath: resources/views/livewire/card/card-citas-por-profesional.blade.php -->
+<div class="bg-white shadow rounded-lg overflow-hidden h-full flex flex-col">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
         <h3 class="text-lg font-medium text-gray-900">Citas Hoy por Profesional</h3>
     </div>
-    <div class="px-4 py-5 sm:p-6">
+    <div class="flex-1 px-4 py-5 sm:p-6">
         <ul class="divide-y divide-gray-200">
             @forelse($citasPorProfesional as $profesional)
                 <li class="py-3">
