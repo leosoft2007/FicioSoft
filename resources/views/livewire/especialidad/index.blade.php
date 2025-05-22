@@ -1,3 +1,4 @@
+<!-- filepath: c:\xampp\htdocs\lara12\resources\views\livewire\especialidad\index.blade.php -->
 <section class="w-full">
     <x-page-header
         title="Gestión de Especialidades"
@@ -14,7 +15,6 @@
 
     <div class="py-6">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
-            <!-- Tarjeta principal -->
             <div class="bg-white shadow-lg rounded-xl overflow-hidden">
                 <!-- Barra de acciones -->
                 <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
@@ -47,8 +47,8 @@
                     </div>
                 </div>
 
-                <!-- Tabla de especialidades -->
-                <div class="overflow-x-auto">
+                <!-- Tabla solo visible en escritorio/tablet -->
+                <div class="overflow-x-auto hidden md:block">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
@@ -126,7 +126,6 @@
                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
-                                                <span class="hidden sm:inline"></span>
                                             </flux:button>
                                         </div>
                                     </td>
@@ -148,8 +147,59 @@
                     </table>
                 </div>
 
-                <!-- Paginación -->
-                <div class="px-6 py-4 border-t border-gray-100">
+                <!-- Tarjetas solo visibles en móvil -->
+                <div class="block md:hidden space-y-4 px-2 py-4">
+                    @forelse ($especialidads as $especialidad)
+                        <div class="bg-white shadow rounded-lg p-4 flex flex-row items-start justify-between gap-2">
+                            <div class="flex-1">
+                                <div class="font-bold text-purple-700 mb-1">{{ $especialidad->nombre }}</div>
+                                <div class="text-xs text-gray-500 mb-2 line-clamp-2">{{ $especialidad->descripcion }}</div>
+                            </div>
+                            <div class="flex flex-col gap-1 items-end">
+                                <flux:button
+                                    wire:navigate
+                                    href="{{ route('especialidads.show', $especialidad->id) }}"
+                                    class="text-purple-600 hover:text-purple-900 flex items-center gap-1 px-2 py-1 rounded hover:bg-purple-50"
+                                    title="Ver detalles"
+                                >
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </flux:button>
+                                <flux:button
+                                    wire:navigate
+                                    href="{{ route('especialidads.edit', $especialidad->id) }}"
+                                    class="text-indigo-600 hover:text-indigo-900 flex items-center gap-1 px-2 py-1 rounded hover:bg-indigo-50"
+                                    title="Editar"
+                                >
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </flux:button>
+                                <flux:button variant="danger"
+                                    class="text-red-600 hover:text-red-900 flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50"
+                                    type="button"
+                                    wire:click="delete({{ $especialidad->id }})"
+                                    wire:confirm="¿Estás seguro de eliminar esta especialidad?"
+                                    title="Eliminar"
+                                >
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </flux:button>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center text-gray-500">No se encontraron especialidades</div>
+                    @endforelse
+                    <div class="mt-4">
+                        {{ $especialidads->withQueryString()->links() }}
+                    </div>
+                </div>
+
+                <!-- Paginación para escritorio -->
+                <div class="px-6 py-4 border-t border-gray-100 hidden md:block">
                     {{ $especialidads->withQueryString()->links() }}
                 </div>
             </div>

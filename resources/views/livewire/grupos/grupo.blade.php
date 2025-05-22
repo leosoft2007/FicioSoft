@@ -77,7 +77,7 @@
                     selectAllow: function(selectInfo) {
                         // Solo permitir selección si estamos en la vista diaria
                         return calendar.view.type === 'timeGridDay' || calendar.view.type ===
-                        'timeGridWeek';
+                            'timeGridWeek';
                     },
                     select: function(info) {
                         const eventData = {
@@ -108,6 +108,14 @@
                                 theme: 'light-border',
                                 placement: 'top',
                                 maxWidth: 300,
+                                trigger: 'mouseenter focus', // Solo mouse y teclado, no 'click'
+                                touch: false, // Desactiva tooltips en touch por defecto
+                                onShow(instance) {
+                                    // Si es touch, ocultar el tooltip después de un tiempo
+                                    if ('ontouchstart' in window) {
+                                        setTimeout(() => instance.hide(), 2000);
+                                    }
+                                }
                             });
                         }
 
@@ -168,7 +176,7 @@
 
 
 
-                dateClick: function(info) {
+                    dateClick: function(info) {
                         calendar.changeView('timeGridDay', info.dateStr);
                     },
 
@@ -193,11 +201,11 @@
                     },
 
 
-            });
+                });
 
 
 
-            calendar.render();
+                calendar.render();
             });
 
             // ✅ Refrescar eventos correctamente desde Livewire

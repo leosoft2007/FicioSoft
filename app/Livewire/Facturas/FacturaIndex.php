@@ -24,7 +24,8 @@ class FacturaIndex extends Component
 
     public function render()
     {
-        $this->authorize('show facturas');
+        $this->authorize('view facturas');
+
         $this->clinica = Auth::user()->clinica;
 
         $query = Factura::with('paciente')
