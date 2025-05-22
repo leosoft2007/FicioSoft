@@ -26,6 +26,10 @@ class Paciente extends Model
                 $registro->clinica_id = auth()->user()->clinica_id;
             }
         });
+
+        static::deleting(function ($paciente) {
+            $paciente->image()->delete();
+        });
     }
     /** @use HasFactory<\Database\Factories\PacienteFactory> */
 
@@ -162,5 +166,12 @@ class Paciente extends Model
             substr($words[0] ?? '', 0, 1) .
                 substr($words[1] ?? '', 0, 1)
         );
+    }
+    /**
+     * Relación polimórfica: un paciente puede tener una o más imágenes.
+     */
+    public function image()
+    {
+        return $this->morphOne(\App\Models\Image::class, 'imageable');
     }
 }

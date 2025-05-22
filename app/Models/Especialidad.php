@@ -58,7 +58,7 @@ class Especialidad extends Model
             'updated_at' => 'datetime',
         ];
     }
-    
+
     public function profesionals()
     {
         return $this->hasMany(Profesional::class, 'id', 'especialidad_id');
@@ -72,5 +72,6 @@ class Especialidad extends Model
         return $this->belongsTo(Clinica::class);
     }
     
-   
+
+
 }

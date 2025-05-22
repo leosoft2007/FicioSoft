@@ -106,4 +106,8 @@ class Profesional extends Model
             'id'  // Local key en cita_grupals
         );
     }
+    public function image()
+    {
+        return $this->morphOne(\App\Models\Image::class, 'imageable');
+    }
 }

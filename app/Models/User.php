@@ -76,6 +76,9 @@ class User extends Authenticatable
             return $this->belongsTo(Clinica::class);
     }
 
-
+    public function image()
+    {
+        return $this->morphOne(\App\Models\Image::class, 'imageable');
+    }
 
 }
