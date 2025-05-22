@@ -46,6 +46,9 @@
 
     @script
         <script>
+            function isMobile() {
+                return window.innerWidth < 768;
+            }
             let calendar;
             Livewire.on('calendar3:load', () => {
                 let calendarEl = document.getElementById('calendar3');
@@ -177,7 +180,19 @@
 
 
                     dateClick: function(info) {
-                        calendar.changeView('timeGridDay', info.dateStr);
+                        if (isMobile()) {
+                            // En móvil: abrir modal para nueva cita en ese horario
+                            const eventData = {
+                                start: info.dateStr,
+                                end: null,
+                                date: info.dateStr.split('T')[0]
+                            };
+                            @this.set('datosSeleccion', eventData);
+                            @this.set('mostrarSelectorTipoCita', true); // abrir modal de tipo de cita
+                        } else {
+                            // En escritorio: cambiar vista como antes
+                            calendar.changeView('timeGridDay', info.dateStr);
+                        }
                     },
 
                     eventClick: function(info) {
