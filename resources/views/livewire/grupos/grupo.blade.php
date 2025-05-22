@@ -46,9 +46,10 @@
 
     @script
         <script>
-            function isMobile() {
-                return window.innerWidth < 768;
-            }
+            window.isMobile = function() {
+        return window.innerWidth < 768;
+    };
+
             let calendar;
             Livewire.on('calendar3:load', () => {
                 let calendarEl = document.getElementById('calendar3');
@@ -176,19 +177,36 @@
                             if (titleEl) titleEl.prepend(icon);
                         }
                     },
+                    dayCellDidMount: function(info) {
+                        // Solo en escritorio y solo en la vista mensual
+                        if (info.view.type === 'dayGridMonth') {
+                            info.el.style.cursor = 'pointer';
+                            info.el.addEventListener('click', function(e) {
+                                // Evita que el click en un evento dentro del día lo capture el día
+                                if (e.target.closest('.fc-event')) return;
+                                calendar.changeView('timeGridDay', info.date.toISOString().split(
+                                    'T')[0]);
+                            });
+                        }
+                    },
 
 
 
                     dateClick: function(info) {
                         if (isMobile()) {
-                            // En móvil: abrir modal para nueva cita en ese horario
-                            const eventData = {
-                                start: info.dateStr,
-                                end: null,
-                                date: info.dateStr.split('T')[0]
-                            };
-                            @this.set('datosSeleccion', eventData);
-                            @this.set('mostrarSelectorTipoCita', true); // abrir modal de tipo de cita
+                            // Si NO estamos en la vista diaria, cambiamos a la vista diaria de ese día
+                            if (calendar.view.type !== 'timeGridDay') {
+                                calendar.changeView('timeGridDay', info.dateStr);
+                            } else {
+                                // Si ya estamos en la vista diaria, abrimos el modal para nueva cita
+                                const eventData = {
+                                    start: info.dateStr,
+                                    end: null,
+                                    date: info.dateStr.split('T')[0]
+                                };
+                                @this.set('datosSeleccion', eventData);
+                                @this.set('mostrarSelectorTipoCita', true);
+                            }
                         } else {
                             // En escritorio: cambiar vista como antes
                             calendar.changeView('timeGridDay', info.dateStr);
