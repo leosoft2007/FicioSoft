@@ -32,11 +32,11 @@ class Edit extends Component
     {
         $this->authorize('edit pacientes');
 
-
+        /*
         if ($this->form->foto) {
 
 
-                    // 🗑️ Borrar la anterior si existe
+            // 🗑️ Borrar la anterior si existe
             if ($this->paciente->foto && Storage::disk('public')->exists($this->paciente->foto)) {
                 Storage::disk('public')->delete($this->paciente->foto);
             }
@@ -50,7 +50,7 @@ class Edit extends Component
             $this->form->foto = $path;
 
 
-        }
+        } */
 
         $this->form->update();
 

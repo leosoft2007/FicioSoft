@@ -41,11 +41,12 @@ class PacienteForm extends Form
 
     public function rules(): array
     {
+        $pacienteId = $this->pacienteModel?->id ?? 'NULL';
         return [
 			'nombre' => 'required|string',
 			'apellido' => 'required|string',
             // validacion para el email
-            'email' => 'required|email|unique:pacientes,email',
+            'email' => 'required|email|unique:pacientes,email,' . $pacienteId,
             'telefono' => 'string',
 			'direccion' => 'string',
 			'ciudad' => 'string',
@@ -112,7 +113,7 @@ class PacienteForm extends Form
 
     public function store(): void
     {
-        
+
 
         $this->pacienteModel->create($this->validate());
 
