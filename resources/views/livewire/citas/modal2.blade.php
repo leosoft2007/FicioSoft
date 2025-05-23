@@ -38,25 +38,35 @@
                 <!-- Paciente y Profesional -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <flux:select label="Paciente" wire:model="newCita.paciente_id" class="w-full">
-                            <option value="">Seleccione un paciente</option>
-                            @foreach ($pacientes as $paciente)
-                                <option value="{{ $paciente->id }}">
-                                    {{ $paciente->apellido }}, {{ $paciente->nombre }}
-                                </option>
-                            @endforeach
-                        </flux:select>
+                        <label for="paciente" class="block text-sm font-medium text-gray-700">Paciente</label>
+                        {{-- Para Paciente --}}
+                        <x-select-busqueda
+                        :options="$pacientes"
+                        :selected-value="$newCita['paciente_id']"
+                        valueField="id"
+                        labelField="nombre_completo"
+                        model="newCita.paciente_id"
+                        primaryColor="indigo-600"
+                        hoverColor="indigo-50"
+                        placeholder="Seleccione un paciente"
+                        />
+
 
                     </div>
                     <div>
-                        <flux:select label="Profesional" wire:model="newCita.profesional_id" class="w-full">
-                            <option value="">Seleccione un profesional</option>
-                            @foreach ($profesionales as $profesional)
-                                <option value="{{ $profesional->id }}">
-                                    {{ $profesional->nombre }}
-                                </option>
-                            @endforeach
-                        </flux:select>
+                        <label for="profesional" class="block text-sm font-medium text-gray-700">Profesional</label>
+                        {{-- Para Profesional --}}
+                        <x-select-busqueda
+                                :options="$profesionales"
+                                :selected-value="$newCita['profesional_id']"
+                                valueField="id"
+                                labelField="nombre"
+                                model="newCita.profesional_id"
+                                placeholder="Seleccione un profesional"
+                                primaryColor="indigo-600"
+                                hoverColor="indigo-50"
+                            />
+
                     </div>
                 </div>
 
@@ -95,3 +105,7 @@
             </div>
         </div>
     </flux:modal>
+
+
+
+

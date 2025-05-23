@@ -79,7 +79,14 @@ class Paciente extends Model
     protected $appends = [
         'full_name',
         'full_address',
+        'nombre_completo',
     ];
+
+
+    public function getNombreCompletoAttribute()
+    {
+        return "{$this->nombre} {$this->apellido}";
+    }
     public function getFullNameAttribute()
     {
         return $this->nombre . ' ' . $this->apellido;
@@ -139,11 +146,7 @@ class Paciente extends Model
         return $query->where('tipo_paciente', 'VIP');
     }
 
-    //nombre completo
-    public function getNombreCompletoAttribute()
-    {
-        return $this->nombre . ' ' . $this->apellido;
-    }
+
 
     public function gruposDisponibles()
     {

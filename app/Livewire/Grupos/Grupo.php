@@ -10,31 +10,26 @@ use App\Models\Profesional;
 use Livewire\Component;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
 
-use function Pest\Laravel\delete;
 
 class Grupo extends Component
 {
-    public $showOcurrenciaUnicaModal = false;
-    public $ocurrencia = [
+    // === PROPIEDADES ===
+
+    // -- Citas individuales
+    public $newCita = [
+        'paciente_id' => '',
+        'profesional_id' => '',
         'fecha' => '',
         'hora_inicio' => '',
         'hora_fin' => '',
-        'participantes' => [], // IDs
-        'cupo_maximo' => 0,
+        'observaciones' => ' '
     ];
+    public $selectedCita = null;
+    public $showModal = false;
+    public $showModal2 = false;
 
-    public $profesionalNombre;
-    public $nombreGrupo;
-
-
-    public $tipoEdicion = null; // 'todas' o 'una'
-    public $ocurrenciaId = null;
-    public $showOcurrenciaModal = false;
-    public string $modoFormulario = 'editar'; // o 'editar'
-    public $editCitaGrupalId = null;
-    public $showGrupalModal = false;
+    // -- Citas grupales
     public $newCitaGrupal = [
         'profesional_id' => null,
         'fecha_inicio' => null,
@@ -46,47 +41,98 @@ class Grupo extends Component
         'cupo_maximo' => 0,
         'observaciones' => '',
         'pacientes' => [],
-        'nombre'
+        'nombre' => ''
     ];
+    public $editCitaGrupalId = null;
+    public $showGrupalModal = false;
+
+    // -- Ocurrencias grupales
+    public $ocurrencia = [
+        'fecha' => '',
+        'hora_inicio' => '',
+        'hora_fin' => '',
+        'participantes' => [], // IDs
+        'cupo_maximo' => 0,
+    ];
+    public $ocurrenciaId = null;
+    public $showOcurrenciaUnicaModal = false;
+    public $showOcurrenciaModal = false;
 
 
+    // -- Datos auxiliares y búsqueda
+    public $profesionalNombre;
+    public $nombreGrupo;
+    public $tipoEdicion = null; // 'todas' o 'una'
+    public string $modoFormulario = 'editar'; // o 'editar'
     public $profesionalSeleccionado = null;
     public $clinicaId;
     public $citas = [];
     public $user;
-    public $showModal = false;
-    public $showModal2 = false;
-    public $selectedCita = null;
     public $estado = '';
     public $fecha;
     public $hora_inicio;
     public $hora_fin;
     public $errorMessage = null;
-    protected $listeners = ['openCreateModal', 'openCitaGrupalModal', 'openCitaModal', 'abrirOcurrencia', 'resetTab'];
-
     public $datosSeleccion;
     public $mostrarSelectorTipoCita = false;
-    public $newCita = [
-        'paciente_id' => '',
-        'profesional_id' => '',
-        'fecha' => '',
-        'hora_inicio' => '',
-        'hora_fin' => '',
-        'observaciones' => ' '
-
-    ];
-
-
     public $profesionales = [];
     public $paciente_id = null;
-
     public $search = ''; // Campo de búsqueda
     public $pacientes = []; // Opciones cargadas dinámicamente
     public $selectedPaciente = null; // Paciente seleccionado
     public $pacientesbusqueda = []; // Opciones cargadas dinámicamente
 
 
+    // -- Listeners
+    protected $listeners = [
+        'openCreateModal',
+        'openCitaGrupalModal',
+        'openCitaModal',
+        'abrirOcurrencia',
+        'resetTab'
+    ];
 
+    // === CICLO DE VIDA ===
+    public function mount()
+    {
+        $this->user = auth()->user();
+        $this->clinicaId = $this->user->clinica_id;
+
+
+       $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->orderby('apellido')->get();
+
+
+        $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)->get();
+
+
+
+        //  ->whereHas('citas', function ($query) {
+        // Opcional: filtra por fecha si lo necesitas
+        // $query->whereDate('fecha', today()); // Filtrar hoy
+        // })
+
+
+        $this->loadCitas();
+    }
+    public function render()
+    {
+        return view('livewire.grupos.grupo');
+    }
+
+    // === MÉTODOS DE CITAS INDIVIDUALES ===
+    public function openCreateModal($data)
+    {
+
+        $start = \Carbon\Carbon::parse($data['start']);
+        $end = \Carbon\Carbon::parse($data['end']);
+
+        $this->newCita['fecha'] = $start->toDateString();
+        $this->newCita['hora_inicio'] = $start->format('H:i');
+        $this->newCita['hora_fin'] = $end->format('H:i');
+
+
+        $this->showModal2 = true;
+    }
     public function guardarCita()
     {
 
@@ -140,59 +186,6 @@ class Grupo extends Component
         $this->reset('newCita', 'showModal2');
         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
     }
-
-    public function openGrupalocurrencia($a, $eventData)
-    {
-
-        $this->dispatch( $a , $eventData);
-    }
-
-    public function closeGrupalModal() {}
-
-    public function mount()
-    {
-        $this->user = auth()->user();
-        $this->clinicaId = $this->user->clinica_id;
-        // $this->pacientesbusqueda = Paciente::where('clinica_id', $this->clinicaId)->get()->mapWithKeys(fn($p) => [$p->id => "{$p->nombre} {$p->apellido}"])->toArray();
-
-
-        $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->orderby('apellido')->get();
-
-        $this->profesionales = Profesional::where('clinica_id', $this->clinicaId)->get();
-
-
-
-        //  ->whereHas('citas', function ($query) {
-                // Opcional: filtra por fecha si lo necesitas
-                // $query->whereDate('fecha', today()); // Filtrar hoy
-           // })
-
-
-        $this->loadCitas();
-    }
-
-   
-
-
-    public function loadCitas()
-    {
-        $citasIndividuales = Cita::paraCalendario($this->clinicaId, $this->profesionalSeleccionado);
-        $citasGrupales = CitaGrupalOcurrencia::paraCalendario($this->clinicaId, $this->profesionalSeleccionado);
-
-        // $this->citas = $citasIndividuales->merge($citasGrupales)->toArray();
-        $this->citas = collect($citasIndividuales)->merge(collect($citasGrupales))->toArray();
-
-
-        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
-    }
-
-    public function filtrarPorProfesional($profesionalId)
-    {
-
-        $this->profesionalSeleccionado = $profesionalId;
-        $this->loadCitas();
-    }
-
     public function saveCita()
     {
         $this->validate([
@@ -218,7 +211,6 @@ class Grupo extends Component
             $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
         }
     }
-
     public function deleteCita()
     {
         if ($this->selectedCita && isset($this->selectedCita['id'])) {
@@ -230,6 +222,63 @@ class Grupo extends Component
             $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
             session()->flash('message', 'Cita Eliminada exitosamente.');
         }
+    }
+    public function closeModal()
+    {
+
+        $this->showModal = false;
+        $this->selectedCita = null;
+
+        $this->dispatch('modalClosed');
+        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+    }
+    public function closeModal2()
+    {
+        $this->showModal2 = false;
+        $this->selectedCita = null;
+
+        $this->dispatch('modalClosed');
+        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+    }
+
+    // === MÉTODOS DE CITAS GRUPALES ===
+    public function openCreateGrupalModal($data)
+    {
+        $this->modoFormulario = 'crear';
+
+        $this->reset('newCitaGrupal');
+        $start = \Carbon\Carbon::parse($data['start']);
+        $end = \Carbon\Carbon::parse($data['end']);
+
+        $this->newCitaGrupal['fecha_inicio'] = $start->toDateString();
+        $this->newCitaGrupal['hora_inicio'] = $start->format('H:i');
+        $this->newCitaGrupal['hora_fin'] = $end->format('H:i');
+
+        $this->dispatch('resetTab');
+
+
+        $this->showGrupalModal = true;
+    }
+    public function createCitaGrupal()
+    {
+        $this->validate($this->reglasCitaGrupal());
+
+        $this->crearCitaGrupal();
+        $this->finalizarAccionGrupal('Grupo creado exitosamente.');
+    }
+    public function updateCitaGrupal()
+    {
+        $this->validate($this->reglasCitaGrupal());
+
+        $cita = CitaGrupal::findOrFail($this->editCitaGrupalId);
+
+        $cita->delete();
+
+
+
+        $this->crearCitaGrupal();
+
+        $this->finalizarAccionGrupal('Grupo Actualizado exitosamente.');
     }
     public function deleteCitaGrupal()
     {
@@ -266,26 +315,7 @@ class Grupo extends Component
             session()->flash('error', 'Ocurrió un error al eliminar el grupo. Intenta nuevamente.');
         }
     }
-
-
-    public function openCreateGrupalModal($data)
-    {
-        $this->modoFormulario = 'crear';
-
-        $this->reset('newCitaGrupal');
-        $start = \Carbon\Carbon::parse($data['start']);
-        $end = \Carbon\Carbon::parse($data['end']);
-
-        $this->newCitaGrupal['fecha_inicio'] = $start->toDateString();
-        $this->newCitaGrupal['hora_inicio'] = $start->format('H:i');
-        $this->newCitaGrupal['hora_fin'] = $end->format('H:i');
-
-        $this->dispatch('resetTab');
-
-
-        $this->showGrupalModal = true;
-    }
-
+    public function closeGrupalModal() {}
     protected function reglasCitaGrupal(): array
     {
         return [
@@ -301,7 +331,6 @@ class Grupo extends Component
             'newCitaGrupal.pacientes' => 'nullable|array|max:' . $this->newCitaGrupal['cupo_maximo'],
         ];
     }
-
     protected function crearCitaGrupal(): CitaGrupal
     {
         $this->newCitaGrupal['dias_semana'] = array_map('intval', $this->newCitaGrupal['dias_semana']);
@@ -323,16 +352,6 @@ class Grupo extends Component
 
         return $cita;
     }
-
-    public function createCitaGrupal()
-    {
-        $this->validate($this->reglasCitaGrupal());
-
-        $this->crearCitaGrupal();
-        $this->finalizarAccionGrupal('Grupo creado exitosamente.');
-
-    }
-
     protected function finalizarAccionGrupal(string $mensaje)
     {
         $this->reset('newCitaGrupal');
@@ -345,27 +364,10 @@ class Grupo extends Component
         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
         session()->flash('message', $mensaje);
     }
-
-    public function openCreateModal($data)
-    {
-
-        $start = \Carbon\Carbon::parse($data['start']);
-        $end = \Carbon\Carbon::parse($data['end']);
-
-        $this->newCita['fecha'] = $start->toDateString();
-        $this->newCita['hora_inicio'] = $start->format('H:i');
-        $this->newCita['hora_fin'] = $end->format('H:i');
-
-
-        $this->showModal2 = true;
-    }
-
-
     public function removePaciente($id)
     {
         $this->newCitaGrupal['pacientes'] = array_filter($this->newCitaGrupal['pacientes'], fn($pid) => $pid !== $id);
     }
-
     public function addPaciente($id)
     {
         if (count($this->newCitaGrupal['pacientes']) < $this->newCitaGrupal['cupo_maximo']) {
@@ -376,7 +378,6 @@ class Grupo extends Component
             $this->dispatchBrowserEvent('notify', ['type' => 'warning', 'message' => 'Se alcanzó el cupo máximo']);
         }
     }
-
     public function validateStep($step)
     {
         $rules = match ($step) {
@@ -403,6 +404,128 @@ class Grupo extends Component
         return true; // necesario para Alpine
     }
 
+    // === MÉTODOS DE OCURRENCIAS GRUPALES ===
+    #[On('abrirOcurrencia')]
+    public function abrirOcurrencia($ocurrenciaId)
+    {
+        $ocurrencia = $this->buscaIdenocurencia($ocurrenciaId);
+        $this->ocurrenciaId = $ocurrencia->id;
+
+
+        $this->ocurrencia = [
+            'fecha' => $ocurrencia->fecha,
+            'hora_inicio' => $ocurrencia->hora_inicio,
+            'hora_fin' => $ocurrencia->hora_fin,
+            'participantes' => $ocurrencia->muchospacientes()->pluck('id')->toArray(),
+            'cupo_maximo' => $ocurrencia->citaGrupal->cupo_maximo,
+
+        ];
+
+
+        $this->profesionalNombre = $ocurrencia->citaGrupal->profesional->nombre . ' ' . $ocurrencia->citaGrupal->profesional->apellido;
+        $this->nombreGrupo = $ocurrencia->citaGrupal->nombre;
+
+        $this->pacientes = Paciente::orderBy('apellido')->get();
+
+        $this->showOcurrenciaUnicaModal = true;
+    }
+    public function agregarParticipante($id)
+    {
+        // Evitar duplicados
+        if (in_array($id, $this->ocurrencia['participantes'])) {
+            return;
+        }
+
+        // Obtener cupo máximo desde la ocurrencia actual
+        $ocurrencia = CitaGrupalOcurrencia::find($this->ocurrenciaId);
+        $cupoMaximo = $ocurrencia?->citaGrupal?->cupo_maximo ?? 0;
+
+        // Validar que no se exceda el cupo
+        if (count($this->ocurrencia['participantes']) >= $cupoMaximo) {
+            $this->addError('ocurrencia.participantes', "Ya se alcanzó el cupo máximo de {$cupoMaximo} participantes.");
+            return;
+        }
+
+        // Agregar si todo está bien
+        $this->resetErrorBag('ocurrencia.participantes'); // Limpiar error si lo hubo
+        $this->ocurrencia['participantes'][] = $id;
+    }
+    public function quitarParticipante($id)
+    {
+        $this->ocurrencia['participantes'] = array_filter(
+            $this->ocurrencia['participantes'],
+            fn($p) => $p != $id
+        );
+    }
+    public function guardarOcurrenciaUnica()
+    {
+        $this->validate([
+            'ocurrencia.fecha' => 'required|date',
+            'ocurrencia.hora_inicio' => 'required',
+            'ocurrencia.hora_fin' => 'required|after:ocurrencia.hora_inicio',
+            'ocurrencia.participantes' => 'array|min:1',
+        ]);
+
+        $ocurrencia = CitaGrupalOcurrencia::findOrFail($this->ocurrenciaId);
+
+        $ocurrencia->update([
+            'fecha' => $this->ocurrencia['fecha'],
+            'hora_inicio' => $this->ocurrencia['hora_inicio'],
+            'hora_fin' => $this->ocurrencia['hora_fin'],
+        ]);
+        $clinicaId = auth()->user()->clinica_id;
+
+        $pivotData = collect($this->ocurrencia['participantes'])
+            ->mapWithKeys(fn($id) => [$id => ['clinica_id' => $clinicaId]])
+            ->toArray();
+        $ocurrencia->muchosPacientes()->sync($pivotData);
+        //$ocurrencia->muchospacientes()->sync($this->ocurrencia['participantes']);
+        $this->loadCitas();
+        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+        $this->showOcurrenciaUnicaModal = false;
+        session()->flash('success', 'Ocurrencia actualizada correctamente.');
+    }
+    public function buscaIdenocurencia($ocurrencia)
+    {
+        // 1. Extraer el ID de la ocurrencia desde el string
+        $fullId = $ocurrencia['citaId'];
+        preg_match('/grupal-ocurrencia-(\d+)/', $fullId, $matches);
+        $ocurrenciaId = $matches[1] ?? null;
+
+        if (!$ocurrenciaId) {
+            session()->flash('error', 'ID de ocurrencia inválido');
+            return;
+        }
+
+        // 2. Buscar la ocurrencia con su relación
+        $ocurrencia = CitaGrupalOcurrencia::with('citaGrupal')->findOrFail($ocurrenciaId);
+
+        return $ocurrencia;
+    }
+
+    // === MÉTODOS DE UTILIDAD Y FILTRO ===
+    public function openGrupalocurrencia($a, $eventData)
+    {
+
+        $this->dispatch( $a , $eventData);
+    }
+    public function loadCitas()
+    {
+        $citasIndividuales = Cita::paraCalendario($this->clinicaId, $this->profesionalSeleccionado);
+        $citasGrupales = CitaGrupalOcurrencia::paraCalendario($this->clinicaId, $this->profesionalSeleccionado);
+
+        // $this->citas = $citasIndividuales->merge($citasGrupales)->toArray();
+        $this->citas = collect($citasIndividuales)->merge(collect($citasGrupales))->toArray();
+
+
+        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
+    }
+    public function filtrarPorProfesional($profesionalId)
+    {
+
+        $this->profesionalSeleccionado = $profesionalId;
+        $this->loadCitas();
+    }
     public function seleccionarTipoCita($tipo)
     {
         $this->mostrarSelectorTipoCita = false;
@@ -413,7 +536,6 @@ class Grupo extends Component
             $this->openCreateGrupalModal($this->datosSeleccion);
         }
     }
-
     public function openCitaModal($data)
     {
 
@@ -443,27 +565,6 @@ class Grupo extends Component
         }
         $this->estado = $cita->estado;
     }
-
-    public function closeModal()
-    {
-
-        $this->showModal = false;
-        $this->selectedCita = null;
-
-        $this->dispatch('modalClosed');
-        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
-    }
-    public function closeModal2()
-    {
-
-        $this->showModal2 = false;
-        $this->selectedCita = null;
-
-        $this->dispatch('modalClosed');
-        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
-    }
-
-
     #[On('openCitaGrupalModal')]
     public function openCitaGrupalModal($eventData)
     {
@@ -494,131 +595,5 @@ class Grupo extends Component
 
         // Mostrar modal
         $this->showGrupalModal = true;
-    }
-
-
-    public function updateCitaGrupal()
-    {
-        $this->validate($this->reglasCitaGrupal());
-
-        $cita = CitaGrupal::findOrFail($this->editCitaGrupalId);
-
-        $cita->delete();
-
-
-
-        $this->crearCitaGrupal();
-
-        $this->finalizarAccionGrupal('Grupo Actualizado exitosamente.');
-
-    }
-
-    #[On('abrirOcurrencia')]
-    public function abrirOcurrencia($ocurrenciaId)
-    {
-        $ocurrencia = $this->buscaIdenocurencia($ocurrenciaId);
-        $this->ocurrenciaId = $ocurrencia->id;
-
-
-        $this->ocurrencia = [
-            'fecha' => $ocurrencia->fecha,
-            'hora_inicio' => $ocurrencia->hora_inicio,
-            'hora_fin' => $ocurrencia->hora_fin,
-            'participantes' => $ocurrencia->muchospacientes()->pluck('id')->toArray(),
-            'cupo_maximo' => $ocurrencia->citaGrupal->cupo_maximo,
-
-        ];
-
-
-        $this->profesionalNombre = $ocurrencia->citaGrupal->profesional->nombre . ' ' . $ocurrencia->citaGrupal->profesional->apellido;
-        $this->nombreGrupo = $ocurrencia->citaGrupal->nombre;
-
-        $this->pacientes = Paciente::orderBy('apellido')->get();
-
-        $this->showOcurrenciaUnicaModal = true;
-    }
-
-    public function agregarParticipante($id)
-    {
-        // Evitar duplicados
-        if (in_array($id, $this->ocurrencia['participantes'])) {
-            return;
-        }
-
-        // Obtener cupo máximo desde la ocurrencia actual
-        $ocurrencia = CitaGrupalOcurrencia::find($this->ocurrenciaId);
-        $cupoMaximo = $ocurrencia?->citaGrupal?->cupo_maximo ?? 0;
-
-        // Validar que no se exceda el cupo
-        if (count($this->ocurrencia['participantes']) >= $cupoMaximo) {
-            $this->addError('ocurrencia.participantes', "Ya se alcanzó el cupo máximo de {$cupoMaximo} participantes.");
-            return;
-        }
-
-        // Agregar si todo está bien
-        $this->resetErrorBag('ocurrencia.participantes'); // Limpiar error si lo hubo
-        $this->ocurrencia['participantes'][] = $id;
-    }
-
-    public function quitarParticipante($id)
-    {
-        $this->ocurrencia['participantes'] = array_filter(
-            $this->ocurrencia['participantes'],
-            fn($p) => $p != $id
-        );
-    }
-
-    public function guardarOcurrenciaUnica()
-    {
-        $this->validate([
-            'ocurrencia.fecha' => 'required|date',
-            'ocurrencia.hora_inicio' => 'required',
-            'ocurrencia.hora_fin' => 'required|after:ocurrencia.hora_inicio',
-            'ocurrencia.participantes' => 'array|min:1',
-        ]);
-
-        $ocurrencia = CitaGrupalOcurrencia::findOrFail($this->ocurrenciaId);
-
-        $ocurrencia->update([
-            'fecha' => $this->ocurrencia['fecha'],
-            'hora_inicio' => $this->ocurrencia['hora_inicio'],
-            'hora_fin' => $this->ocurrencia['hora_fin'],
-        ]);
-        $clinicaId = auth()->user()->clinica_id;
-
-        $pivotData = collect($this->ocurrencia['participantes'])
-            ->mapWithKeys(fn($id) => [$id => ['clinica_id' => $clinicaId]])
-            ->toArray();
-        $ocurrencia->muchosPacientes()->sync($pivotData);
-       //$ocurrencia->muchospacientes()->sync($this->ocurrencia['participantes']);
-        $this->loadCitas();
-        $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
-        $this->showOcurrenciaUnicaModal = false;
-        session()->flash('success', 'Ocurrencia actualizada correctamente.');
-    }
-
-
-    public function buscaIdenocurencia($ocurrencia)
-    {
-        // 1. Extraer el ID de la ocurrencia desde el string
-        $fullId = $ocurrencia['citaId'];
-        preg_match('/grupal-ocurrencia-(\d+)/', $fullId, $matches);
-        $ocurrenciaId = $matches[1] ?? null;
-
-        if (!$ocurrenciaId) {
-            session()->flash('error', 'ID de ocurrencia inválido');
-            return;
-        }
-
-        // 2. Buscar la ocurrencia con su relación
-        $ocurrencia = CitaGrupalOcurrencia::with('citaGrupal')->findOrFail($ocurrenciaId);
-
-        return $ocurrencia;
-    }
-
-
-    public function render()
-    {
-        return view('livewire.grupos.grupo');
     }
 }

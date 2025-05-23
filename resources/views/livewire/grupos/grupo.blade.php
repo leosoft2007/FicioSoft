@@ -47,8 +47,8 @@
     @script
         <script>
             window.isMobile = function() {
-        return window.innerWidth < 768;
-    };
+                return window.innerWidth < 768;
+            };
 
             let calendar;
             Livewire.on('calendar3:load', () => {
@@ -243,23 +243,23 @@
 
             // ✅ Refrescar eventos correctamente desde Livewire
             Livewire.on('refresh-calendar', (updatedEvents) => {
-                if (!calendar || typeof calendar.removeAllEvents !== 'function') {
-                    //  console.warn('Calendario no inicializado correctamente');
-                    return;
-                }
+            if (!calendar || typeof calendar.removeAllEvents !== 'function') {
+                //  console.warn('Calendario no inicializado correctamente');
+                return;
+            }
 
-                const eventos = updatedEvents.updatedEvents || updatedEvents;
+            const eventos = updatedEvents.updatedEvents || updatedEvents;
 
-                if (!Array.isArray(eventos)) {
-                    console.error('Formato incorrecto de eventos:', eventos);
-                    return;
-                }
-                // console.log(eventos);
-                calendar.removeAllEvents();
-                calendar.addEventSource(eventos);
-                //  console.log(updatedEvents.updatedEvents);
+            if (!Array.isArray(eventos)) {
+                console.error('Formato incorrecto de eventos:', eventos);
+                return;
+            }
+            // console.log(eventos);
+            calendar.removeAllEvents();
+            calendar.addEventSource(eventos);
+            //  console.log(updatedEvents.updatedEvents);
 
             });
-        </script>
+         </script>
     @endscript
 </div>
