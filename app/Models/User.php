@@ -80,5 +80,9 @@ class User extends Authenticatable
     {
         return $this->morphOne(\App\Models\Image::class, 'imageable');
     }
+    public function gastos()
+    {
+        return $this->hasMany(Gasto::class);
+    }
 
 }

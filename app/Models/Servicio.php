@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Models\Scopes\ClinicaScope;
 use App\Traits\HasAuditable;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Traits\HasRoles;
+
 
 class Servicio extends Model
 {

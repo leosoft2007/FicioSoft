@@ -42,7 +42,7 @@ Route::get('init', [ClinicaController::class, 'init'])->name('init');
 Route::middleware(['auth'])->group(function () {
 
     Route::view('dashboard', 'dashboard')->name('dashboard');
-    
+
 
     Route::redirect('settings', 'settings/profile');
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
@@ -118,7 +118,10 @@ Route::get('/pacientes/consentimientos/firmar/{paciente}/{consentimientos}', [Co
     Route::get('/servicios/show/{servicio}', \App\Livewire\Servicios\Show::class)->name('servicios.show');
     Route::get('/servicios/update/{servicio}', \App\Livewire\Servicios\Edit::class)->name('servicios.edit');
 
-    // routes/api.php
+    Route::get('/gastos', \App\Livewire\Gastos\Index::class)->name('gastos.index');
+    Route::get('/gastos/create', \App\Livewire\Gastos\Create::class)->name('gastos.create');
+    Route::get('/gastos/show/{gasto}', \App\Livewire\Gastos\Show::class)->name('gastos.show');
+    Route::get('/gastos/update/{gasto}', \App\Livewire\Gastos\Edit::class)->name('gastos.edit');
 
 });
 

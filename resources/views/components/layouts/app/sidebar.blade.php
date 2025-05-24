@@ -61,6 +61,9 @@
                     <flux:navlist.item icon="document-currency-euro" :href="route('servicios.index')"
                         :current="request()->routeIs('servicios.*')" wire:navigate>{{ __('Servicios') }}
                     </flux:navlist.item>
+                    <flux:navlist.item icon="document-currency-euro" :href="route('gastos.index')"
+                        :current="request()->routeIs('gastos.*')" wire:navigate>{{ __('Gastos') }}
+                    </flux:navlist.item>
                 </flux:menu.radio.group>
             </flux:menu>
         </flux:dropdown>
