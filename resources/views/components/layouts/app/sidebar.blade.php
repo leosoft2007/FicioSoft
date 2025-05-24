@@ -151,6 +151,9 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
+        <div class="flex justify-center my-4">
+            <x-fecha-compacta />
+        </div>
     </flux:sidebar>
 
     <!-- Mobile User Menu -->

@@ -5,8 +5,17 @@
             placeholder="Descripcion" />
     </div>
     <div>
-        <flux:input wire:model="form.monto" :label="__('Monto')" type="text" autocomplete="form.monto"
-            placeholder="Monto" />
+        <label class="block text-sm font-medium mb-1">{{ __('Monto') }}</label>
+        <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 text-base">€</span>
+            <flux:input
+                wire:model="form.monto"
+                type="text"
+                class="pl-8 w-full"
+                placeholder="Monto"
+                autocomplete="form.monto"
+            />
+        </div>
     </div>
     <div>
         <flux:input wire:model="form.fecha" :label="__('Fecha')" type="date" autocomplete="form.fecha"

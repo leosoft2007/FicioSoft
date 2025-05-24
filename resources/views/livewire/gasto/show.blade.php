@@ -49,7 +49,7 @@
                                 </svg>
                                 Monto
                             </dt>
-                            <dd class="mt-1 text-sm text-gray-800 sm:col-span-2 sm:mt-0 bg-white p-3 rounded-md shadow-sm font-medium text-purple-600">{{ $gasto->monto }}</dd>
+                            <dd class="mt-1 text-sm text-gray-800 sm:col-span-2 sm:mt-0 bg-white p-3 rounded-md shadow-sm font-medium text-purple-600">€ {{ $gasto->monto }}</dd>
                         </div>
 
                         <!-- Fecha -->

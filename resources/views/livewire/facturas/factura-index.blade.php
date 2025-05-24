@@ -1,3 +1,4 @@
+<div>
 <x-page-header
 title="🧾 Listado de Facturas"
 subtitle=""
@@ -67,3 +68,4 @@ wire:key="factura-filtros"
 
 </div>
 </x-page-header>
+</div>
