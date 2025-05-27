@@ -42,7 +42,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/clinica.php"
+            "app/Helpers/Clinica.php"
         ]
     },
     "autoload-dev": {
