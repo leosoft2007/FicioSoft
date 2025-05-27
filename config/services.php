@@ -14,9 +14,9 @@ return [
     |
     */
     'google' => [
-        'client_id' => env('11419751008-rslp984h9it483vut468upff2jbb4rjo.apps.googleusercontent.com'),
-        'client_secret' => env('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'),
-        'redirect' => env('https://fisiosoft-main-dfnulp.laravel.cloud/login/google/callback'),
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
     'postmark' => [
