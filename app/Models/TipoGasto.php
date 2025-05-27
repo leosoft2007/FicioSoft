@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasAuditable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Scopes\ClinicaScope;
+use App\Traits\BelongsToClinica;
 
 class TipoGasto extends Model
 {
@@ -20,17 +21,9 @@ class TipoGasto extends Model
         'descripcion',
         'clinica_id',
     ];
-    protected static function booted()
-    {
-        static::addGlobalScope(new ClinicaScope);
+    use BelongsToClinica;
 
-        // Al crear una cita, asignamos automáticamente la clínica del usuario
-        static::creating(function ($registro) {
-            if (auth()->check()) {
-                $registro->clinica_id = auth()->user()->clinica_id;
-            }
-        });
-    }
+    public static $hasClinica = true;
     /**
      * Get the gastos associated with the tipo gasto.
      */

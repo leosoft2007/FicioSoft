@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 use App\Traits\HasAuditable;
 use App\Models\Scopes\ClinicaScope;
+use App\Traits\BelongsToClinica;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,19 +20,11 @@ class CitaGrupalOcurrencia extends Model
     use HasAuditable;
     use HasRoles;
     protected $fillable = ['fecha', 'hora_inicio', 'hora_fin', 'estado', 'cita_grupal_id', 'clinica_id'];
-    
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new ClinicaScope);
+    use BelongsToClinica;
 
-        // Al crear una cita, asignamos automáticamente la clínica del usuario
-        static::creating(function ($cita) {
-            if (auth()->check()) {
-                $cita->clinica_id = auth()->user()->clinica_id;
-            }
-        });
-    }
+    public static $hasClinica = true;
+
     public function cuposDisponibles()
     {
         $cupoMaximo = $this->citaGrupal->cupo_maximo ?? 0;

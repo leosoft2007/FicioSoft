@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\ClinicaScope;
+use App\Traits\BelongsToClinica;
 use App\Traits\HasAuditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,17 +15,9 @@ class Consentimiento extends Model
     use HasRoles;
     use HasAuditable;
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new ClinicaScope);
+    use BelongsToClinica;
 
-        // Al crear una cita, asignamos automáticamente la clínica del usuario
-        static::creating(function ($registro) {
-            if (auth()->check()) {
-                $registro->clinica_id = auth()->user()->clinica_id;
-            }
-        });
-    }
+    public static $hasClinica = true;
 
 
     protected $fillable = [
@@ -39,7 +32,7 @@ class Consentimiento extends Model
                 return $this->belongsToMany(Paciente::class, 'consentimiento_pacientes', 'consentimiento_id', 'paciente_id')
                     ->withPivot('firma', 'firmado_en')
                     ->withTimestamps();
-                    
+
             }
     public function consentimientoPacientes()
     {

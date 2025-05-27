@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasAuditable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Scopes\ClinicaScope;
+use App\Traits\BelongsToClinica;
 
 class Gasto extends Model
 {
@@ -27,20 +28,9 @@ class Gasto extends Model
     protected $casts = [
         'fecha' => 'datetime',
     ];
-    protected static function booted()
-    {
-        static::addGlobalScope(new ClinicaScope);
+    use BelongsToClinica;
 
-        // Al crear una cita, asignamos automáticamente la clínica del usuario y el usuario
-        // que está creando el gasto
-        // Esto es útil para auditoría y control de acceso
-        static::creating(function ($registro) {
-            if (auth()->check()) {
-                $registro->clinica_id = auth()->user()->clinica_id;
-                $registro->user_id = auth()->user()->id;
-            }
-        });
-    }
+    public static $hasClinica = true;
     /**
      * Get the tipo gasto associated with the gasto.
      */

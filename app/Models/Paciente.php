@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\ClinicaScope;
+use App\Traits\BelongsToClinica;
 use App\Traits\HasAuditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,21 +17,9 @@ class Paciente extends Model
     use HasAuditable;
     use HasRoles;
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new ClinicaScope);
+    use BelongsToClinica;
 
-        // Al crear una cita, asignamos automáticamente la clínica del usuario
-        static::creating(function ($registro) {
-            if (auth()->check()) {
-                $registro->clinica_id = auth()->user()->clinica_id;
-            }
-        });
-
-        static::deleting(function ($paciente) {
-            $paciente->image()->delete();
-        });
-    }
+    public static $hasClinica = true;
     /** @use HasFactory<\Database\Factories\PacienteFactory> */
 
 

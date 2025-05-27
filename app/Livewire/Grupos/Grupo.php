@@ -96,7 +96,7 @@ class Grupo extends Component
     public function mount()
     {
         $this->user = auth()->user();
-        $this->clinicaId = $this->user->clinica_id;
+        $this->clinicaId = clinica_actual();
 
 
        $this->pacientes = Paciente::where('clinica_id', $this->clinicaId)->orderby('apellido')->get();

@@ -14,11 +14,7 @@ class ClinicaScope implements Scope
     {
         if (auth()->check()) {
             $table = $model->getTable();
-
-            // Seguridad: verificar si la columna clinica_id existe
-            if ($model->getConnection()->getSchemaBuilder()->hasColumn($table, 'clinica_id')) {
-                $builder->where("$table.clinica_id", auth()->user()->clinica_id);
-            }
+            $builder->where("$table.clinica_id", auth()->user()->clinica_id);
         } else {
             // Seguridad: si no hay usuario, que no retorne nada
             $builder->whereRaw('0 = 1');

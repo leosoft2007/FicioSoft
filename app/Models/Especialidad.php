@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\ClinicaScope;
+use App\Traits\BelongsToClinica;
 use App\Traits\HasAuditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,18 +15,9 @@ class Especialidad extends Model
     use HasFactory;
     use HasAuditable;
     use HasRoles;
+    use BelongsToClinica;
 
-   protected static function booted()
-    {
-        static::addGlobalScope(new ClinicaScope);
-
-        // Al crear una cita, asignamos automáticamente la clínica del usuario
-        static::creating(function ($registro) {
-            if (auth()->check()) {
-                $registro->clinica_id = auth()->user()->clinica_id;
-            }
-        });
-    }
+    public static $hasClinica = true;
 
     protected $perPage = 20;
     /**
@@ -71,7 +63,7 @@ class Especialidad extends Model
     {
         return $this->belongsTo(Clinica::class);
     }
-    
+
 
 
 }

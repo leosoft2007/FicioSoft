@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 use App\Traits\HasAuditable;
 use App\Models\Scopes\ClinicaScope;
+use App\Traits\BelongsToClinica;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -36,28 +37,27 @@ class CitaGrupal extends Model
         'fecha_fin' => 'datetime',
     ];
 
+    use BelongsToClinica;
+
+    public static $hasClinica = true;
+
     protected static function booted()
     {
-        static::addGlobalScope(new ClinicaScope);
-
-        // Asignar automáticamente la clínica del usuario
-        static::creating(function ($cita) {
-            if (auth()->check()) {
-                $cita->clinica_id = auth()->user()->clinica_id;
-            }
-        });
+        parent::booted();
 
         // Generar ocurrencias después de crear la cita grupal
         static::created(function ($cita) {
             $cita->generarOcurrencias();
         });
 
+        // Validación personalizada
         static::saving(function ($cita) {
             if (!empty($cita->fecha_fin) && \Carbon\Carbon::parse($cita->fecha_fin)->lessThan(\Carbon\Carbon::parse($cita->fecha_inicio))) {
                 throw new \Exception("La fecha de fin no puede ser menor que la de inicio.");
             }
         });
     }
+
 
     public function clinica()
     {

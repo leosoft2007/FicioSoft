@@ -5,7 +5,7 @@ namespace App\Models;
 use Spatie\Permission\Traits\HasRoles;
 use App\Traits\HasAuditable;
 use App\Models\Scopes\ClinicaScope;
-
+use App\Traits\BelongsToClinica;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,17 +18,9 @@ class CitaGrupalPaciente extends Model
     use HasRoles;
     protected $fillable = ['cita_grupal_ocurrencia_id', 'paciente_id','clinica_id'];
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new ClinicaScope);
+    use BelongsToClinica;
 
-        // Al crear una cita, asignamos automáticamente la clínica del usuario
-        static::creating(function ($cita) {
-            if (auth()->check()) {
-                $cita->clinica_id = auth()->user()->clinica_id;
-            }
-        });
-    }
+    public static $hasClinica = true;
     public function citaGrupalOcurrencia()
     {
         return $this->belongsTo(CitaGrupalOcurrencia::class);

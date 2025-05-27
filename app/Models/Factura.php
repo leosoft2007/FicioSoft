@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\ClinicaScope;
+use App\Traits\BelongsToClinica;
 use App\Traits\HasAuditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,18 +15,20 @@ class Factura extends Model
     use HasAuditable;
     use HasRoles;
 
+    use BelongsToClinica;
+
+    public static $hasClinica = true;
+
     protected static function booted()
     {
-        static::addGlobalScope(new ClinicaScope);
+        parent::booted(); // Por si el trait o la clase base requieren boot
 
         static::creating(function ($registro) {
-            if (auth()->check()) {
-                $registro->clinica_id = auth()->user()->clinica_id;
-            }
+            // El trait ya asignó clinica_id si es necesario
 
             // Generar número de factura secuencial por clínica
             if (empty($registro->numero_factura) && $registro->clinica_id) {
-                $ultimoNumero = self::withoutGlobalScope(ClinicaScope::class)
+                $ultimoNumero = self::withoutGlobalScope(\App\Models\Scopes\ClinicaScope::class)
                     ->where('clinica_id', $registro->clinica_id)
                     ->orderByDesc('id')
                     ->value('numero_factura');
@@ -44,6 +47,7 @@ class Factura extends Model
             $factura->fecha_rectificacion = now();
         });
     }
+
 
 
 protected static function generarNumeroSecuencial($ultimoNumero)
