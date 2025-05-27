@@ -8,7 +8,7 @@
         </div>
         <div>
             <h3 class="text-lg font-medium text-gray-900">Facturación Mensual</h3>
-            <p class="text-2xl font-semibold text-gray-900">${{ number_format($facturacionMes, 2) }}</p>
+            <p class="text-2xl font-semibold text-gray-900">€{{ number_format($facturacionMes, 2) }}</p>
             <p class="text-sm text-gray-500">
                 @if($comparacionFacturacion >= 0)
                     <span class="text-green-600">↑ {{ $comparacionFacturacion }}%</span> vs mes anterior

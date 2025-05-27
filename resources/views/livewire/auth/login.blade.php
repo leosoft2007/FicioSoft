@@ -117,6 +117,12 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     </form>
 
+    <!-- Botones de login social -->
+    <div class="flex flex-col gap-2">
+        <a href="{{ route('social.login', 'google') }}" class="btn btn-google w-full">Iniciar sesión con Google</a>
+        <a href="{{ route('social.login', 'facebook') }}" class="btn btn-facebook w-full">Iniciar sesión con Facebook</a>
+    </div>
+    
     @if (Route::has('register'))
         <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
             {{ __('Don\'t have an account?') }}

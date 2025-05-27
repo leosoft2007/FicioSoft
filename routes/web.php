@@ -14,6 +14,9 @@ Route::middleware(['auth'])->group(function () {
     Livewire\Volt\Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
+Route::get('login/{provider}', [\App\Http\Controllers\SocialController::class, 'redirect'])->name('social.login');
+Route::get('login/{provider}/callback', [\App\Http\Controllers\SocialController::class, 'callback']);
+
 // Carga de rutas por módulo
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';

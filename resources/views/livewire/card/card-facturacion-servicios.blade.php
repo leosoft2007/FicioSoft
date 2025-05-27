@@ -22,7 +22,7 @@
                             <span class="font-medium text-gray-900">{{ $servicio['nombre'] }}</span>
                         </div>
                         <div class="text-right">
-                            <span class="font-semibold text-gray-900">${{ number_format($servicio['total'], 2) }}</span>
+                            <span class="font-semibold text-gray-900">€{{ number_format($servicio['total'], 2) }}</span>
                             <span class="ml-2 text-xs text-gray-500">({{ $porcentaje }}%)</span>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
             @if (!empty($facturacionServicios) && count($facturacionServicios) > 0)
                 <li class="pt-4 mt-4 border-t border-gray-200 flex justify-between items-center font-bold text-gray-900">
                     <span>Total General</span>
-                    <span>${{ number_format($total, 2) }}</span>
+                    <span>€{{ number_format($total, 2) }}</span>
                 </li>
             @endif
         </ul>
