@@ -50,6 +50,9 @@
                         hoverColor="indigo-50"
                         placeholder="Seleccione un paciente"
                         />
+                        @error('newCita.paciente_id')
+                                <span class="text-red-600 text-sm">{{ $message }}</span>
+                            @enderror
 
 
                     </div>
@@ -66,6 +69,9 @@
                                 primaryColor="indigo-600"
                                 hoverColor="indigo-50"
                             />
+                            @error('newCita.profesional_id')
+                                <span class="text-red-600 text-sm">{{ $message }}</span>
+                            @enderror
 
                     </div>
                 </div>

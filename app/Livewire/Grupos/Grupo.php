@@ -144,7 +144,7 @@ class Grupo extends Component
             'newCita.hora_inicio' => 'required|date_format:H:i',
             'newCita.hora_fin' => 'required|date_format:H:i|after:newCita.hora_inicio',
             'newCita.observaciones' => 'nullable|string|max:255',
-        ]);
+        ], $this->mensajesValidacion());
 
         // Crear la cita
 
@@ -186,11 +186,68 @@ class Grupo extends Component
         $this->reset('newCita', 'showModal2');
         $this->dispatch('refresh-calendar', updatedEvents: $this->citas);
     }
+    protected function mensajesValidacion()
+    {
+        return [
+            // Citas individuales
+            'newCita.paciente_id.required' => 'El paciente es obligatorio.',
+            'newCita.paciente_id.exists' => 'El paciente seleccionado no existe.',
+            'newCita.profesional_id.required' => 'El profesional es obligatorio.',
+            'newCita.profesional_id.exists' => 'El profesional seleccionado no existe.',
+            'newCita.fecha.required' => 'La fecha es obligatoria.',
+            'newCita.fecha.date' => 'La fecha no es válida.',
+            'newCita.hora_inicio.required' => 'La hora de inicio es obligatoria.',
+            'newCita.hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
+            'newCita.hora_fin.required' => 'La hora de fin es obligatoria.',
+            'newCita.hora_fin.date_format' => 'La hora de fin debe tener el formato HH:MM.',
+            'newCita.hora_fin.after' => 'La hora de fin debe ser posterior a la hora de inicio.',
+            'newCita.observaciones.max' => 'Las observaciones no pueden superar los 255 caracteres.',
+
+            // Citas individuales - edición
+            'selectedCita.estado.required' => 'El estado es obligatorio.',
+            'selectedCita.estado.in' => 'El estado debe ser pendiente, confirmado o cancelado.',
+
+            // Citas grupales
+            'newCitaGrupal.profesional_id.required' => 'El profesional es obligatorio.',
+            'newCitaGrupal.profesional_id.exists' => 'El profesional seleccionado no existe.',
+            'newCitaGrupal.nombre.string' => 'El nombre debe ser un texto.',
+            'newCitaGrupal.fecha_inicio.required' => 'La fecha de inicio es obligatoria.',
+            'newCitaGrupal.fecha_inicio.date' => 'La fecha de inicio no es válida.',
+            'newCitaGrupal.fecha_fin.date' => 'La fecha de fin no es válida.',
+            'newCitaGrupal.fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la de inicio.',
+            'newCitaGrupal.hora_inicio.required' => 'La hora de inicio es obligatoria.',
+            'newCitaGrupal.hora_fin.required' => 'La hora de fin es obligatoria.',
+            'newCitaGrupal.hora_fin.after' => 'La hora de fin debe ser posterior a la de inicio.',
+            'newCitaGrupal.dias_semana.required' => 'Debes seleccionar al menos un día de la semana.',
+            'newCitaGrupal.dias_semana.array' => 'Los días de la semana deben ser una lista.',
+            'newCitaGrupal.dias_semana.min' => 'Selecciona al menos un día de la semana.',
+            'newCitaGrupal.frecuencia.required' => 'La frecuencia es obligatoria.',
+            'newCitaGrupal.frecuencia.in' => 'La frecuencia debe ser semanal o quincenal.',
+            'newCitaGrupal.cupo_maximo.required' => 'El cupo máximo es obligatorio.',
+            'newCitaGrupal.cupo_maximo.integer' => 'El cupo máximo debe ser un número.',
+            'newCitaGrupal.cupo_maximo.min' => 'El cupo máximo debe ser al menos 1.',
+            'newCitaGrupal.pacientes.array' => 'Los pacientes deben ser una lista.',
+            'newCitaGrupal.pacientes.max' => 'No puedes agregar más pacientes que el cupo máximo.',
+
+            // Ocurrencias grupales
+            'ocurrencia.fecha.required' => 'La fecha es obligatoria.',
+            'ocurrencia.fecha.date' => 'La fecha no es válida.',
+            'ocurrencia.hora_inicio.required' => 'La hora de inicio es obligatoria.',
+            'ocurrencia.hora_fin.required' => 'La hora de fin es obligatoria.',
+            'ocurrencia.hora_fin.after' => 'La hora de fin debe ser posterior a la de inicio.',
+            'ocurrencia.participantes.array' => 'Los participantes deben ser una lista.',
+            'ocurrencia.participantes.min' => 'Debes seleccionar al menos un participante.',
+        ];
+    }
     public function saveCita()
     {
         $this->validate([
             'selectedCita.estado' => 'required|in:pendiente,confirmado,cancelado',
-        ]);
+            'selectedCita.observaciones' => 'nullable|string|max:255',
+            'selectedCita.fecha' => 'required|date',
+            'selectedCita.hora_inicio' => 'required|date_format:H:i',
+            'selectedCita.hora_fin' => 'required|date_format:H:i|after:selectedCita.hora_inicio',
+        ], $this->mensajesValidacion());
 
         $cita = Cita::find($this->selectedCita['id']);
 
@@ -261,7 +318,7 @@ class Grupo extends Component
     }
     public function createCitaGrupal()
     {
-        $this->validate($this->reglasCitaGrupal());
+        $this->validate($this->reglasCitaGrupal(), $this->mensajesValidacion());
 
         $this->crearCitaGrupal();
         $this->finalizarAccionGrupal('Grupo creado exitosamente.');
@@ -399,7 +456,28 @@ class Grupo extends Component
             default => [],
         };
 
-        $validated = $this->validate($rules);
+        $messages = [
+            'newCitaGrupal.profesional_id.required' => 'El profesional es obligatorio.',
+            'newCitaGrupal.fecha_inicio.required' => 'La fecha de inicio es obligatoria.',
+            'newCitaGrupal.fecha_inicio.date' => 'La fecha de inicio no es válida.',
+            'newCitaGrupal.fecha_fin.date' => 'La fecha de fin no es válida.',
+            'newCitaGrupal.fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la de inicio.',
+            'newCitaGrupal.hora_inicio.required' => 'La hora de inicio es obligatoria.',
+            'newCitaGrupal.hora_fin.required' => 'La hora de fin es obligatoria.',
+            'newCitaGrupal.hora_fin.after' => 'La hora de fin debe ser posterior a la de inicio.',
+            'newCitaGrupal.dias_semana.required' => 'Debes seleccionar al menos un día de la semana.',
+            'newCitaGrupal.dias_semana.array' => 'Los días de la semana deben ser una lista.',
+            'newCitaGrupal.dias_semana.min' => 'Selecciona al menos un día de la semana.',
+            'newCitaGrupal.frecuencia.required' => 'La frecuencia es obligatoria.',
+            'newCitaGrupal.frecuencia.in' => 'La frecuencia debe ser semanal o quincenal.',
+            'newCitaGrupal.cupo_maximo.required' => 'El cupo máximo es obligatorio.',
+            'newCitaGrupal.cupo_maximo.integer' => 'El cupo máximo debe ser un número.',
+            'newCitaGrupal.cupo_maximo.min' => 'El cupo máximo debe ser al menos 1.',
+            'newCitaGrupal.pacientes.array' => 'Los pacientes deben ser una lista.',
+            'newCitaGrupal.pacientes.max' => 'No puedes agregar más pacientes que el cupo máximo.',
+        ];
+
+        $validated = $this->validate($rules, $messages);
 
         return true; // necesario para Alpine
     }

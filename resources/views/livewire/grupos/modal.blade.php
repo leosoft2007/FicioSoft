@@ -89,9 +89,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <flux:input type="text" label="Nombre del Grupo" wire:model.defer="newCitaGrupal.nombre" />
-                        @error('newCitaGrupal.nombre')
-                            <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror
+
                     </div>
                     <div>
                         <flux:select label="Profesional" wire:model.defer="newCitaGrupal.profesional_id">
@@ -100,39 +98,29 @@
                                 <option value="{{ $pro->id }}">{{ $pro->nombre }}</option>
                             @endforeach
                         </flux:select>
-                        @error('newCitaGrupal.profesional_id')
-                            <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror
+
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <flux:input type="date" label="Fecha Inicio" wire:model.defer="newCitaGrupal.fecha_inicio" />
-                        @error('newCitaGrupal.fecha_inicio')
-                            <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror
+
                     </div>
                     <div>
                         <flux:input type="date" label="Fecha Fin" wire:model.defer="newCitaGrupal.fecha_fin" />
-                        @error('newCitaGrupal.fecha_fin')
-                            <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror
+
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <flux:input type="time" label="Hora Inicio" wire:model.defer="newCitaGrupal.hora_inicio" />
-                        @error('newCitaGrupal.hora_inicio')
-                            <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror
+
                     </div>
                     <div>
                         <flux:input type="time" label="Hora Fin" wire:model.defer="newCitaGrupal.hora_fin" />
-                        @error('newCitaGrupal.hora_fin')
-                            <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror
+
                     </div>
                 </div>
 
@@ -166,9 +154,7 @@
                 <div>
                     <flux:input type="number" label="Cupo Máximo" wire:model.defer="newCitaGrupal.cupo_maximo"
                         min="1" />
-                    @error('newCitaGrupal.cupo_maximo')
-                        <span class="text-red-600 text-sm">{{ $message }}</span>
-                    @enderror
+                    
                 </div>
                 <flux:textarea label="Observaciones" wire:model.defer="newCitaGrupal.observaciones" rows="3" />
             </div>
