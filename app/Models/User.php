@@ -27,6 +27,15 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $perPage = 20;
+    
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->clinica_id)) {
+                $user->clinica_id = 1;
+            }
+        });
+    }
 
     protected $fillable = [
         'name',
