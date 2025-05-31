@@ -29,3 +29,4 @@ require __DIR__ . '/consentimientos.php';
 require __DIR__ . '/grupos.php';
 require __DIR__ . '/servicios.php';
 require __DIR__ . '/gastos.php';
+require __DIR__ . '/recibo.php';

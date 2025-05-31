@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('subtotal', 10, 2);
             $table->decimal('iva', 10, 2)->default(0); // IVA en porcentaje
             $table->decimal('total', 10, 2);
-            $table->timestamps();
+            $table->timestamps(); 
         });
     }
 

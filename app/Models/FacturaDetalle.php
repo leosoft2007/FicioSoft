@@ -34,6 +34,7 @@ class FacturaDetalle extends Model
         'subtotal',
         'iva',
         'total',
+        'iva_porcentaje',
     ];
     public function factura()
     {

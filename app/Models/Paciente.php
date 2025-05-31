@@ -71,7 +71,11 @@ class Paciente extends Model
         'nombre_completo',
     ];
 
-
+    public function recibos()
+    {
+        return $this->hasMany(Recibo::class);
+    }
+    
     public function getNombreCompletoAttribute()
     {
         return "{$this->nombre} {$this->apellido}";

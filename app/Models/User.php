@@ -27,7 +27,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $perPage = 20;
-    
+
     protected static function booted()
     {
         static::creating(function ($user) {
@@ -92,6 +92,10 @@ class User extends Authenticatable
     public function gastos()
     {
         return $this->hasMany(Gasto::class);
+    }
+    public function recibos()
+    {
+        return $this->hasMany(Recibo::class);
     }
 
 }

@@ -90,7 +90,12 @@ protected static function generarNumeroSecuencial($ultimoNumero)
     {
         return $this->hasMany(FacturaDetalle::class);
     }
-
+    public function recibos()
+    {
+        return $this->belongsToMany(Recibo::class, 'factura_recibos')
+            ->withPivot('valor')
+            ->withTimestamps();
+    }
 
 
 }
