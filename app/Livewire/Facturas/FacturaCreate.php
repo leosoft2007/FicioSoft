@@ -8,6 +8,7 @@ use App\Models\FacturaDetalle;
 use App\Models\Paciente;
 use App\Models\Servicio;
 use App\Models\Clinica;
+use App\Models\Recibo;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,8 @@ class FacturaCreate extends Component
     public $recibosDisponibles = [];
     public $montoAsignado = 0;
     public $recibo_id;
+    public $recibosAsignadosTemporal = []; // Almacena IDs de recibos
+
 
     public function updatedServicioId($servicioId)
     {
@@ -93,11 +96,10 @@ class FacturaCreate extends Component
             $this->montoAsignado = 0;
         }
     }
-
-
-
-
-
+    /**
+     * Agrega un servicio a la factura.
+     * Calcula el subtotal, IVA y total del servicio.
+     */
     public function addServicio()
     {
 
@@ -161,13 +163,7 @@ class FacturaCreate extends Component
                 ]);
                 $factura->detalles()->delete(); // Reemplazar detalles
                 // Quitar recibos anteriores y asignar los nuevos
-                $factura->recibos()->detach();
-                if ($this->recibo_id) {
-                    $recibo = \App\Models\Recibo::find($this->recibo_id);
-                    if ($recibo) {
-                        $factura->recibos()->attach($recibo->id, ['valor' => $recibo->valor]);
-                    }
-                }
+
             } else {
                 $factura = Factura::create([
                     'clinica_id' => $this->clinica->id,
@@ -179,11 +175,16 @@ class FacturaCreate extends Component
                     'total' => $this->calcularTotal(),
                 ]);
                 // Asignar recibo a la factura (si corresponde)
-                if ($this->recibo_id) {
-                    $recibo = \App\Models\Recibo::find($this->recibo_id);
-                    if ($recibo) {
-                        $factura->recibos()->attach($recibo->id, ['valor' => $recibo->valor]);
+                // 3. Asignar los recibos (solo si hay)
+                if (!empty($this->recibosAsignadosTemporal)) {
+                    $pivotData = [];
+                    foreach ($this->recibosAsignadosTemporal as $reciboId) {
+                        $recibo = \App\Models\Recibo::find($reciboId);
+                        if ($recibo) {
+                            $pivotData[$reciboId] = ['valor' => $recibo->valor];
+                        }
                     }
+                    $factura->recibos()->attach($pivotData);
                 }
             }
 
@@ -324,5 +325,33 @@ class FacturaCreate extends Component
             return $item['cantidad'] * $item['precio_unitario'];
         });
     }
-    
+
+    // Método para agregar recibo temporalmente
+    public function agregarRecibo($reciboId)
+    {
+        if (!in_array($reciboId, $this->recibosAsignadosTemporal)) {
+            $this->recibosAsignadosTemporal[] = $reciboId;
+            $this->actualizarMontoAsignado();
+        }
+    }
+
+    // Método para quitar recibo temporal
+    public function quitarRecibo($reciboId)
+    {
+        $this->recibosAsignadosTemporal = array_diff($this->recibosAsignadosTemporal, [$reciboId]);
+        $this->actualizarMontoAsignado();
+    }
+
+    // Método para calcular el monto asignado temporal
+    public function getMontoAsignadoTemporalProperty()
+    {
+        if (empty($this->recibosAsignadosTemporal)) return 0;
+
+        return Recibo::whereIn('id', $this->recibosAsignadosTemporal)
+            ->sum('valor');
+    }
+    public function actualizarMontoAsignado()
+    {
+        $this->montoAsignado = \App\Models\Recibo::whereIn('id', $this->recibosAsignadosTemporal)->sum('valor');
+    }
 }

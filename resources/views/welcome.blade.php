@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FisioSistem - Gestión Integral para Clínicas de Fisioterapia</title>
+    <title>{{ config('app.name') }} - Gestión Integral para Clínicas de Fisioterapia</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -26,7 +26,7 @@
                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                     </path>
                 </svg>
-                <h1 class="text-2xl font-bold text-blue-600">FisioSistem</h1>
+                <h1 class="text-2xl font-bold text-blue-600">{{ config('app.name') }}</h1>
             </div>
 
             <nav class="hidden md:flex space-x-8">
@@ -57,7 +57,7 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 flex flex-col md:flex-row items-center">
         <div class="md:w-1/2 mb-10 md:mb-0">
             <h2 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-gray-900">
-                Optimiza tu clínica con <span class="text-blue-600">FisioSistem</span>
+                Optimiza tu clínica con <span class="text-blue-600">{{ config('app.name') }}</span>
             </h2>
             <p class="text-lg text-gray-600 mb-8">
                 La solución todo-en-uno para gestión de citas, pacientes, facturación y más. Diseñado específicamente
@@ -239,7 +239,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Beneficios para tu clínica</h2>
-                <p class="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">Descubre cómo FisioSistem puede transformar tu
+                <p class="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">Descubre cómo {{ config('app.name') }} puede transformar tu
                     práctica</p>
             </div>
 
@@ -308,8 +308,8 @@
                     </ul>
 
                     <div class="mt-10 bg-white p-6 rounded-lg shadow-sm">
-                        <p class="italic text-gray-600">"FisioSistem ha transformado nuestra clínica. Ahora gestionamos
-                            el doble de pacientes con menos esfuerzo administrativo."</p>
+                        <p class="italic text-gray-600">{{ config('app.name') }} ha transformado nuestra clínica. Ahora gestionamos
+                            el doble de pacientes con menos esfuerzo administrativo.</p>
                         <p class="mt-4 font-medium text-gray-900">- Dra. María González, Clínica FisioPlus</p>
                     </div>
                 </div>
@@ -508,7 +508,7 @@
                 <div class="md:w-1/2 mb-10 md:mb-0">
                     <h2 class="text-3xl font-extrabold sm:text-4xl mb-4">¿Quieres verlo en acción?</h2>
                     <p class="text-lg text-gray-300 mb-6">Agenda una demostración personalizada con nuestro equipo y
-                        descubre cómo FisioSistem puede optimizar tu clínica.</p>
+                        descubre cómo {{ config('app.name') }} puede optimizar tu clínica.</p>
                     <a href="#contact"
                         class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-blue-700 bg-white hover:bg-gray-100">
                         Solicitar demostración
@@ -579,7 +579,7 @@
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-sm">&copy; {{ date('Y') }} FisioSistem. Todos los derechos reservados.</p>
+            <p class="text-sm">&copy; {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.</p>
             <div class="mt-4">
                 <a href="#" class="text-gray-400 hover:text-white mx-2">Política de privacidad</a>
                 <span class="text-gray-400">|</span>

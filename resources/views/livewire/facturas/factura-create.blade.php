@@ -12,48 +12,28 @@
                 <div class="mt-2">
                     <flux:input label="Fecha" type="date" wire:model="fecha" />
                 </div>
-
             </div>
             <div>
                 <flux:radio.group wire:model.live="metodo_pago" label="Método de Pago" variant="segmented">
-                    <flux:radio value="efectivo" label="Efectivo"  checked>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-euro-icon lucide-badge-euro"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="M7 12h5"/><path d="M15 9.4a4 4 0 1 0 0 5.2"/></svg>
+                    <flux:radio value="efectivo" label="Efectivo" checked>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-badge-euro-icon lucide-badge-euro">
+                            <path
+                                d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                            <path d="M7 12h5" />
+                            <path d="M15 9.4a4 4 0 1 0 0 5.2" />
+                        </svg>
                     </flux:radio>
                     <flux:radio value="tarjeta" label="Tarjeta" icon="credit-card" />
                     <flux:radio value="transferencia" label="Transferencia" icon="credit-card" />
                 </flux:radio.group>
-
-                {{-- Asignar recibos --}}
-                <div class="mt-4">
-                    <flux:select label="Asignar Recibo" wire:model="recibo_id">
-                        <option value="">Seleccione un recibo</option>
-                        @foreach ($recibosDisponibles as $recibo)
-                            <option value="{{ $recibo->id }}">
-                                {{ $recibo->numero }} - €{{ number_format($recibo->valor, 2) }}
-                            </option>
-                        @endforeach
-                    </flux:select>
-                    @if ($recibo_id)
-                        @php
-                            $recibo = $recibosDisponibles->firstWhere('id', $recibo_id);
-                            $totalFactura = $this->calcularTotal();
-                            $montoAsignado = $this->montoAsignado ?? 0;
-                        @endphp
-                        @if ($recibo && $totalFactura > $recibo->valor)
-                            <div class="mt-2 text-red-600 text-sm flex items-center gap-1">
-                                ⚠️ El monto de la factura (€{{ number_format($totalFactura, 2) }}) excede el valor del recibo
-                                (€{{ number_format($recibo->valor, 2) }})
-                            </div>
-                        @elseif($recibo && $montoAsignado >= $totalFactura)
-                            <div class="mt-2 text-green-600 text-sm flex items-center gap-1">
-                                ✅ La factura ya está cubierta por los recibos asignados.
-                            </div>
-                        @endif
-                    @endif
-                </div>
             </div>
         </div>
 
+
+
+        {{-- Resto de la vista (líneas de factura, resumen de totales, etc.) --}}
         {{-- Líneas de factura --}}
         <div class="border rounded-lg overflow-hidden mb-6 bg-white shadow-sm">
             <table class="min-w-full border border-gray-200 text-sm">
@@ -172,13 +152,14 @@
                             @php
                                 // Evitar división por cero
                                 $porcentaje = $this->totalIva > 0 ? ($iva['importe'] / $this->totalIva) * 100 : 0;
-                                $radians = deg2rad(360 * $porcentaje / 100);
+                                $radians = deg2rad((360 * $porcentaje) / 100);
                                 $x = 50 + 35 * cos($radians);
                                 $y = 50 + 35 * sin($radians);
                                 $largeArc = $porcentaje > 50 ? 1 : 0;
                             @endphp
-                            <path d="M50,50 L50,15 A35,35 0 {{ $largeArc }},1 {{ $x }},{{ $y }} Z"
-                                  fill="{{ $colors[$key % count($colors)] }}" />
+                            <path
+                                d="M50,50 L50,15 A35,35 0 {{ $largeArc }},1 {{ $x }},{{ $y }} Z"
+                                fill="{{ $colors[$key % count($colors)] }}" />
                         @endforeach
                     </svg>
                 </div>
@@ -233,12 +214,111 @@
                     class="mt-4 w-full px-5 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-semibold flex items-center justify-center gap-2 transition transform hover:scale-105">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 13l4 4L19 7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                     GUARDAR FACTURA
                 </button>
             </div>
+        </div>
+
+
+        {{-- Asignación de recibos - Nueva implementación --}}
+        <div class="mb-6 bg-white rounded-lg shadow-sm p-4 border">
+            <h3 class="font-semibold text-indigo-700 mb-3">Asignación de Recibos</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {{-- Recibos Disponibles --}}
+                <div class="border rounded-lg p-3">
+                    <h4 class="font-medium text-gray-700 mb-2">Recibos Disponibles</h4>
+                    <div class="space-y-2 max-h-60 overflow-y-auto">
+                        @forelse($recibosDisponibles as $recibo)
+                            @if (!in_array($recibo->id, $recibosAsignadosTemporal))
+                                <div class="flex items-center justify-between p-2 border rounded hover:bg-gray-50">
+                                    <div>
+                                        <span class="font-medium">#{{ $recibo->numero }}</span>
+                                        <span class="text-sm text-gray-600 ml-2">€{{ number_format($recibo->valor, 2) }}</span>
+                                        <span class="text-xs text-gray-500 ml-2">
+                                            {{ \Carbon\Carbon::parse($recibo->fecha)->format('d/m/Y') }}
+                                        </span>
+                                    </div>
+                                    <button wire:click="agregarRecibo({{ $recibo->id }})"
+                                        class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-sm hover:bg-indigo-200 transition">
+                                        Asignar
+                                    </button>
+                                </div>
+                            @endif
+                        @empty
+                            <p class="text-gray-500 text-sm">No hay recibos disponibles para este paciente</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Recibos Asignados Temporalmente --}}
+                <div class="border rounded-lg p-3">
+                    <h4 class="font-medium text-gray-700 mb-2">Recibos Asignados</h4>
+                    <div class="space-y-2 max-h-60 overflow-y-auto">
+                        @forelse($recibosDisponibles->whereIn('id', $recibosAsignadosTemporal) as $recibo)
+                            <div class="flex items-center justify-between p-2 border rounded hover:bg-gray-50">
+                                <div>
+                                    <span class="font-medium">#{{ $recibo->numero }}</span>
+                                    <span class="text-sm text-gray-600 ml-2">€{{ number_format($recibo->valor, 2) }}</span>
+                                    <span class="text-xs text-gray-500 ml-2">
+                                        {{ \Carbon\Carbon::parse($recibo->fecha)->format('d/m/Y') }}
+                                    </span>
+                                </div>
+                                <button wire:click="quitarRecibo({{ $recibo->id }})"
+                                    class="px-2 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200 transition">
+                                    Quitar
+                                </button>
+                            </div>
+                        @empty
+                            <p class="text-gray-500 text-sm">No hay recibos asignados</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Resumen de montos (usando la propiedad computada) --}}
+
+
+
+            </div>
+
+            {{-- Resumen de montos --}}
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-blue-50 p-3 rounded-lg">
+                    <div class="text-sm text-blue-700">Total Factura</div>
+                    <div class="text-xl font-bold">€{{ number_format($this->calcularTotal(), 2) }}</div>
+                </div>
+
+                <div class="bg-green-50 p-3 rounded-lg">
+                    <div class="text-sm text-green-700">Total Asignado</div>
+                    <div class="text-xl font-bold">€{{ number_format($this->montoAsignado, 2) }}</div>
+                </div>
+
+                <div class="@if ($this->calcularTotal() > $this->montoAsignado) bg-red-50 @else bg-gray-50 @endif p-3 rounded-lg">
+                    <div class="text-sm @if ($this->calcularTotal() > $this->montoAsignado) text-red-700 @else text-gray-700 @endif">
+                        Diferencia
+                    </div>
+                    <div class="text-xl font-bold">
+                        @if ($this->calcularTotal() > $this->montoAsignado)
+                            -€{{ number_format($this->calcularTotal() - $this->montoAsignado, 2) }}
+                        @else
+                            €{{ number_format($this->montoAsignado - $this->calcularTotal(), 2) }}
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            {{-- Mensajes de validación --}}
+            @if ($this->calcularTotal() > $this->montoAsignado)
+                <div class="mt-3 p-2 bg-red-100 text-red-700 rounded text-sm flex items-center gap-2">
+                    ⚠️ La suma de los recibos asignados no cubre el total de la factura
+                </div>
+            @elseif($this->montoAsignado > 0 && $this->montoAsignado >= $this->calcularTotal())
+                <div class="mt-3 p-2 bg-green-100 text-green-700 rounded text-sm flex items-center gap-2">
+                    ✅ La factura está cubierta por los recibos asignados
+                </div>
+            @endif
         </div>
 
         {{-- Mensajes de éxito/error --}}

@@ -10,7 +10,7 @@
             <div class="text-center">
                 <a href="{{ route('home') }}" wire:navigate>
                     <span class="inline-block bg-pink-100 dark:bg-pink-800 text-pink-900 dark:text-white px-4 py-2 rounded-xl text-2xl font-bold">
-                        FisioSistem
+                        {{ config('app.name') }}
                     </span>
                 </a>
             </div>
