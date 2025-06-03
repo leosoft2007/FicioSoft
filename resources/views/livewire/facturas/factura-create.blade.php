@@ -1,17 +1,19 @@
 <div class="bg-gradient-to-br from-sky-50 to-indigo-100 min-h-screen p-6">
-    <x-page-header title="🧾 {{ $titulo }}" subtitle="Crear o editar factura" color="green" :clickable="true"
-        badge="Nuevo" icon="check" footer="Factura electrónica">
 
         {{-- Datos principales --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <x-page-header title="🧾 {{ $titulo }}"  color="indigo" :clickable="true"
+        badge="Nuevo" icon="check" >
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div>
                 <flux:label>Paciente</flux:label>
                 <x-select-busqueda :options="$pacientes" :selected-value="$paciente_id" valueField="id" labelField="nombre_completo"
                     model="paciente_id" primaryColor="indigo-600" hoverColor="indigo-50"
                     placeholder="Seleccione un paciente" />
-                <div class="mt-2">
-                    <flux:input label="Fecha" type="date" wire:model="fecha" />
-                </div>
+
+            </div>
+            <div >
+                <flux:input label="Fecha" type="date" wire:model="fecha" />
             </div>
             <div>
                 <flux:radio.group wire:model.live="metodo_pago" label="Método de Pago" variant="segmented">
@@ -30,9 +32,9 @@
                 </flux:radio.group>
             </div>
         </div>
+    </x-page-header>
 
-
-
+    <div class="rounded-xl bg-orange-50 border border-orange-200 p-4 mb-4 shadow">
         {{-- Resto de la vista (líneas de factura, resumen de totales, etc.) --}}
         {{-- Líneas de factura --}}
         <div class="border rounded-lg overflow-hidden mb-6 bg-white shadow-sm">
@@ -141,28 +143,7 @@
             <div class="border rounded-lg p-4 bg-white shadow-sm">
                 <h3 class="font-semibold text-indigo-700 mb-3">Resumen de IVA</h3>
 
-                {{-- Gráfico SVG de torta --}}
-                <div class="flex justify-center my-4">
-                    <svg width="120" height="120" viewBox="0 0 100 100">
-                        @php
-                            $offset = 0;
-                            $colors = ['#6366F1', '#EC4899', '#10B981', '#F59E0B'];
-                        @endphp
-                        @foreach ($this->resumenIva as $key => $iva)
-                            @php
-                                // Evitar división por cero
-                                $porcentaje = $this->totalIva > 0 ? ($iva['importe'] / $this->totalIva) * 100 : 0;
-                                $radians = deg2rad((360 * $porcentaje) / 100);
-                                $x = 50 + 35 * cos($radians);
-                                $y = 50 + 35 * sin($radians);
-                                $largeArc = $porcentaje > 50 ? 1 : 0;
-                            @endphp
-                            <path
-                                d="M50,50 L50,15 A35,35 0 {{ $largeArc }},1 {{ $x }},{{ $y }} Z"
-                                fill="{{ $colors[$key % count($colors)] }}" />
-                        @endforeach
-                    </svg>
-                </div>
+                
 
                 {{-- Tabla de resumen IVA --}}
                 <table class="w-full">
@@ -221,10 +202,13 @@
             </div>
         </div>
 
+    </div>
+    <x-page-header title="Asignación de Recibos"  color="red" :clickable="true"
+        badge="Nuevo" icon="check" >
 
         {{-- Asignación de recibos - Nueva implementación --}}
         <div class="mb-6 bg-white rounded-lg shadow-sm p-4 border">
-            <h3 class="font-semibold text-indigo-700 mb-3">Asignación de Recibos</h3>
+            <h3 class="font-semibold text-indigo-700 mb-3"></h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {{-- Recibos Disponibles --}}
@@ -320,6 +304,7 @@
                 </div>
             @endif
         </div>
+    </x-page-header>
 
         {{-- Mensajes de éxito/error --}}
         @if (session()->has('success'))
@@ -333,5 +318,5 @@
             </div>
         @endif
 
-    </x-page-header>
+
 </div>
