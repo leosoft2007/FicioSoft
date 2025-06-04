@@ -4,6 +4,9 @@ namespace App\Livewire\Component;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GenericExport;
 
 
 class TablePlus extends Component
@@ -20,6 +23,9 @@ class TablePlus extends Component
     public $addRoute = null;
     public $showFiltro = false;
     public $title = 'Listado';
+    public $showExportExcel = true;
+    public $showExportPdf = true;
+    public int $perPage = 10;
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -32,7 +38,7 @@ class TablePlus extends Component
     public $routeEdit = null;
     public $delete = false;
 
-    public function mount($modelClass, $columns, $title = 'Listado', $routeShow = null, $routeEdit = null, $delete = false)
+    public function mount($modelClass, $columns, $title = 'Listado', $routeShow = null, $routeEdit = null, $delete = false, $showExportExcel = true, $showExportPdf = true)
     {
         $this->modelClass = $modelClass;
         // Asigna sortable=true por defecto si no está definido
@@ -43,6 +49,9 @@ class TablePlus extends Component
             return $col;
         }, $columns);
 
+        $this->showExportExcel = $showExportExcel;
+        $this->showExportPdf = $showExportPdf;
+
         $this->title = $title;
         $this->routeShow = $routeShow;
         $this->routeEdit = $routeEdit;
@@ -50,6 +59,36 @@ class TablePlus extends Component
         if (count($this->columns)) {
             $this->sortField = $this->columns[0]['field'];
         }
+    }
+
+    public function exportExcel()
+    {
+        $query = $this->getExportQuery();
+        $data = $query->get();
+
+        return Excel::download(new GenericExport($data, $this->columns), 'listado.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $query = $this->getExportQuery();
+        $data = $query->get();
+
+        // Usamos una vista genérica y le pasamos los datos y columnas
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('exports.generic-table', [
+            'data' => $data,
+            'columns' => $this->columns,
+        ])->setPaper('a4', 'portrait'); // 'portrait' o 'landscape'
+        return response()->streamDownload(
+            fn() => print($pdf->output()),
+            'listado.pdf'
+        );
+    }
+
+    protected function getExportQuery()
+    {
+        return $this->buildQuery();
+
     }
 
     public function sort($field)
@@ -62,9 +101,8 @@ class TablePlus extends Component
         }
     }
 
-    public function getItemsProperty()
+    protected function buildQuery()
     {
-
         $query = ($this->modelClass)::query();
         // Busca la columna actual en el array de columnas
         $currentColumn = collect($this->columns)->firstWhere('field', $this->sortField);
@@ -155,9 +193,13 @@ class TablePlus extends Component
 
 
         }
+        return $query;
 
+    }
 
-        return $query->paginate(10);
+    public function getItemsProperty()
+    {
+        return $this->buildQuery()->paginate($this->perPage);
     }
 
     public function resetFilters()

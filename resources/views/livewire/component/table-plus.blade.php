@@ -19,6 +19,7 @@
                                 - Pagina la tabla
                                 - Usa variables $columns, $items, $sortField, $sortDirection, $routeShow, $routeEdit, $delete
                                 --}}
+                                
 
                                 <div class="hidden md:block">
                                     <table class="w-full divide-y divide-indigo-200">
@@ -206,6 +207,7 @@
                                                                     </svg>
                                                                 </button>
                                                             @endif
+
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -218,7 +220,24 @@
                                         </tbody>
                                     </table>
                                     <div class="mt-4 px-6 py-3 bg-indigo-50 border-t border-indigo-100 rounded-b-lg">
-                                        {{ $items->links() }}
+                                        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                                            {{-- Paginador --}}
+                                            <div>
+                                                {{ $items->links() }}
+                                            </div>
+                                            {{-- Selector de cantidad por página --}}
+                                            <div class="flex items-center gap-2">
+                                                <label for="perPage" class="text-sm text-gray-700">Mostrar</label>
+                                                <select wire:model.live="perPage" id="perPage" class="border rounded px-2 py-1 text-sm bg-accent-foreground">
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="20">20</option>
+                                                    <option value="50">50</option>
+                                                    <option value="1000">Todos</option>
+                                                </select>
+                                                <span class="text-sm text-gray-700">resultados</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -363,6 +382,7 @@
                                     <div class="mt-4 px-2 py-3 bg-indigo-50 border-t border-indigo-100 rounded-b-lg">
                                         {{ $items->links() }}
                                     </div>
+
                                 </div>
                                 <!-- Fin Vista móvil -->
                             </div>

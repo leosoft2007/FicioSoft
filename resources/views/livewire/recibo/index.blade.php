@@ -25,5 +25,8 @@
     :columns="$columnsFactura"
     add-route="{{ route('facturas.create') }}" title="Lista de Facturas"
     :delete="false"
+    :showExportExcel="true"
+    :showExportPdf="true"
+
 />
 </section>
