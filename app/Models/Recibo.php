@@ -39,7 +39,7 @@ class Recibo extends Model
             if (empty($recibo->usuario_id) && auth()->check()) {
                 $recibo->user_id = auth()->id();
             }
-            
+
 
         });
     }
@@ -57,5 +57,14 @@ class Recibo extends Model
         return $this->belongsToMany(Factura::class, 'factura_recibos')
             ->withPivot('valor')
             ->withTimestamps();
+    }
+    public static function tablePlusWith()
+    {
+        return ['paciente'];
+    }
+    
+    public function getIdLongAttribute()
+    {
+        return "REC - {$this->id}";
     }
 }

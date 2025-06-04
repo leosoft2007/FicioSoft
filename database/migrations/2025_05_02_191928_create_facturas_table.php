@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paciente_id')->constrained()->onDelete('cascade');
-            
+
             $table->foreignId('clinica_id')->constrained()->onDelete('cascade');
             $table->date('fecha');
             $table->decimal('total', 10, 2);
             $table->string('estado')->default('pendiente'); // pendiente, pagada, cancelada
-            $table->string('metodo_pago')->nullable(); // efectivo, tarjeta, transferencia
+            $table->string('metodo_pago')->nullable(); // efectivo, tarjeta, transferencia 
             $table->string('numero_factura')->unique();
             $table->string('descripcion')->nullable();
             $table->boolean('enviado')->default(false); // si la factura ha sido enviada al paciente

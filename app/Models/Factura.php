@@ -96,6 +96,7 @@ protected static function generarNumeroSecuencial($ultimoNumero)
             ->withPivot('valor')
             ->withTimestamps();
     }
+    
 
 
 }
