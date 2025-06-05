@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId('especialidad_id')->onDelete('cascade');
             $table->foreign('especialidad_id')->references('id')->on('especialidads');
             $table->foreignId('usuario_id')->onDelete('cascade');
-            $table->foreign('usuario_id')->references('id')->on('users');
+            $table->foreign('usuario_id')->references('id')->on('users'); 
             $table->string('color')->nullable();
             $table->timestamps();
         });

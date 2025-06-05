@@ -7,46 +7,51 @@
                     <!-- Buscador y filtros -->
                     @include('livewire.component.table-plus-buscar')
 
-                    <div class="flow-root mt-6">
-                        <div class="overflow-x-auto rounded-lg border border-indigo-50">
-                            <div class="inline-block min-w-full py-2 align-middle">
-                                <!-- Vista de escritorio -->
 
-                                {{--
+                    <!-- Vista de escritorio -->
+
+                    {{--
                                 Tabla responsiva de escritorio.
                                 - Columnas y filas renderizadas con formato
                                 - Acciones (ver, editar, eliminar) con SVGs y tooltips
                                 - Pagina la tabla
                                 - Usa variables $columns, $items, $sortField, $sortDirection, $routeShow, $routeEdit, $delete
                                 --}}
-                                
 
+
+                    <div class="flow-root mt-6">
+                        <div class="overflow-x-auto rounded-2xl shadow-lg border border-indigo-100 bg-white">
+                            <!-- sombra + redondeado + fondo -->
+                            <div class="inline-block min-w-full py-0 align-middle">
                                 <div class="hidden md:block">
-                                    <table class="w-full divide-y divide-indigo-200">
-                                        <thead class="bg-indigo-600 text-white">
+                                    <table class="w-full divide-y divide-indigo-200 rounded-2xl overflow-hidden">
+                                        <!-- redondeado tabla -->
+                                        <thead class="bg-indigo-500 text-white">
                                             <tr>
                                                 @foreach ($columns as $column)
-                                                    <th wire:click="sort('{{ $column['field'] }}')"
-                                                        class="py-3 pl-6 pr-3 text-left text-xs font-bold uppercase tracking-wider cursor-pointer select-none">
-                                                        <span class="flex items-center">
-                                                            @if ($sortField === $column['field'])
-                                                                @if ($sortDirection === 'asc')
-                                                                    <svg class="w-3 h-3 mr-1" viewBox="0 0 20 20"
-                                                                        fill="currentColor">
-                                                                        <path
-                                                                            d="M10 3a1 1 0 01.894.553l3 6A1 1 0 0113 11H7a1 1 0 01-.894-1.447l3-6A1 1 0 0110 3z" />
-                                                                    </svg>
-                                                                @else
-                                                                    <svg class="w-3 h-3 mr-1" viewBox="0 0 20 20"
-                                                                        fill="currentColor">
-                                                                        <path
-                                                                            d="M10 17a1 1 0 01-.894-.553l-3-6A1 1 0 017 9h6a1 1 0 01.894 1.447l-3 6A1 1 0 0110 17z" />
-                                                                    </svg>
+                                                    @if (!isset($column['visible']) || $column['visible'])
+                                                        <th wire:click="sort('{{ $column['field'] }}')"
+                                                            class="py-3 pl-6 pr-3 text-center text-xs font-bold uppercase tracking-wider cursor-pointer select-none">
+                                                            <span class="flex items-center">
+                                                                @if ($sortField === $column['field'])
+                                                                    @if ($sortDirection === 'asc')
+                                                                        <svg class="w-3 h-3 mr-1" viewBox="0 0 20 20"
+                                                                            fill="currentColor">
+                                                                            <path
+                                                                                d="M10 3a1 1 0 01.894.553l3 6A1 1 0 0113 11H7a1 1 0 01-.894-1.447l3-6A1 1 0 0110 3z" />
+                                                                        </svg>
+                                                                    @else
+                                                                        <svg class="w-3 h-3 mr-1" viewBox="0 0 20 20"
+                                                                            fill="currentColor">
+                                                                            <path
+                                                                                d="M10 17a1 1 0 01-.894-.553l-3-6A1 1 0 017 9h6a1 1 0 01.894 1.447l-3 6A1 1 0 0110 17z" />
+                                                                        </svg>
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                            {{ $column['label'] }}
-                                                        </span>
-                                                    </th>
+                                                                {{ $column['label'] }}
+                                                            </span>
+                                                        </th>
+                                                    @endif
                                                 @endforeach
                                                 <th
                                                     class="py-3 pr-6 pl-3 text-left text-xs font-bold uppercase tracking-wider">
@@ -60,88 +65,158 @@
                                                         Acciones
                                                     </span>
                                                 </th>
+
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-indigo-100 bg-white">
                                             @forelse($items as $item)
                                                 <tr class="hover:bg-indigo-50 transition-colors duration-150">
-                                                    @php
-                                                        $badgePalettes = [
-                                                            1 => 'bg-green-100 text-green-800',
-                                                            2 => 'bg-blue-100 text-blue-800',
-                                                            3 => 'bg-indigo-100 text-indigo-800',
-                                                            4 => 'bg-yellow-100 text-yellow-800',
-                                                            5 => 'bg-gray-100 text-gray-800',
-                                                            6 => 'bg-red-100 text-red-800',
-                                                        ];
-                                                    @endphp
+
                                                     @foreach ($columns as $column)
-                                                        <td
-                                                            class="whitespace-nowrap px-3 py-4 text-sm
+                                                        @if (!isset($column['visible']) || $column['visible'])
+                                                            <td
+                                                                class="whitespace-nowrap px-3 py-4 text-sm
                                                             @if (($column['format'] ?? null) === 'nombre') text-gray-700 @endif">
-                                                            @php
-                                                                $value = data_get($item, $column['field']);
-                                                                $format = $column['format'] ?? null;
-                                                            @endphp
+                                                                @php
+                                                                    $value = data_get($item, $column['field']);
+                                                                    $format = $column['format'] ?? null;
+                                                                @endphp
 
-                                                            {{-- Fecha --}}
-                                                            @if ($format === 'date' && !empty($value))
-                                                                <span
-                                                                    class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs flex items-center">
-                                                                    <svg class="w-3 h-3 mr-1" viewBox="0 0 24 24"
-                                                                        fill="none">
-                                                                        <path
-                                                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                                                            stroke="currentColor" stroke-width="2"
-                                                                            stroke-linecap="round" />
-                                                                    </svg>
-                                                                    {{ \Carbon\Carbon::parse($value)->format('d/m/Y') }}
-                                                                </span>
-                                                                {{-- Valor monetario --}}
-                                                            @elseif($format === 'money' && isset($value))
-                                                                @php
-                                                                    $positivo = $value >= 0;
-                                                                    $symbol = '€';
-                                                                    $color = $positivo
-                                                                        ? 'bg-green-100 text-green-800'
-                                                                        : 'bg-red-100 text-red-800';
-                                                                @endphp
-                                                                <span
-                                                                    class="{{ $color }} px-2 py-1 rounded-full text-xs flex items-center font-semibold">
-                                                                    {{ $symbol }}{{ number_format(abs($value), 2) }}
-                                                                </span>
-                                                                {{-- Badge genérico --}}
-                                                            @elseif($format === 'badge')
-                                                                @php
-                                                                    $badge_map = $column['badge_map'] ?? [];
-                                                                    $badge = $badge_map[$value] ?? 5;
-                                                                    $colorClass =
-                                                                        $badgePalettes[$badge] ?? $badgePalettes[5];
-                                                                    $icon = $column['icon'] ?? '';
-                                                                @endphp
-                                                                <span
-                                                                    class="{{ $colorClass }} px-2 py-1 rounded-full text-xs flex items-center">
-                                                                    {!! $icon !!}{{ $value }}
-                                                                </span>
-                                                                {{-- Nombre --}}
-                                                            @elseif($format === 'nombre' && !empty($value))
-                                                                <div class="flex items-center gap-2">
-                                                                    <svg class="h-4 w-4 text-indigo-400" fill="none"
-                                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                                                    </svg>
-                                                                    {{ $value }}
-                                                                </div>
-                                                            @elseif ($format === 'custom' && isset($column['render']) && is_callable($column['render']))
+                                                                {{-- Fecha --}}
+                                                                @if ($format === 'date' && !empty($value))
+                                                                    <span
+                                                                        class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs flex items-center justify-center text-center">
+                                                                        <svg class="w-3 h-3 mr-1" viewBox="0 0 24 24"
+                                                                            fill="none">
+                                                                            <path
+                                                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                                                stroke="currentColor" stroke-width="2"
+                                                                                stroke-linecap="round" />
+                                                                        </svg>
+                                                                        {{ \Carbon\Carbon::parse($value)->format('d/m/Y') }}
+                                                                    </span>
+                                                                    {{-- Valor monetario --}}
+                                                                @elseif($format === 'money' && isset($value))
+                                                                    @php
+                                                                        $positivo = $value >= 0;
+                                                                        $symbol = '€';
+                                                                        $color = $positivo
+                                                                            ? 'bg-green-100 text-green-800'
+                                                                            : 'bg-red-100 text-red-800';
+                                                                    @endphp
+                                                                    <span
+                                                                        class="{{ $color }} px-2 py-1 rounded-full text-xs flex items-center justify-end text-right font-semibold">
+                                                                        {{ $symbol }}
+                                                                        {{ number_format(abs($value), 2) }}
+                                                                    </span>
+                                                                    {{-- Badge genérico --}}
+                                                                @elseif($format === 'badge')
+                                                                    @php
+                                                                        $badge_map = $column['badge_map'] ?? [];
+                                                                        $badge = $badge_map[$value] ?? 'gris';
+                                                                        $colorClass =
+                                                                            $this->fondoPalettes[$badge] ??
+                                                                            $this->fondoPalettes['gris'];
+                                                                        $icon = $column['icon'] ?? '';
+                                                                    @endphp
+                                                                    <span
+                                                                        class="{{ $colorClass }} px-2 py-1 rounded-full text-xs flex items-center justify-center text-center">
+                                                                        {!! $icon !!}{{ $value }}
+                                                                    </span>
+                                                                    {{-- Nombre --}}
+                                                                @elseif($format === 'nombre')
+                                                                    @php
+                                                                        // Si hay concat_fields, arma el string
+                                                                        if (isset($column['concat_fields'])) {
+                                                                            $fields = $column['concat_fields'];
+                                                                            $separator =
+                                                                                $column['concat_separator'] ?? ' ';
+                                                                            $parts = [];
+                                                                            foreach ($fields as $field) {
+                                                                                $part = data_get($item, $field);
+                                                                                if (!empty($part)) {
+                                                                                    $parts[] = $part;
+                                                                                }
+                                                                            }
+                                                                            $display = implode($separator, $parts);
+                                                                        } else {
+                                                                            $display = $value;
+                                                                        }
+                                                                    @endphp
+                                                                    <div class="flex items-center gap-2">
+                                                                        <svg class="h-4 w-4 text-indigo-400"
+                                                                            fill="none" stroke="currentColor"
+                                                                            viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                                        </svg>
+                                                                        {{ $display }}
+                                                                    </div>
+                                                                @elseif ($format === 'custom' && isset($column['render']) && is_callable($column['render']))
                                                                     {!! $column['render']($item, $value) !!}
+                                                                @elseif ($format === 'contacto')
+                                                                    @php
+                                                                        $email = data_get(
+                                                                            $item,
+                                                                            $column['email_field'] ?? 'email',
+                                                                        );
+                                                                        $telefono = data_get(
+                                                                            $item,
+                                                                            $column['telefono_field'] ?? 'telefono',
+                                                                        );
+                                                                    @endphp
+                                                                    <div class="flex flex-col gap-1">
+                                                                        <div class="flex items-center gap-2">
+                                                                            <svg class="h-4 w-4 text-gray-400"
+                                                                                fill="none" stroke="currentColor"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round"
+                                                                                    stroke-linejoin="round"
+                                                                                    stroke-width="2"
+                                                                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                                            </svg>
+                                                                            <span
+                                                                                class="text-gray-700">{{ $email }}</span>
+                                                                        </div>
+                                                                        <div class="flex items-center gap-2">
+                                                                            <svg class="h-4 w-4 text-gray-400"
+                                                                                fill="none" stroke="currentColor"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round"
+                                                                                    stroke-linejoin="round"
+                                                                                    stroke-width="2"
+                                                                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                                            </svg>
+                                                                            <span
+                                                                                class="text-gray-700">{{ $telefono }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                @elseif ($format === 'color')
+                                                                    <div
+                                                                        class="px-6 py-4 text-sm font-medium text-gray-900">
+                                                                        <div class="flex items-center gap-2">
+                                                                            <span
+                                                                                class="inline-block w-4 h-4 rounded-full border"
+                                                                                style="background-color: {{ $value }};">
+                                                                            </span>
 
-                                                                {{-- Genérico --}}
-                                                            @else
-                                                                {{ $value }}
-                                                            @endif
-                                                        </td>
+                                                                        </div>
+                                                                    </div>
+                                                                @elseif ($format === 'fondo')
+                                                                    @php
+                                                                        $paletteKey = $column['fondo_palette'] ?? 'gris'; // Por defecto el gris si no hay clave
+                                                                        $fondoClass = $fondoPalettes[$paletteKey] ?? $fondoPalettes['gris'];
+                                                                    @endphp
+                                                                    <span class="{{ $fondoClass }} px-3 py-1 rounded-lg block text-center">
+                                                                        {{ $value }}
+                                                                    </span>
+                                                                    {{-- Genérico --}}
+                                                                @else
+                                                                    {{ $value }}
+                                                                @endif
+                                                            </td>
+                                                        @endif
                                                     @endforeach
                                                     @php
                                                         // Calcula las URLs una sola vez y valídalas aquí
@@ -220,7 +295,8 @@
                                         </tbody>
                                     </table>
                                     <div class="mt-4 px-6 py-3 bg-indigo-50 border-t border-indigo-100 rounded-b-lg">
-                                        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                                        <div
+                                            class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                                             {{-- Paginador --}}
                                             <div>
                                                 {{ $items->links() }}
@@ -228,7 +304,8 @@
                                             {{-- Selector de cantidad por página --}}
                                             <div class="flex items-center gap-2">
                                                 <label for="perPage" class="text-sm text-gray-700">Mostrar</label>
-                                                <select wire:model.live="perPage" id="perPage" class="border rounded px-2 py-1 text-sm bg-accent-foreground">
+                                                <select wire:model.live="perPage" id="perPage"
+                                                    class="border rounded px-2 py-1 text-sm bg-accent-foreground">
                                                     <option value="5">5</option>
                                                     <option value="10">10</option>
                                                     <option value="20">20</option>
@@ -251,34 +328,26 @@
                                     - Acciones accesibles (ver, editar, eliminar)
                                     - Paginación clara y accesible
                                     --}}
-                                @php
-                                    $badgePalettes = [
-                                        1 => 'bg-green-100 text-green-800',
-                                        2 => 'bg-blue-100 text-blue-800',
-                                        3 => 'bg-indigo-100 text-indigo-800',
-                                        4 => 'bg-yellow-100 text-yellow-800',
-                                        5 => 'bg-gray-100 text-gray-800',
-                                        6 => 'bg-red-100 text-red-800',
-                                    ];
-                                @endphp
+
 
                                 <div class="block md:hidden space-y-4 mt-6">
                                     @foreach ($items as $item)
-                                        <div
-                                            class="bg-white rounded-xl shadow border border-indigo-100 p-4 flex flex-col space-y-2">
-
-                                            @foreach ($columns as $column)
-                                                @if (!empty($column['show_in_mobile']))
-                                                    @php
-                                                        $value = data_get($item, $column['field']);
-                                                        $format = $column['format'] ?? null;
-                                                    @endphp
-                                                    <div class="flex items-center text-sm mb-1">
-                                                        <span class="font-bold text-indigo-600 mr-2">
-                                                            {{ $column['label'] }}:
-                                                        </span>
-                                                        <span>
-                                                            {{-- Formatos --}}
+                                        <div class="bg-white rounded-xl shadow border border-indigo-100 p-4">
+                                            <div class="grid grid-cols-3 gap-x-4 gap-y-2">
+                                                @foreach ($columns as $column)
+                                                    @if (!empty($column['show_in_mobile']))
+                                                        @php
+                                                            $value = data_get($item, $column['field']);
+                                                            $format = $column['format'] ?? null;
+                                                        @endphp
+                                                        {{-- Label: ocupa 1 columna --}}
+                                                        <div class="flex items-center text-sm col-span-1">
+                                                            <span class="font-bold text-indigo-600 mr-1">
+                                                                {{ $column['label'] }}:
+                                                            </span>
+                                                        </div>
+                                                        {{-- Value: ocupa 2 columnas --}}
+                                                        <div class="flex items-center text-sm col-span-2">
                                                             @if ($format === 'date' && !empty($value))
                                                                 <span
                                                                     class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs flex items-center">
@@ -306,9 +375,10 @@
                                                             @elseif($format === 'badge')
                                                                 @php
                                                                     $badge_map = $column['badge_map'] ?? [];
-                                                                    $badge = $badge_map[$value] ?? 5;
+                                                                    $badge = $badge_map[$value] ?? 'gris';
                                                                     $colorClass =
-                                                                        $badgePalettes[$badge] ?? $badgePalettes[5];
+                                                                        $this->fondoPalettes[$badge] ??
+                                                                        $this->fondoPalettes['gris'];
                                                                     $icon = $column['icon'] ?? '';
                                                                 @endphp
                                                                 <span
@@ -326,14 +396,61 @@
                                                                     </svg>
                                                                     {{ $value }}
                                                                 </div>
+                                                            @elseif($format === 'contacto')
+                                                                @php
+                                                                    $email = data_get(
+                                                                        $item,
+                                                                        $column['email_field'] ?? 'email',
+                                                                    );
+                                                                    $telefono = data_get(
+                                                                        $item,
+                                                                        $column['telefono_field'] ?? 'telefono',
+                                                                    );
+                                                                @endphp
+                                                                <div>
+                                                                    <div class="flex items-center gap-2">
+                                                                        <svg class="h-4 w-4 text-gray-400"
+                                                                            fill="none" stroke="currentColor"
+                                                                            viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                stroke-width="2"
+                                                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                                        </svg>
+                                                                        <span
+                                                                            class="text-gray-700">{{ $email }}</span>
+                                                                    </div>
+                                                                    <div class="flex items-center gap-2 mt-1">
+                                                                        <svg class="h-4 w-4 text-gray-400"
+                                                                            fill="none" stroke="currentColor"
+                                                                            viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                stroke-width="2"
+                                                                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                                        </svg>
+                                                                        <span
+                                                                            class="text-gray-700">{{ $telefono }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            @elseif ($format === 'color')
+                                                                <div
+                                                                    class="px-6 py-4 text-sm font-medium text-gray-900">
+                                                                    <div class="flex items-center gap-2">
+                                                                        <span
+                                                                            class="inline-block w-4 h-4 rounded-full border"
+                                                                            style="background-color: {{ $value }};">
+                                                                        </span>
+
+                                                                    </div>
+                                                                </div>
                                                             @else
                                                                 {{ $value }}
                                                             @endif
-                                                        </span>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                             <!-- Acciones -->
                                             <div class="flex justify-end space-x-2 mt-2">
                                                 @if ($showRouteUrl)

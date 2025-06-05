@@ -13,6 +13,30 @@
 
     </section>
     <livewire:component.table-plus
+    :model-class="\App\Models\Profesional::class"
+    :columns="$columnsProfesional"
+    add-route="{{ route('profesionals.create') }}" title="Lista de Profesionales"
+    routeShow="profesionals.show"
+    routeEdit="profesionals.edit"
+    :delete="false"
+    :showExportExcel="true"
+    :showExportPdf="true"
+
+/>
+
+    <livewire:component.table-plus
+    :model-class="\App\Models\Paciente::class"
+    :columns="$columnsPaciente"
+    add-route="{{ route('pacientes.create') }}" title="Lista de Pacientes"
+    routeShow="pacientes.show"
+    routeEdit="pacientes.edit"
+    :delete="false"
+    :showExportExcel="true"
+    :showExportPdf="true"
+
+/>
+
+    <livewire:component.table-plus
     :model-class="\App\Models\Recibo::class"
     :columns="$columnsRecibo"
     add-route="{{ route('recibos.create') }}" title="Recibos de Clientes"

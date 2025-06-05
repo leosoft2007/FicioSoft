@@ -26,6 +26,19 @@ class TablePlus extends Component
     public $showExportExcel = true;
     public $showExportPdf = true;
     public int $perPage = 10;
+    public array $fondoPalettes = [
+        'verde' => 'bg-green-100 text-green-900 font-semibold',
+        'azul' => 'bg-blue-100 text-blue-900 font-semibold',
+        'indigo' => 'bg-indigo-100 text-indigo-900 font-semibold',
+        'amarillo' => 'bg-yellow-100 text-yellow-900 font-semibold',
+        'gris' => 'bg-gray-100 text-gray-900 font-semibold',
+        'rojo' => 'bg-red-100 text-red-900 font-semibold',
+        // o usa cadenas si prefieres
+        'warning' => 'bg-yellow-100 text-yellow-800',
+        'info'    => 'bg-blue-100 text-blue-800',
+        'success' => 'bg-green-100 text-green-800',
+        'error'   => 'bg-red-100 text-red-800',
+    ];
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -59,6 +72,16 @@ class TablePlus extends Component
         if (count($this->columns)) {
             $this->sortField = $this->columns[0]['field'];
         }
+    }
+
+    protected function getTableColumns()
+    {
+        return array_filter($this->columns, fn($col) => !isset($col['visible']) || $col['visible']);
+    }
+
+    protected function getExportColumns()
+    {
+        return array_filter($this->columns, fn($col) => !isset($col['show_in_export']) || $col['show_in_export']);
     }
 
     public function exportExcel()
@@ -128,22 +151,26 @@ class TablePlus extends Component
         }
 
         // Búsqueda genérica
-        if ($this->search) {
-            $query->where(function ($q) {
-                foreach ($this->columns as $column) {
-                    if (!empty($column['searchable'])) {
-                        if (str_contains($column['field'], '.')) {
-                            [$relation, $field] = explode('.', $column['field'], 2);
-                            $q->orWhereHas($relation, function ($qr) use ($field) {
-                                $qr->where($field, 'like', '%' . $this->search . '%');
-                            });
-                        } else {
-                            $q->orWhere($column['field'], 'like', '%' . $this->search . '%');
-                        }
+       if ($this->search) {
+    $search = strtolower($this->search);
+    $query->where(function ($q) use ($search) {
+        foreach ($this->columns as $column) {
+            if (!empty($column['searchable'])) {
+                $fields = $column['search_fields'] ?? [$column['field']];
+                foreach ($fields as $field) {
+                    if (str_contains($field, '.')) {
+                        [$relation, $relatedField] = explode('.', $field, 2);
+                        $q->orWhereHas($relation, function ($qr) use ($relatedField, $search) {
+                            $qr->whereRaw('LOWER(' . $relatedField . ') LIKE ?', ['%' . $search . '%']);
+                        });
+                    } else {
+                        $q->orWhereRaw('LOWER(' . $field . ') LIKE ?', ['%' . $search . '%']);
                     }
                 }
-            });
+            }
         }
+    });
+}
 
         // Filtros avanzados
 
@@ -190,7 +217,6 @@ class TablePlus extends Component
                     $query->where($dbField, $value);
                 }
             }
-
 
         }
         return $query;
