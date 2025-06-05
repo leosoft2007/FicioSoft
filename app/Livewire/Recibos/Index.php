@@ -19,7 +19,7 @@ class Index extends Component
 
     // En tu Controller o en el método render() de tu componente Livewire
     public $columnsRecibo = [
-        ['field' => 'id_long', 'label' => 'Número', 'format' => null, 'sortable' => false, 'show_in_mobile' => true, 'searchable' => false],
+        ['field' => 'id_long', 'label' => 'Número', 'format' => null, 'sortable' => false, 'show_in_mobile' => true, 'searchable' => false,  'format' => 'fondo', 'fondo_palette' => 'gris'],
         ['field' => 'paciente.apellido', 'label' => 'Apellido', 'visible' => false],
         [
             'field' => 'paciente.nombre', // Tu campo principal de búsqueda
@@ -48,7 +48,7 @@ class Index extends Component
             'show_in_mobile' => true, 'filter' => 'select', 'options' => ['efectivo', 'tarjeta', 'cheque']],
     ];
     public $columnsFactura = [
-        ['field' => 'numero_factura', 'label' => 'Número', 'format' => null, 'show_in_mobile' => true, 'searchable' => true],
+        ['field' => 'numero_factura', 'label' => 'Número', 'format' => null, 'show_in_mobile' => true, 'searchable' => true,  'format' => 'fondo', 'fondo_palette' => 'gris'],
         ['field' => 'paciente.apellido', 'label' => 'Apellido', 'visible' => false],
         [
             'field' => 'paciente.nombre', // Tu campo principal de búsqueda

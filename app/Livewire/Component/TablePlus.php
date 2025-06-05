@@ -39,7 +39,52 @@ class TablePlus extends Component
         'success' => 'bg-green-100 text-green-800',
         'error'   => 'bg-red-100 text-red-800',
     ];
+    public $estilo;
 
+    public array $tablaEstilo = [
+            'indigo' => [
+                'thead' => 'bg-indigo-600 text-white font-semibold',
+                'border' => 'border-indigo-200',
+                'divide' => 'divide-indigo-200',
+                'row_hover' => 'hover:bg-indigo-50',
+                'footer_bg' => 'bg-indigo-50 border-t border-indigo-200',
+            ],
+            'azul' => [
+                'thead' => 'bg-blue-600 text-white font-semibold',
+                'border' => 'border-blue-200',
+                'divide' => 'divide-blue-200',
+                'row_hover' => 'hover:bg-blue-50',
+                'footer_bg' => 'bg-blue-50 border-t border-blue-200',
+            ],
+            'verde' => [
+                'thead' => 'bg-green-600 text-white font-semibold',
+                'border' => 'border-green-200',
+                'divide' => 'divide-green-200',
+                'row_hover' => 'hover:bg-green-50',
+                'footer_bg' => 'bg-green-50 border-t border-green-200',
+            ],
+            'amarillo' => [
+                'thead' => 'bg-yellow-600 text-white font-semibold',
+                'border' => 'border-yellow-200',
+                'divide' => 'divide-yellow-200',
+                'row_hover' => 'hover:bg-yellow-50',
+                'footer_bg' => 'bg-yellow-50 border-t border-yellow-200',
+            ],
+            'gris' => [
+                'thead' => 'bg-gray-600 text-white font-semibold',
+                'border' => 'border-gray-200',
+                'divide' => 'divide-gray-200',
+                'row_hover' => 'hover:bg-gray-50',
+                'footer_bg' => 'bg-gray-50 border-t border-gray-200',
+            ],
+            'rojo' => [
+                'thead' => 'bg-red-600 text-white font-semibold',
+                'border' => 'border-red-200',
+                'divide' => 'divide-red-200',
+                'row_hover' => 'hover:bg-red-50',
+                'footer_bg' => 'bg-red-50 border-t border-red-200',
+            ],
+        ];
     protected $queryString = [
         'search' => ['except' => ''],
         'sortField' => ['except' => ''],
@@ -51,7 +96,7 @@ class TablePlus extends Component
     public $routeEdit = null;
     public $delete = false;
 
-    public function mount($modelClass, $columns, $title = 'Listado', $routeShow = null, $routeEdit = null, $delete = false, $showExportExcel = true, $showExportPdf = true)
+    public function mount($modelClass, $columns, $title = 'Listado', $routeShow = null, $routeEdit = null, $delete = false, $showExportExcel = true, $showExportPdf = true, $estilo = null)
     {
         $this->modelClass = $modelClass;
         // Asigna sortable=true por defecto si no está definido
@@ -61,7 +106,12 @@ class TablePlus extends Component
             }
             return $col;
         }, $columns);
-
+        // Si el usuario pasa un color por nombre, busca en $fondoPalettes
+        if ($estilo && isset($this->tablaEstilo[$estilo])) {
+            $this->estilo = $this->tablaEstilo[$estilo];
+        } else {
+            $this->estilo = $this->tablaEstilo['indigo'] ?? 'bg-indigo-100 text-indigo-900 font-semibold';
+        }
         $this->showExportExcel = $showExportExcel;
         $this->showExportPdf = $showExportPdf;
 

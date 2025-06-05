@@ -20,13 +20,13 @@
 
 
                     <div class="flow-root mt-6">
-                        <div class="overflow-x-auto rounded-2xl shadow-lg border border-indigo-100 bg-white">
+                        <div class="overflow-x-auto rounded-2xl shadow-lg border {{ $estilo['border'] }} bg-white">
                             <!-- sombra + redondeado + fondo -->
                             <div class="inline-block min-w-full py-0 align-middle">
                                 <div class="hidden md:block">
-                                    <table class="w-full divide-y divide-indigo-200 rounded-2xl overflow-hidden">
+                                    <table class="w-full {{ $estilo['divide'] }} rounded-2xl overflow-hidden">
                                         <!-- redondeado tabla -->
-                                        <thead class="bg-indigo-500 text-white">
+                                        <thead class="{{ $estilo['thead'] }}">
                                             <tr>
                                                 @foreach ($columns as $column)
                                                     @if (!isset($column['visible']) || $column['visible'])
@@ -68,9 +68,9 @@
 
                                             </tr>
                                         </thead>
-                                        <tbody class="divide-y divide-indigo-100 bg-white">
+                                        <tbody class="divide-y {{ $estilo['divide'] }} bg-white">
                                             @forelse($items as $item)
-                                                <tr class="hover:bg-indigo-50 transition-colors duration-150">
+                                                <tr class="{{ $estilo['row_hover'] }} transition-colors duration-150">
 
                                                     @foreach ($columns as $column)
                                                         @if (!isset($column['visible']) || $column['visible'])
@@ -294,7 +294,7 @@
                                             @endforelse
                                         </tbody>
                                     </table>
-                                    <div class="mt-4 px-6 py-3 bg-indigo-50 border-t border-indigo-100 rounded-b-lg">
+                                    <div class="mt-4 px-6 py-3 {{ $estilo['footer_bg'] }} rounded-b-lg">
                                         <div
                                             class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                                             {{-- Paginador --}}

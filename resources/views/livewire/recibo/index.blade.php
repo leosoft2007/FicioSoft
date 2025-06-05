@@ -21,6 +21,7 @@
     :delete="false"
     :showExportExcel="true"
     :showExportPdf="true"
+    estilo="rojo"
 
 />
 
@@ -33,6 +34,7 @@
     :delete="false"
     :showExportExcel="true"
     :showExportPdf="true"
+    estilo="verde"
 
 />
 
@@ -43,6 +45,7 @@
     routeShow="recibos.show"
     routeEdit="recibos.edit"
     :delete="false"
+    estilo="gris"
 />
 <livewire:component.table-plus
     :model-class="\App\Models\Factura::class"
@@ -51,6 +54,7 @@
     :delete="false"
     :showExportExcel="true"
     :showExportPdf="true"
+    estilo="amarillo"
 
 />
 </section>
