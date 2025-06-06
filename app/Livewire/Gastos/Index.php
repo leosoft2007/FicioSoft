@@ -5,52 +5,60 @@ namespace App\Livewire\Gastos;
 use App\Models\Gasto;
 use Illuminate\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
+
 
 class Index extends Component
 {
-    use WithPagination;
-    public $buscar = '';
-    public $showFiltro = false;
-    public $filtroMetodoPago = '';
-    public $filtroFecha = '';
-    public $filtroFechaInicio = '';
-    public $filtroFechaFin = '';
+
+
+    public $columnsGastos = [
+        [
+            'field' => 'tipoGasto.nombre',
+            'label' => 'Tipo de Gasto',
+            'format' => 'fondo',
+            'fondo_palette' => 'blanco',
+            'filter' => 'relation-select',
+            'relation_field' => 'tipo_gasto_id',
+            'relation_label' => 'nombre', // <-- campo a mostrar como label
+            'relation_model' => \App\Models\TipoGasto::class, // <-- agrega esto para hacerlo genérico
+            'options' => [], // se llena en mount()
+        ],
+        ['field' => 'descripcion', 'label' => 'Descripción', 'show_in_mobile' => true, 'searchable' => true, 'format' => 'fondo', 'fondo_palette' => 'gris'],
+        ['field' => 'fecha', 'label' => 'Fecha', 'searchable' => false, 'format' => 'date', 'show_in_mobile' => true, 'filter' => 'range_date'],
+        ['field' => 'monto', 'label' => 'Monto', 'searchable' => true, 'format' => 'money', 'show_in_mobile' => true, 'filter' => 'range_number'],
+        [
+            'field' => 'metodo_pago',
+            'label' => 'Forma de Pago',
+            'format' => 'badge',
+            'badge_map' => [
+                'Contado' => 'verde',
+                'Tarjeta de Crédito' => 'azul',
+                'Transferencia Bancaria' => 'indigo',
+                'Bizum' => 'amarillo',
+                'Cheque' => 'rojo',
+                'Efectivo' => 'verde',
+            ],
+            'icon' => '<svg class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none"><path d="M3 10H21M7 15H8M12 15H13M6 8H18C19.1046 8 20 8.89543 20 10V16C20 17.1046 19.1046 18 18 18H6C4.89543 18 4 17.1046 4 16V10C4 8.89543 4.89543 8 6 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>',
+            'show_in_mobile' => true,
+            'filter' => 'select',
+            'options' => ['Contado', 'Tarjeta de Crédito', 'Transferencia Bancaria', 'Bizum', 'Cheque', 'Efectivo'],
+        ],
+
+
+    ];
+
+
+
+
     public function render(): View
-    {
-        $gastos = Gasto::with('tipoGasto')
-            ->where(function ($query) {
-                if ($this->buscar) {
-                    $query->whereHas('tipoGasto', function ($q) {
-                        $q->where('nombre', 'ilike', '%' . $this->buscar . '%');
-                    })
-                        ->orWhere('descripcion', 'ilike', '%' . $this->buscar . '%');
-                }
-            })
-            ->when($this->filtroMetodoPago, function ($query) {
-                $query->where('metodo_pago', $this->filtroMetodoPago);
-            })
-            ->when($this->filtroFechaInicio && $this->filtroFechaFin, function ($query) {
-                $query->whereBetween('fecha', [$this->filtroFechaInicio, $this->filtroFechaFin]);
-            })
-            ->when($this->filtroFechaInicio && !$this->filtroFechaFin, function ($query) {
-                $query->whereDate('fecha', '>=', $this->filtroFechaInicio);
-            })
-            ->when(!$this->filtroFechaInicio && $this->filtroFechaFin, function ($query) {
-                $query->whereDate('fecha', '<=', $this->filtroFechaFin);
-            })
-            ->orderByDesc('fecha')
-            ->paginate(10);
 
-        return view('livewire.gasto.index', compact('gastos'))->with('i', $this->getPage() * $gastos->perPage());
+    {
+
+
+        return view('livewire.gasto.index');
 
 
     }
 
-    public function delete(Gasto $gasto)
-    {
-        $gasto->delete();
 
-        return $this->redirectRoute('gastos.index', navigate: true);
-    }
 }

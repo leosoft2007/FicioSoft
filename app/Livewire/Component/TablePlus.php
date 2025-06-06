@@ -33,6 +33,8 @@ class TablePlus extends Component
         'amarillo' => 'bg-yellow-100 text-yellow-900 font-semibold',
         'gris' => 'bg-gray-100 text-gray-900 font-semibold',
         'rojo' => 'bg-red-100 text-red-900 font-semibold',
+        'purple' => 'bg-purple-100 text-purple-900 font-semibold',
+        'blanco' => 'bg-white text-gray-900 font-semibold',
         // o usa cadenas si prefieres
         'warning' => 'bg-yellow-100 text-yellow-800',
         'info'    => 'bg-blue-100 text-blue-800',
@@ -288,6 +290,20 @@ class TablePlus extends Component
         $this->resetPage();
     }
 
+    public function getColumnsWithOptionsProperty()
+    {
+        $columns = $this->columns;
+        foreach ($columns as &$col) {
+            if (($col['filter'] ?? null) === 'relation-select') {
+                $label = $col['relation_label'] ?? 'nombre';
+                $modelClass = $col['relation_model'] ?? null;
+                if ($modelClass && class_exists($modelClass)) {
+                    $col['options'] = $modelClass::pluck($label, 'id')->toArray();
+                }
+            }
+        }
+        return $columns;
+    }
     public function render()
     {
 

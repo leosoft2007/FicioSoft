@@ -4,7 +4,7 @@
     <x-page-header
     title="{{ __('Consentimientos') }}"
     subtitle="Lista de  {{ __('Consentimientos') }}"
-    color="pink"
+    color="blue"
     :clickable="true"
     badge="Nuevo"
     icon="check"
@@ -23,7 +23,7 @@
     :delete="true"
     :showExportExcel="false"
     :showExportPdf="false"
-    estilo="verde"
+    estilo="purple"
 
 />
 </section>

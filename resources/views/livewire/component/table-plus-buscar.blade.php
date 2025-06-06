@@ -25,19 +25,18 @@ Incluye: modal de filtros avanzados y chips de filtros activos.
     </div>
     <!-- Filtro avanzado modal -->
     @if ($showFiltro ?? false)
-        <div
-            class="absolute right-0 top-12 z-50 w-80 bg-white rounded-lg shadow-lg border border-indigo-100 p-6">
+        <div class="absolute right-0 top-12 z-50 w-80 bg-white rounded-lg shadow-lg border border-indigo-100 p-6">
             <h3 class="text-lg font-bold mb-4">Filtros avanzados</h3>
-            @foreach ($columns as $col)
+            @foreach ($this->columnsWithOptions as $col)
                 @if (!empty($col['filter']))
                     <div class="mb-4">
                         <label class="block text-sm font-medium mb-1">{{ $col['label'] }}</label>
                         @if ($col['filter'] === 'range_number')
                             <div class="flex gap-2">
-                                <input type="number" wire:model="filters.{{ $col['field'] }}_min"
-                                    placeholder="Mín" class="w-1/2 border rounded px-2 py-1" />
-                                <input type="number" wire:model="filters.{{ $col['field'] }}_max"
-                                    placeholder="Máx" class="w-1/2 border rounded px-2 py-1" />
+                                <input type="number" wire:model="filters.{{ $col['field'] }}_min" placeholder="Mín"
+                                    class="w-1/2 border rounded px-2 py-1" />
+                                <input type="number" wire:model="filters.{{ $col['field'] }}_max" placeholder="Máx"
+                                    class="w-1/2 border rounded px-2 py-1" />
                             </div>
                         @elseif ($col['filter'] === 'range_date')
                             <div class="flex gap-2">
@@ -46,9 +45,16 @@ Incluye: modal de filtros avanzados y chips de filtros activos.
                                 <input type="date" wire:model="filters.{{ $col['field'] }}_to"
                                     class="w-1/2 border rounded px-2 py-1" />
                             </div>
+                        @elseif(($col['filter'] ?? null) === 'relation-select')
+                            <select wire:model="filters.{{ $col['relation_field'] }}"
+                                class="border rounded px-2 py-1 text-sm">
+                                <option value="">Todos</option>
+                                @foreach ($col['options'] as $id => $label)
+                                    <option value="{{ $id }}">{{ $label }}</option>
+                                @endforeach
+                            </select>
                         @elseif ($col['filter'] === 'select')
-                            <select wire:model="filters.{{ $col['field'] }}"
-                                class="w-full border rounded px-2 py-1">
+                            <select wire:model="filters.{{ $col['field'] }}" class="w-full border rounded px-2 py-1">
                                 <option value="">Todos</option>
                                 @foreach ($col['options'] as $option)
                                     <option value="{{ $option }}">{{ ucfirst($option) }}
@@ -70,10 +76,36 @@ Incluye: modal de filtros avanzados y chips de filtros activos.
 </div>
 @if (count($filters))
     <div class="flex flex-wrap gap-2 mt-4">
-        @foreach (array_keys($filters) as $field)
-            <input wire:model="filters.{{ $field }}"
-                class="border border-indigo-200 bg-indigo-50 rounded px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="{{ ucfirst(str_replace('_', ' ', $field)) }}" />
+        @foreach ($filters as $key => $value)
+            @if (!empty($value))
+                @php
+                    // Buscar la columna asociada
+                    $col = collect($this->columnsWithOptions)
+                        ->first(function ($c) use ($key) {
+                            return ($c['relation_field'] ?? $c['field']) === $key
+                                || (isset($c['field']) && (str_starts_with($key, $c['field'] . '_') || $key === $c['field']));
+                        });
+                @endphp
+                @if ($col)
+                    <span class="border border-indigo-200 bg-indigo-50 rounded px-2 py-1 text-sm flex items-center">
+                        <span>
+                            {{ $col['label'] }}:
+                            @if (($col['filter'] ?? null) === 'relation-select')
+                                {{ $col['options'][$value] ?? $value }}
+                            @elseif (($col['filter'] ?? null) === 'select')
+                                {{ ucfirst($value) }}
+                            @elseif (str_contains($key, '_from'))
+                                desde {{ $value }}
+                            @elseif (str_contains($key, '_to'))
+                                hasta {{ $value }}
+                            @else
+                                {{ $value }}
+                            @endif
+                        </span>
+                        <button wire:click="$set('filters.{{ $key }}', '')" class="ml-2 text-red-500 hover:text-red-700" title="Quitar filtro">&times;</button>
+                    </span>
+                @endif
+            @endif
         @endforeach
     </div>
 @endif

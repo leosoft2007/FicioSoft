@@ -1,7 +1,7 @@
-<section class="w-full bg-gradient-to-b from-indigo-50 to-white">
+<section class="w-full bg-white">
     <div class="py-8">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-6 bg-white shadow-lg rounded-xl border border-indigo-100">
+            <div class="p-6 bg-white shadow-lg rounded-xl border {{ $estilo['border'] }}">
                 <div class="w-full">
                     @include('livewire.component.table-plus-header')
                     <!-- Buscador y filtros -->

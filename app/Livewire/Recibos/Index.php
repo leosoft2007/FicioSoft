@@ -70,7 +70,7 @@ class Index extends Component
             'icon' => '<svg class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none"><path d="M3 10H21M7 15H8M12 15H13M6 8H18C19.1046 8 20 8.89543 20 10V16C20 17.1046 19.1046 18 18 18H6C4.89543 18 4 17.1046 4 16V10C4 8.89543 4.89543 8 6 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>',
             'show_in_mobile' => true,
             'filter' => 'select',
-            'options' => ['efectivo', 'tarjeta', 'transferencia', 'bizum'],
+            'options' => ['efectivo', 'tarjeta', 'transferencia', 'bizum'], 
         ],
         ['field' => 'estado', 'label' => 'Estado', 'format' => 'badge', 'badge_map' => ['pendiente' => 'rojo', 'pagada' => 'verde', 'cancelada' => 'gris'], 'show_in_mobile' => true, 'filter' => 'select', 'options' => ['pendiente', 'pagada', 'cancelada']],
     ];
@@ -136,7 +136,7 @@ class Index extends Component
         ],
 
 
-    ]; 
+    ];
 
     public function render(): View
     {
