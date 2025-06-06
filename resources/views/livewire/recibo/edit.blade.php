@@ -10,7 +10,7 @@
             <h1 class="text-2xl font-bold text-gray-800">{{ __('Editar Recibo') }}</h1>
         </div>
         <flux:button variant="primary" :href="route('recibos.index')" class="bg-indigo-600 hover:bg-indigo-700 transition">
-            {{ __('Volver') }}
+            {{ __('Volver') }} 
         </flux:button>
     </div>
 

@@ -203,6 +203,8 @@
 
                                                                         </div>
                                                                     </div>
+                                                                @elseif($format === 'limit_html')
+                                                                    {{ \Illuminate\Support\Str::limit(strip_tags($value ), 80) }}
                                                                 @elseif ($format === 'fondo')
                                                                     @php
                                                                         $paletteKey = $column['fondo_palette'] ?? 'gris'; // Por defecto el gris si no hay clave

@@ -2,27 +2,30 @@
 
 namespace App\Livewire\Especialidads;
 
-use App\Livewire\Forms\EspecialidadForm;
+
 use App\Models\Especialidad;
 use Livewire\Component;
 
 class Create extends Component
 {
-    public EspecialidadForm $form;
-
-    public function mount(Especialidad $especialidad)
-    {
-        $this->form->setEspecialidadModel($especialidad);
-    }
-
-    public function save()
-    {
-        $this->authorize('create especialidads');
-        $this->form->clinica_id = auth()->user()->clinica->id;
-        $this->form->store();
-
-        return $this->redirectRoute('especialidads.index', navigate: true);
-    }
+    public $fields = [
+        [
+            'name' => 'nombre',
+            'label' => 'Nombre',
+            'type' => 'text',
+            'rules' => 'required|string|max:80',
+        ],
+        [
+            'name' => 'descripcion',
+            'label' => 'Descripción',
+            'type' => 'textarea',
+            'rules' => 'nullable|string|max:255',
+        ],
+    ];
+    public $validationMessages = [
+        'formData.nombre.required' => 'El nombre es obligatorio.',
+        'formData.descripcion.max' => 'La descripción no puede tener más de 255 caracteres.',
+    ];
 
     public function render()
     {

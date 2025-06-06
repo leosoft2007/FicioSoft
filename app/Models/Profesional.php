@@ -65,6 +65,14 @@ class Profesional extends Model
             'updated_at' => 'datetime',
         ];
     }
+    protected static function booted()
+    {
+        static::creating(function ($profesional) {
+            if (auth()->check() && empty($profesional->usuario_id)) {
+                $profesional->usuario_id = auth()->id();
+            }
+        });
+    }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

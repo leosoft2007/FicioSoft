@@ -8,21 +8,29 @@ use Livewire\Component;
 
 class Edit extends Component
 {
-    public EspecialidadForm $form;
-
+    public $fields = [
+            [
+                'name' => 'nombre',
+                'label' => 'Nombre',
+                'type' => 'text',
+                'rules' => 'required|string|max:80',
+            ],
+            [
+                'name' => 'descripcion',
+                'label' => 'Descripción',
+                'type' => 'textarea',
+                'rules' => 'nullable|string|max:255',
+            ],
+        ];
+    public $especialidad;
+    public $validationMessages = [
+        'formData.nombre.required' => 'El nombre es obligatorio.',
+        'formData.descripcion.max' => 'La descripción no puede tener más de 255 caracteres.',
+    ];
     public function mount(Especialidad $especialidad)
     {
-        $this->form->setEspecialidadModel($especialidad);
-    }
-
-    public function save()
-    {
         $this->authorize('edit especialidads');
-        $this->form->update();
-        
-        return $this->redirectRoute('especialidads.index', navigate: true);
     }
-
     public function render()
     {
         $this->authorize('edit especialidads');

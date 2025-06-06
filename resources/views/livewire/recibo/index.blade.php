@@ -28,6 +28,7 @@
     <livewire:component.table-plus
     :model-class="\App\Models\Paciente::class"
     :columns="$columnsPaciente"
+    :filters="['clinica_id' => auth()->user()->clinica_id]"
     add-route="{{ route('pacientes.create') }}" title="Lista de Pacientes"
     routeShow="pacientes.show"
     routeEdit="pacientes.edit"

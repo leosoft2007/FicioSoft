@@ -5,17 +5,12 @@ namespace App\Livewire\Recibos;
 use App\Models\Recibo;
 use Illuminate\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
+
 
 class Index extends Component
 {
-    use WithPagination;
-    public $buscar = '';
-    public $showFiltro = false;
-    public $filtroFormaPago = '';
-    public $filtroFecha = '';
-    public $filtroFechaInicio = '';
-    public $filtroFechaFin = '';
+
+
 
     // En tu Controller o en el método render() de tu componente Livewire
     public $columnsRecibo = [
@@ -141,7 +136,7 @@ class Index extends Component
         ],
 
 
-    ];
+    ]; 
 
     public function render(): View
     {

@@ -5,11 +5,31 @@ namespace App\Livewire\Consentimientos;
 use App\Models\Consentimiento;
 use Illuminate\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
+
 
 class Index extends Component
 {
-    use WithPagination;
+    public $columnsConsentimiento = [
+        ['field' => 'titulo', 'label' => 'Título', 'searchable' => true, 'format' => 'fondo', 'fondo_palette' => 'indigo', 'show_in_mobile' => true],
+        ['field' => 'contenido', 'label' => 'Contenido', 'searchable' => true, 'format' => 'limit_html', 'fondo_palette' => 'indigo', 'show_in_mobile' => true],
+        [
+            'field' => 'tipo',
+            'label' => 'Tipo',
+            'searchable' => true,
+            'format' => 'badge',
+            'badge_map' => [
+                'clinica' => 'verde',
+                'profesional' => 'indigo',
+                'general' => 'amarillo',
+            ],
+            'show_in_mobile' => true,
+            'sortable' => false,
+            'filter' => 'select',
+            'options' => ['clinica', 'profesional', 'general'],
+            
+        ],
+    ];
+
 
     public function render(): View
     {
@@ -17,18 +37,13 @@ class Index extends Component
         $clinica = auth()->user()->clinica;
 
         // listamos los concentimientos de la clinica
-        $consentimientos = Consentimiento::where('clinica_id', $clinica->id)->paginate();
+        $consentimientos = Consentimiento::where('clinica_id', $clinica->id)->get()->count();
 
 
-        return view('livewire.consentimiento.index', compact('consentimientos'))
-            ->with('i', $this->getPage() * $consentimientos->perPage());
+        return view('livewire.consentimiento.index', [
+            'consentimientos' => $consentimientos
+        ]);
     }
 
-    public function delete(Consentimiento $consentimiento)
-    {
-        $this->authorize('delete consentimientos');
-        $consentimiento->delete();
 
-        return $this->redirectRoute('consentimientos.index', navigate: true);
-    }
 }

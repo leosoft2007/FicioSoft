@@ -36,8 +36,15 @@
         <label class="block text-sm font-medium mb-1">{{ __('Tipo de Gasto') }}</label>
         <div class="flex items-center space-x-2 relative">
             <div class="flex-1">
-                <x-select-busqueda :options="$tiposgasto" :selected-value="old('form.tipo_gasto_id', $form->tipo_gasto_id ?? null)" valueField="id" labelField="nombre"
-                    model="form.tipo_gasto_id" placeholder="Seleccione un tipo de gasto" primaryColor="indigo-600"
+                <x-select-busqueda
+                :options="$tiposgasto"
+                :selected-value="old('form.tipo_gasto_id',
+                $form->tipo_gasto_id ?? null)"
+                valueField="id"
+                labelField="nombre"
+                model="form.tipo_gasto_id"
+                placeholder="Seleccione un tipo de gasto"
+                primaryColor="indigo-600"
                     hoverColor="indigo-50" />
             </div>
             <button type="button"
