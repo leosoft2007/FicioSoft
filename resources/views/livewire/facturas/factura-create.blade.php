@@ -1,37 +1,29 @@
 <div class="bg-gradient-to-br from-sky-50 to-indigo-100 min-h-screen p-6">
 
-        {{-- Datos principales --}}
-        <x-page-header title="🧾 {{ $titulo }}"  color="indigo" :clickable="true"
-        badge="Nuevo" icon="check" >
+    {{-- Datos principales --}}
+    <x-page-header title="🧾 {{ $titulo }}" color="indigo" :clickable="true" badge="Nuevo" icon="check">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
                 <flux:label>Paciente</flux:label>
                 <x-select-busqueda :options="$pacientes" :selected-value="$paciente_id" valueField="id" labelField="nombre_completo"
                     model="paciente_id" primaryColor="indigo-600" hoverColor="indigo-50"
                     placeholder="Seleccione un paciente" />
-
-            </div>
-            <div >
-                <flux:input label="Fecha" type="date" wire:model="fecha" />
             </div>
             <div>
-                <flux:radio.group wire:model.live="metodo_pago" label="Método de Pago" variant="segmented">
-                    <flux:radio value="efectivo" label="Efectivo" checked>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-badge-euro-icon lucide-badge-euro">
-                            <path
-                                d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                            <path d="M7 12h5" />
-                            <path d="M15 9.4a4 4 0 1 0 0 5.2" />
-                        </svg>
-                    </flux:radio>
-                    <flux:radio value="tarjeta" label="Tarjeta" icon="credit-card" />
-                    <flux:radio value="transferencia" label="Transferencia" icon="credit-card" />
-                </flux:radio.group>
+                <flux:input label="Fecha" type="date" wire:model="fecha" />
+            </div>
+            <div class="md:col-span-2">
+                <x-radio-plus name="metodo_pago" variant="primary" wire:model="metodo_pago" label="Método de Pago" :options="[
+                    ['value' => 'efectivo', 'label' => 'Efectivo'],
+                    ['value' => 'tarjeta', 'label' => 'Tarjeta'],
+                    ['value' => 'transferencia', 'label' => 'Transferencia'],
+                ]"
+                    :inline="true"
+                    :selected="'efectivo'" />
             </div>
         </div>
+
     </x-page-header>
 
     <div class="rounded-xl bg-orange-50 border border-orange-200 p-4 mb-4 shadow">
@@ -143,7 +135,7 @@
             <div class="border rounded-lg p-4 bg-white shadow-sm">
                 <h3 class="font-semibold text-indigo-700 mb-3">Resumen de IVA</h3>
 
-                
+
 
                 {{-- Tabla de resumen IVA --}}
                 <table class="w-full">
@@ -203,8 +195,7 @@
         </div>
 
     </div>
-    <x-page-header title="Asignación de Recibos"  color="red" :clickable="true"
-        badge="Nuevo" icon="check" >
+    <x-page-header title="Asignación de Recibos" color="red" :clickable="true" badge="Nuevo" icon="check">
 
         {{-- Asignación de recibos - Nueva implementación --}}
         <div class="mb-6 bg-white rounded-lg shadow-sm p-4 border">
@@ -220,7 +211,8 @@
                                 <div class="flex items-center justify-between p-2 border rounded hover:bg-gray-50">
                                     <div>
                                         <span class="font-medium">#{{ $recibo->numero }}</span>
-                                        <span class="text-sm text-gray-600 ml-2">€{{ number_format($recibo->valor, 2) }}</span>
+                                        <span
+                                            class="text-sm text-gray-600 ml-2">€{{ number_format($recibo->valor, 2) }}</span>
                                         <span class="text-xs text-gray-500 ml-2">
                                             {{ \Carbon\Carbon::parse($recibo->fecha)->format('d/m/Y') }}
                                         </span>
@@ -245,7 +237,8 @@
                             <div class="flex items-center justify-between p-2 border rounded hover:bg-gray-50">
                                 <div>
                                     <span class="font-medium">#{{ $recibo->numero }}</span>
-                                    <span class="text-sm text-gray-600 ml-2">€{{ number_format($recibo->valor, 2) }}</span>
+                                    <span
+                                        class="text-sm text-gray-600 ml-2">€{{ number_format($recibo->valor, 2) }}</span>
                                     <span class="text-xs text-gray-500 ml-2">
                                         {{ \Carbon\Carbon::parse($recibo->fecha)->format('d/m/Y') }}
                                     </span>
@@ -306,17 +299,17 @@
         </div>
     </x-page-header>
 
-        {{-- Mensajes de éxito/error --}}
-        @if (session()->has('success'))
-            <div class="mt-4 p-4 bg-green-100 text-green-800 rounded-lg font-semibold flex items-center gap-2">
-                ✅ {{ session('success') }}
-            </div>
-        @endif
-        @if (session()->has('error'))
-            <div class="mt-4 p-4 bg-red-100 text-red-800 rounded-lg font-semibold flex items-center gap-2">
-                ❌ {{ session('error') }}
-            </div>
-        @endif
+    {{-- Mensajes de éxito/error --}}
+    @if (session()->has('success'))
+        <div class="mt-4 p-4 bg-green-100 text-green-800 rounded-lg font-semibold flex items-center gap-2">
+            ✅ {{ session('success') }}
+        </div>
+    @endif
+    @if (session()->has('error'))
+        <div class="mt-4 p-4 bg-red-100 text-red-800 rounded-lg font-semibold flex items-center gap-2">
+            ❌ {{ session('error') }}
+        </div>
+    @endif
 
 
 </div>
